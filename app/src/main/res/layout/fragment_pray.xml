@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.PrayFragment">
+
+ <androidx.constraintlayout.widget.ConstraintLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+
+
+     <TextView
+         android:id="@+id/date"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="24dp"
+         android:layout_marginTop="24dp"
+         android:layout_marginEnd="24dp"
+         android:padding="10dp"
+         android:background="@drawable/input_background"
+         android:text="TextView"
+         android:textColor="@color/black"
+         android:textSize="20sp"
+         android:fontFamily="@font/cairo_bold"
+         android:gravity="center"
+         android:backgroundTint="#60D29322"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.498"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+
+     <TableLayout
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:layout_marginTop="20dp"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/date">
+
+         <TableRow android:background="#2C3F51B5"
+             android:layout_marginStart="20dp"
+             android:layout_marginEnd="20dp"
+             >
+             <TextView
+                 android:id="@+id/fajer"
+                 android:text="Cell 1"
+                 android:layout_weight="1"
+                 android:padding="10dp"
+                  android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+             <TextView
+                 android:layout_weight="1"
+                 android:text="الفجر"
+                 android:layout_gravity="start"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:padding="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+         </TableRow>
+         <View  android:layout_width="match_parent"
+             android:layout_height="1dp"/>
+         <TableRow android:background="#2C3F51B5"
+             android:layout_marginStart="20dp"
+             android:layout_marginEnd="20dp"
+             >
+             <TextView
+                 android:id="@+id/dohor"
+                 android:text="Cell 1"
+                 android:layout_weight="1"
+                 android:padding="10dp"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+             <TextView
+                 android:layout_weight="1"
+                 android:text="الظهر"
+                 android:layout_gravity="start"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:padding="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+         </TableRow>
+         <View  android:layout_width="match_parent"
+             android:layout_height="1dp"/>
+         <TableRow android:background="#2C3F51B5"
+             android:layout_marginStart="20dp"
+             android:layout_marginEnd="20dp"
+             >
+             <TextView
+                 android:id="@+id/aser"
+                 android:text="Cell 1"
+                 android:layout_weight="1"
+                 android:padding="10dp"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+             <TextView
+                 android:layout_weight="1"
+                 android:text="العصر"
+                 android:layout_gravity="start"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:padding="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+         </TableRow>
+         <View  android:layout_width="match_parent"
+             android:layout_height="1dp"/>
+         <TableRow android:background="#2C3F51B5"
+             android:layout_marginStart="20dp"
+             android:layout_marginEnd="20dp"
+             >
+             <TextView
+                 android:id="@+id/magrep"
+                 android:text="Cell 1"
+                 android:layout_weight="1"
+                 android:padding="10dp"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+             <TextView
+                 android:layout_weight="1"
+                 android:text="المغرب"
+                 android:layout_gravity="start"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:padding="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+         </TableRow>
+         <View  android:layout_width="match_parent"
+             android:layout_height="1dp"/>
+         <TableRow android:background="#2C3F51B5"
+             android:layout_marginStart="20dp"
+             android:layout_marginEnd="20dp"
+             >
+             <TextView
+                 android:id="@+id/aisha"
+                 android:text="Cell 1"
+                 android:layout_weight="1"
+                 android:padding="10dp"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+             <TextView
+                 android:layout_weight="1"
+                 android:text="العشاء"
+                 android:layout_gravity="start"
+                 android:gravity="start"
+                 android:textSize="16sp"
+                 android:textColor="@color/black"
+                 android:fontFamily="@font/cairo_bold"
+                 android:padding="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+         </TableRow>
+
+     </TableLayout>
+
+ </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

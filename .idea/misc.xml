@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/btn_background.xml" value="0.2545" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/buttombar.xml" value="0.2545" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/ic_star_1259_svgrepo_com.xml" value="0.2555" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/input_background.xml" value="0.2545" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/splash_background.xml" value="0.2" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/transparent.xml" value="0.2135" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/font/cairo_bold.xml" value="0.2765625" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_add_user.xml" value="0.264" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_bottom_navigation_bar.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_main.xml" value="0.2359375" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_remembrance_details.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_sora.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/activity_splash.xml" value="0.264" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_pray.xml" value="0.176" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_remembrance.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/item_quran_chapter.xml" value="0.4" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/loader_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/remembrance_details_item.xml" value="0.4" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/remembrance_item.xml" value="0.264" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/menu/bottom_navigation_bar_menu.xml" value="0.25" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
