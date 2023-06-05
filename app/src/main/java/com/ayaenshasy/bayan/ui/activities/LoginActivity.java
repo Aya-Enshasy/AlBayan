@@ -42,7 +42,9 @@ public class LoginActivity extends BaseActivity {
                 if (dataSnapshot.exists()) {
                      password = dataSnapshot.getValue(String.class);
                      Log.e(";getPassword",password);
-                  } else {
+                    AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.password,password);
+
+                } else {
                  }
             }
 
@@ -70,6 +72,7 @@ public class LoginActivity extends BaseActivity {
                         if (value.equals(binding.identifier.getText().toString())&&binding.password.getText().toString().equals(password)) {
                             Toast.makeText(LoginActivity.this, "تم تسجيل الدخول بنجاح", Toast.LENGTH_SHORT).show();
                             AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.LOGIN,Constant.LOGIN);
+                            AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_ID,binding.identifier.getText().toString());
                             startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
                             finish();
                         }else {

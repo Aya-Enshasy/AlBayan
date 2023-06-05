@@ -18,16 +18,19 @@
         android:theme="@style/Theme.Quraney"
         tools:targetApi="31">
         <activity
-            android:name=".MonthlyHistoryActivity"
+            android:name=".ui.activities.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".DailyHistoryActivity"
+            android:name=".ui.activities.MonthlyHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".SupportActivity"
+            android:name=".ui.activities.DailyHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".EditUserProfileActivity"
+            android:name=".ui.activities.SupportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.EditUserProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.SoraActivity"

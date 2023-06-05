@@ -9,16 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ayaenshasy.bayan.DailyHistoryActivity;
-import com.ayaenshasy.bayan.EditUserProfileActivity;
-import com.ayaenshasy.bayan.MonthlyHistoryActivity;
 import com.ayaenshasy.bayan.R;
-import com.ayaenshasy.bayan.SupportActivity;
+import com.ayaenshasy.bayan.ui.activities.ChangePasswordActivity;
+import com.ayaenshasy.bayan.ui.activities.DailyHistoryActivity;
+import com.ayaenshasy.bayan.ui.activities.EditUserProfileActivity;
+import com.ayaenshasy.bayan.ui.activities.MonthlyHistoryActivity;
+import com.ayaenshasy.bayan.ui.activities.SupportActivity;
 import com.ayaenshasy.bayan.databinding.FragmentSettingsBinding;
 import com.ayaenshasy.bayan.ui.activities.AddUserActivity;
 import com.ayaenshasy.bayan.ui.activities.LoginActivity;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 
 public class SettingsFragment extends Fragment {
@@ -62,7 +65,16 @@ public class SettingsFragment extends Fragment {
 
         openActivities();
 
+        getData();
+
         return view;
+    }
+
+    private void getData(){
+        binding.userName.setText(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_NAME));
+        binding.identifier.setText(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID));
+        Glide.with(getActivity()).load(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_IMAGE)).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
+
     }
 
     private void openActivities() {
@@ -86,10 +98,20 @@ public class SettingsFragment extends Fragment {
             startActivity(new Intent(getActivity(), MonthlyHistoryActivity.class));
         });
 
+        binding.changePassword.setOnClickListener(View -> {
+            startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+        });
+
         binding.logOut.setOnClickListener(View -> {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
             AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.LOGIN, "");
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
     }
 }

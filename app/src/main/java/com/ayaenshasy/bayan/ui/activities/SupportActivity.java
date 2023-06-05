@@ -1,14 +1,16 @@
-package com.ayaenshasy.bayan;
+package com.ayaenshasy.bayan.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class EditUserProfileActivity extends AppCompatActivity {
+import com.ayaenshasy.bayan.R;
+
+public class SupportActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_profile);
+        setContentView(R.layout.activity_support);
     }
 }

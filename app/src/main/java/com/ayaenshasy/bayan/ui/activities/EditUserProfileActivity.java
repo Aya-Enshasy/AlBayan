@@ -17,10 +17,13 @@ import android.widget.Toast;
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.base.BaseActivity;
 import com.ayaenshasy.bayan.databinding.ActivityAddUserBinding;
+import com.ayaenshasy.bayan.databinding.ActivityEditUserProfileBinding;
+import com.ayaenshasy.bayan.databinding.ActivitySplashBinding;
 import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,9 +33,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -41,8 +41,8 @@ import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddUserActivity extends BaseActivity {
-    ActivityAddUserBinding binding;
+public class EditUserProfileActivity extends BaseActivity {
+    ActivityEditUserProfileBinding binding;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
     String image1;
@@ -50,12 +50,11 @@ public class AddUserActivity extends BaseActivity {
     boolean img=false;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAddUserBinding.inflate(getLayoutInflater());
+        binding = ActivityEditUserProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
@@ -64,6 +63,15 @@ public class AddUserActivity extends BaseActivity {
         clickListener();
         userImage();
         requestStoragePermission();
+        getData();
+    }
+
+    private void getData(){
+        image1 =AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.USER_IMAGE);
+        binding.name.setText(AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.USER_NAME));
+        binding.identifier.setText(AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.USER_ID));
+        Glide.with(getBaseContext()).load(image1).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -74,50 +82,14 @@ public class AddUserActivity extends BaseActivity {
         binding.addBtn.setOnClickListener(View -> {
             if (binding.name.getText().toString().equals(""))
                 Toast.makeText(this, "اضف الاسم", Toast.LENGTH_SHORT).show();
-            else if (binding.identifier.getText().toString().equals(""))
-                Toast.makeText(this, "اضف رقم الهوية", Toast.LENGTH_SHORT).show();
-//            else if (img==false)
-//                Toast.makeText(this, "اضف صورة لو سمحت", Toast.LENGTH_SHORT).show();
-          else
-              addUser();
+           else
+                editUser();
 
             closeKeyboard();
         });
         binding.backArrow.setOnClickListener(View -> {
             finish();
         });
-    }
-
-    private void addUser() {
-        loaderDialog();
-         Map<String, Object> map = new HashMap<>();
-        map.put("name", binding.name.getText().toString());
-        map.put("image", image1);
-        map.put("id", binding.identifier.getText().toString());
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
-
-        User user = new User(binding.identifier.getText().toString(), binding.name.getText().toString(), image1);
-
-        usersRef.child(binding.identifier.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-
-                Toast.makeText(AddUserActivity.this, "Add Successfully", Toast.LENGTH_SHORT).show();
-                binding.progressBar.setVisibility(View.GONE);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("TAG", "Error adding document", e);
-                Toast.makeText(AddUserActivity.this, "حاول مجددا", Toast.LENGTH_SHORT).show();
-                loader_dialog.dismiss();
-            }
-        });
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -169,4 +141,36 @@ public class AddUserActivity extends BaseActivity {
 
     }
 
+    private void editUser() {
+        loaderDialog();
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", binding.name.getText().toString());
+        map.put("image", image1);
+        map.put("id", binding.identifier.getText().toString());
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference("users");
+
+        User user = new User(binding.identifier.getText().toString(), binding.name.getText().toString(), image1);
+
+        usersRef.child(binding.identifier.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+                Toast.makeText(EditUserProfileActivity.this, "تم التعديل بنجاح", Toast.LENGTH_SHORT).show();
+                 AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_NAME, binding.name.getText().toString());
+                AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_IMAGE,image1);
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("TAG", "Error adding document", e);
+                Toast.makeText(EditUserProfileActivity.this, "حاول مجددا", Toast.LENGTH_SHORT).show();
+                loader_dialog.dismiss();
+            }
+        });
+
+
+    }
 }

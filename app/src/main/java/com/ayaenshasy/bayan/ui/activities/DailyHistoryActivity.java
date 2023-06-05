@@ -1,14 +1,16 @@
-package com.ayaenshasy.bayan;
+package com.ayaenshasy.bayan.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MonthlyHistoryActivity extends AppCompatActivity {
+import com.ayaenshasy.bayan.R;
+
+public class DailyHistoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monthly_history);
+        setContentView(R.layout.activity_daily_history);
     }
 }
