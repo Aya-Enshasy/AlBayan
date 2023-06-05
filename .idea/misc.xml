@@ -6,6 +6,7 @@
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/btn_background.xml" value="0.2545" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/buttombar.xml" value="0.2545" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/ic_star_1259_svgrepo_com.xml" value="0.2555" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/ic_user_circle_svgrepo_com.xml" value="0.2555" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/input_background.xml" value="0.2545" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/splash_background.xml" value="0.2" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/transparent.xml" value="0.2135" />
@@ -20,10 +21,12 @@
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_pray.xml" value="0.176" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_remembrance.xml" value="0.25" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/item_quran_chapter.xml" value="0.4" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/loader_dialog.xml" value="0.25" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/remembrance_details_item.xml" value="0.4" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/remembrance_item.xml" value="0.264" />
+        <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/layout/sora_item.xml" value="0.4" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/menu/bottom_navigation_bar_menu.xml" value="0.25" />
       </map>
     </option>

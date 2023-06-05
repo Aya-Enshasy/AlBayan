@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ayaenshasy.bayan.R;
-import com.ayaenshasy.bayan.SoraActivity;
+import com.ayaenshasy.bayan.ui.activities.SoraActivity;
 import com.ayaenshasy.bayan.model.QuranChapter;
 import com.ayaenshasy.bayan.utils.Constant;
 

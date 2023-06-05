@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.ayaenshasy.bayan.databinding.ActivitySplashBinding;
-import com.ayaenshasy.bayan.ui.BottomNavigationBarActivity;
-import com.ayaenshasy.bayan.ui.LoginActivity;
+import com.ayaenshasy.bayan.ui.activities.BottomNavigationBarActivity;
+import com.ayaenshasy.bayan.ui.activities.LoginActivity;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
 
@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                if (AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.LOGIN ).equals("")){
+                if (AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.LOGIN).equals("")){
                     startActivity(new Intent(getBaseContext(), LoginActivity.class));
                     finish();
                 }else {

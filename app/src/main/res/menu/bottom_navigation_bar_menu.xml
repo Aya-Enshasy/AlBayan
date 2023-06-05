@@ -26,4 +26,10 @@
         android:icon="@drawable/ic_mosque_svgrepo_com"
         android:title="مواقيت الصلاة" />
 
+    <item
+        android:id="@+id/Settings"
+        android:iconTint="@color/orange"
+        android:icon="@drawable/ic_settings_svgrepo_com"
+        android:title="الاعدادات" />
+
 </menu>

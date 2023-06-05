@@ -3,7 +3,7 @@
     <string name="login">تسجيل الدخول</string>
     <string name="password">ادخل كلمة المرور</string>
     <string name="add">اضافة</string>
-    <string name="add_user">اضافة مستخدم جديد</string>
+     <string name="add_user">اضافة مستخدم جديد</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

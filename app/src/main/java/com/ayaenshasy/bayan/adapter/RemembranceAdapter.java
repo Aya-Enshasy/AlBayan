@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.databinding.RemembranceItemBinding;
-import com.ayaenshasy.bayan.ui.RemembranceDetailsActivity;
+import com.ayaenshasy.bayan.ui.activities.RemembranceDetailsActivity;
 import com.ayaenshasy.bayan.model.RemembranceModel;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
