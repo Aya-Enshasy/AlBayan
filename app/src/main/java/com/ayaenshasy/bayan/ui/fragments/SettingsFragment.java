@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.ui.activities.ChangePasswordActivity;
@@ -64,7 +65,6 @@ public class SettingsFragment extends Fragment {
         View view = binding.getRoot();
 
         openActivities();
-
         getData();
 
         return view;
@@ -75,6 +75,13 @@ public class SettingsFragment extends Fragment {
         binding.identifier.setText(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID));
         Glide.with(getActivity()).load(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_IMAGE)).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
 
+         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
+            binding.changePassword.setVisibility(View.GONE);
+            binding.addUser.setVisibility(View.GONE);
+        }else {
+            binding.changePassword.setVisibility(View.VISIBLE);
+            binding.addUser.setVisibility(View.VISIBLE);
+        }
     }
 
     private void openActivities() {
