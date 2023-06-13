@@ -81,7 +81,7 @@ public class SettingsFragment extends BaseFragment {
                 .skipMemoryCache(true).into(binding.userImage);
 
 //         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
-            binding.changePassword.setVisibility(View.GONE);
+//            binding.changePassword.setVisibility(View.GONE);
 //            binding.addUser.setVisibility(View.GONE);
 //        }else {
 //            binding.changePassword.setVisibility(View.VISIBLE);

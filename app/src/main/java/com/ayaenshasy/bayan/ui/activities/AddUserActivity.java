@@ -1,11 +1,9 @@
 package com.ayaenshasy.bayan.ui.activities;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.net.Uri;
@@ -21,51 +19,39 @@ import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.base.BaseActivity;
 import com.ayaenshasy.bayan.databinding.ActivityAddUserBinding;
 import com.ayaenshasy.bayan.model.Role;
-import com.ayaenshasy.bayan.model.user.Student;
-import com.ayaenshasy.bayan.model.user.User;
-import com.ayaenshasy.bayan.utils.AppPreferences;
-import com.ayaenshasy.bayan.utils.Constant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.lazydatepicker.LazyDatePicker;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-public class AddUserActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
+public class AddUserActivity extends BaseActivity {
     ActivityAddUserBinding binding;
-    StorageReference storageReference;
-    FirebaseStorage firebaseStorage;
+     FirebaseStorage firebaseStorage;
     Uri imageUri;
     ActivityResultLauncher<String> al1;
-    boolean img = false;
-    FirebaseUser currentUser;
+     FirebaseUser currentUser;
     FirebaseAuth mAuth;
     Role user_role;
     private Calendar calendar;
-    Map<String, Object> map;
+    String birthDate;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -75,6 +61,11 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
         binding = ActivityAddUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        init();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void init(){
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
@@ -93,32 +84,28 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void clickListener() {
+     private void clickListener() {
         binding.imgUser.setOnClickListener(View -> {
             al1.launch("image/*");
         });
         binding.btnSave.setOnClickListener(View -> {
-            if (binding.etName.getText().toString().equals(""))
-                Toast.makeText(this, "اضف الاسم", Toast.LENGTH_SHORT).show();
-            else if (binding.etId.getText().toString().equals(""))
-                Toast.makeText(this, "اضف رقم الهوية", Toast.LENGTH_SHORT).show();
-            else if (binding.etPhone.getText().toString().equals(""))
-                Toast.makeText(this, "اضف رقم الهاتف", Toast.LENGTH_SHORT).show();
-//            else if (img==false)
-//                Toast.makeText(this, "اضف صورة لو سمحت", Toast.LENGTH_SHORT).show();
-            else
                 addUser();
-
             closeKeyboard();
         });
-        binding.btnSelectDate.setOnClickListener(View -> {
-            showDatePickerDialog();
+        binding.lazyDatePicker.setOnClickListener(View -> {
+            try {
+                showDatePickerDialog();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         });
 
-//        binding.backArrow.setOnClickListener(View -> {
-//            finish();
-//        });
+
+        binding.backArrow.setOnClickListener(View -> {
+            finish();
+
+
+        });
     }
 
     private void addUser() {
@@ -148,22 +135,22 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
 
         String name = binding.etName.getText().toString();
         String phone = binding.etPhone.getText().toString();
-        String birthDate = binding.etBrithDate.getText().toString();
-        String gender = binding.radioFemale.isChecked() ? binding.radioFemale.getText().toString() : binding.radioMale.getText().toString();
+        formatDate(binding.lazyDatePicker.getDate().toString());
+         String gender = binding.radioFemale.isChecked() ? binding.radioFemale.getText().toString() : binding.radioMale.getText().toString();
 
         // Validate input fields before proceeding
         if (TextUtils.isEmpty(name)) {
-            showErrorMessage("Name field is empty");
+            showErrorMessage("اضف الاسم");
             return;
         }
 
         if (TextUtils.isEmpty(phone)) {
-            showErrorMessage("Phone field is empty");
+            showErrorMessage("اضف رقم الهاتف");
             return;
         }
 
         if (TextUtils.isEmpty(birthDate)) {
-            showErrorMessage("Birth date field is empty");
+            showErrorMessage("اضف تاريخ الميلاد");
             return;
         }
 
@@ -182,7 +169,7 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
 
             // Validate the parent ID field for students
             if (TextUtils.isEmpty(parentId)) {
-                showErrorMessage("Parent ID field is empty");
+                showErrorMessage("اضف رقم هوية الاب");
                 return;
             }
 
@@ -195,7 +182,7 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // ID already exists, show an error message or handle the case accordingly
-                    showErrorMessage("ID already exists");
+                    showErrorMessage("رقم الهوية موجود بالفعل");
                 } else {
                     // ID is unique, proceed with adding the user to the database
 
@@ -234,16 +221,13 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
                     // Add the user to the database with the complete user data
                     addUserWithUserData(userRef, userData);
                 }).addOnFailureListener(e -> {
-                    // Handle any errors during URL retrieval
-                    showErrorMessage("Failed to retrieve image URL");
+                     showErrorMessage("خطا بتحميل الصورة حاول مرة اخرى");
                 });
             }).addOnFailureListener(e -> {
-                // Handle any errors during the upload process
-                showErrorMessage("Image upload failed");
+                 showErrorMessage("خطا بتحميل الصورة حاول مرة اخرى");
             });
         } else {
-            // No image selected, proceed without uploading an image
-            addUserWithUserData(userRef, userData);
+             addUserWithUserData(userRef, userData);
         }
     }
 
@@ -251,11 +235,10 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
         userRef.setValue(userData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // User added successfully
-                        showSuccessMessage("User added successfully");
+                         showSuccessMessage("تم الاضافة بنجاح");
+                        finish();
                     } else {
-                        // User addition failed
-                        showErrorMessage("Failed to add user");
+                         showErrorMessage("خطا بتسجيل المستخدم حاول لاحقا");
                     }
                 });
     }
@@ -271,7 +254,6 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
                     }
                 });
     }
-
 
     private void showErrorMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -290,26 +272,46 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
     }
 
 
-    private void showDatePickerDialog() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
+     private void showDatePickerDialog() throws ParseException {
+        LazyDatePicker lazyDatePicker = findViewById(R.id.lazyDatePicker);
+        lazyDatePicker.setDateFormat(LazyDatePicker.DateFormat.MM_DD_YYYY);
 
-        datePickerDialog.show();
+//        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+
+//         Date date = ft.parse("1945-01-01");
+//
+//        lazyDatePicker.setMinDate(date);
+//        lazyDatePicker.setMaxDate(date);
+
+        lazyDatePicker.setOnDatePickListener(new LazyDatePicker.OnDatePickListener() {
+            @Override
+            public void onDatePick(Date dateSelected) {
+
+             }
+        });
+
+        lazyDatePicker.setOnDateSelectedListener(new LazyDatePicker.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Boolean dateSelected) {
+
+                //...
+            }
+        });
+
     }
 
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+    private void formatDate(String date){
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        String selectedDate = dateFormat.format(calendar.getTime());
-
-        binding.etBrithDate.setText(selectedDate);
+        try {
+            Date inputDate = inputDateFormat.parse(date);
+            String formattedDate = outputDateFormat.format(inputDate);
+            birthDate = formattedDate;
+            System.out.println("Formatted Date: " + formattedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
+
 }

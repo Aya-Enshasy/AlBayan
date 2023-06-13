@@ -45,7 +45,7 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="Ayah Enshasi"
                 android:textColor="@color/black"
@@ -62,8 +62,9 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="Ayah Enshasi"
-                android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textColor="@color/orange"
+                 android:textSize="16dp"
+
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +81,7 @@
                 android:text="38e39i29i32o"
                 android:textColor="@color/orange"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,13 +92,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
+                android:layout_marginTop="30dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/identifier">
+                app:layout_constraintTop_toBottomOf="@+id/user_role">
 
                 <ImageView
                     android:layout_width="@dimen/_15sdp"
@@ -362,6 +364,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
