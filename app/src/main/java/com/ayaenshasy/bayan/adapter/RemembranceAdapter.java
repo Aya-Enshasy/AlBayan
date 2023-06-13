@@ -73,7 +73,7 @@ public class RemembranceAdapter extends RecyclerView.Adapter<RemembranceAdapter.
                      .putExtra(Constant.Remembrance_Id, list.get(position).getId() + "")
             );
 
-            AppPreferences.getInstance(context).setIntegerPreferences(Constant.Remembrance_Id, list.get(position).getId());
+//            AppPreferences.getInstance(context).setIntegerPreferences(Constant.Remembrance_Id, list.get(position).getId());
         });
 
     }

@@ -3,60 +3,92 @@ package com.ayaenshasy.bayan.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.ayaenshasy.bayan.model.Role;
+import com.ayaenshasy.bayan.model.user.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class AppPreferences {
 
-    public static AppPreferences sessionInstance;
-    public static String PREF_NAME = "AlBayanPreferences";
-    public SharedPreferences prefs;
+    private static AppPreferences instance;
+    public static final String PREF_NAME = "AlBayanPreferences";
+    private SharedPreferences prefs;
+    private Gson gson = new GsonBuilder().serializeNulls().create();
 
     public static final String SELECTED_LANGUAGE = "language";
+    public static final String USER_ROLE = "role";
+    public static final String USER_DATA = "USER_DATA";
+    public static final String is_Login = "is_Login";
 
-    public static AppPreferences getInstance(Context context) {
-        if (sessionInstance == null) {
-            sessionInstance = new AppPreferences(context);
+    public static synchronized AppPreferences getInstance(Context context) {
+        if (instance == null) {
+            instance = new AppPreferences(context);
         }
-        return sessionInstance;
+        return instance;
     }
 
-    private AppPreferences(Context context) {
+    public AppPreferences(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public boolean setStringPreferences(String key, String value) {
+    public void clearPreferences() {
+        prefs.edit().clear().apply();
+    }
+
+    public void setUserProfile(User userProfile) {
+        prefs.edit().putString(USER_DATA, gson.toJson(userProfile)).apply();
+    }
+
+    public User getUserProfile() {
+        setBooleanPreference(is_Login,true);
+        String userProfileJson = prefs.getString(USER_DATA, "{}");
+        return gson.fromJson(userProfileJson, User.class);
+    }
+
+    public boolean setStringPreference(String key, String value) {
         return prefs.edit().putString(key, value).commit();
     }
 
-    public String getStringPreferences(String key) {
-
+    public String getStringPreference(String key) {
         return prefs.getString(key, "");
     }
 
-    public boolean setIntegerPreferences(String key, int value) {
+    public boolean setUserRole(Role role) {
+        String roleValue = role.name();
+        return prefs.edit().putString(USER_ROLE, roleValue).commit();
+    }
+
+    public Role getUserRole() {
+        return getUserProfile().getRole();
+//        Role roleValue = getUserProfile().getRole();
+//        if (!roleValue.isEmpty()) {
+//            return Role.valueOf(roleValue);
+//        } else {
+//            return Role.ADMIN;
+//        }
+    }
+
+    public boolean setIntegerPreference(String key, int value) {
         return prefs.edit().putInt(key, value).commit();
     }
 
-    public int getIntegerPreferences(String key) {
-
+    public int getIntegerPreference(String key) {
         return prefs.getInt(key, -1);
     }
 
-    public boolean setBooleanPreferences(String key, boolean value) {
+    public boolean setBooleanPreference(String key, boolean value) {
         return prefs.edit().putBoolean(key, value).commit();
     }
 
-    public boolean getBooleanPreferences(String key) {
-
+    public boolean getBooleanPreference(String key) {
         return prefs.getBoolean(key, false);
     }
 
-    public boolean setLongPreferences(String key, double value) {
+    public boolean setLongPreference(String key, double value) {
         return prefs.edit().putLong(key, (long) value).commit();
     }
 
-    public Long getLongPreferences(String key) {
-
+    public Long getLongPreference(String key) {
         return prefs.getLong(key, -1);
     }
-
-
 }

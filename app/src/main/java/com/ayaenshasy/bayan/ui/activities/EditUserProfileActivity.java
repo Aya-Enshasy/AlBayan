@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,9 +48,10 @@ public class EditUserProfileActivity extends BaseActivity {
     FirebaseStorage firebaseStorage;
     String image1;
     ActivityResultLauncher<String> al1;
-    boolean img=false;
+    boolean img = false;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +68,12 @@ public class EditUserProfileActivity extends BaseActivity {
         getData();
     }
 
-    private void getData(){
-        image1 =AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.USER_IMAGE);
-        binding.name.setText(AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.USER_NAME));
-        binding.identifier.setText(AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.USER_ID));
-        Glide.with(getBaseContext()).load(image1).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
+    @SuppressLint("SetTextI18n")
+    private void getData() {
+        User user = preferences.getUserProfile();
+        binding.name.setText(user.getName());
+        binding.identifier.setText(user.getIdNumber() + "");
+        Glide.with(getBaseContext()).load(user.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
 
     }
 
@@ -82,10 +85,10 @@ public class EditUserProfileActivity extends BaseActivity {
         binding.addBtn.setOnClickListener(View -> {
             if (binding.name.getText().toString().equals(""))
                 Toast.makeText(this, "اضف الاسم", Toast.LENGTH_SHORT).show();
-           else
-                editUser();
+            else
+//                editUser();
 
-            closeKeyboard();
+                closeKeyboard();
         });
         binding.backArrow.setOnClickListener(View -> {
             finish();
@@ -117,7 +120,7 @@ public class EditUserProfileActivity extends BaseActivity {
                                             storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Uri> task) {
-                                                    img=true;
+                                                    img = true;
                                                     image1 = task.getResult().toString();
                                                     Glide.with(getBaseContext()).load(image1).transform(new RoundedCorners(8)).error(R.drawable.ic_user_circle_svgrepo_com).into(binding.userImage);
                                                     Log.e("UploadActivity1", image1);
@@ -141,36 +144,36 @@ public class EditUserProfileActivity extends BaseActivity {
 
     }
 
-    private void editUser() {
-        loaderDialog();
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", binding.name.getText().toString());
-        map.put("image", image1);
-        map.put("id", binding.identifier.getText().toString());
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
-
-        User user = new User(binding.identifier.getText().toString(), binding.name.getText().toString(), image1);
-
-        usersRef.child(binding.identifier.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-
-                Toast.makeText(EditUserProfileActivity.this, "تم التعديل بنجاح", Toast.LENGTH_SHORT).show();
-                 AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_NAME, binding.name.getText().toString());
-                AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_IMAGE,image1);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("TAG", "Error adding document", e);
-                Toast.makeText(EditUserProfileActivity.this, "حاول مجددا", Toast.LENGTH_SHORT).show();
-                loader_dialog.dismiss();
-            }
-        });
-
-
-    }
+//    private void editUser() {
+//        loaderDialog();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("name", binding.name.getText().toString());
+//        map.put("image", image1);
+//        map.put("id", binding.identifier.getText().toString());
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference usersRef = database.getReference("users");
+//
+//        User user = new User(binding.identifier.getText().toString(), binding.name.getText().toString(), image1);
+//
+//        usersRef.child(binding.identifier.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void unused) {
+//
+//                Toast.makeText(EditUserProfileActivity.this, "تم التعديل بنجاح", Toast.LENGTH_SHORT).show();
+//                 AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_NAME, binding.name.getText().toString());
+//                AppPreferences.getInstance(getBaseContext()).setStringPreferences(Constant.USER_IMAGE,image1);
+//                finish();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.w("TAG", "Error adding document", e);
+//                Toast.makeText(EditUserProfileActivity.this, "حاول مجددا", Toast.LENGTH_SHORT).show();
+//                loader_dialog.dismiss();
+//            }
+//        });
+//
+//
+//    }
 }

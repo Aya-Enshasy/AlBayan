@@ -1,5 +1,6 @@
 package com.ayaenshasy.bayan.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.ui.activities.ChangePasswordActivity;
 import com.ayaenshasy.bayan.ui.activities.DailyHistoryActivity;
 import com.ayaenshasy.bayan.ui.activities.EditUserProfileActivity;
@@ -25,7 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends BaseFragment {
     FragmentSettingsBinding binding;
 
 
@@ -70,18 +72,21 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    private void getData(){
-        binding.userName.setText(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_NAME));
-        binding.identifier.setText(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID));
-        Glide.with(getActivity()).load(AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_IMAGE)).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
+    @SuppressLint("SetTextI18n")
+    private void getData() {
+        binding.userName.setText(user.getName());
+        binding.userRole.setText(role_name);
+        binding.identifier.setText(user.getName() + "");
+        Glide.with(context).load(user.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true).into(binding.userImage);
 
-         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
+//         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
             binding.changePassword.setVisibility(View.GONE);
-            binding.addUser.setVisibility(View.GONE);
-        }else {
-            binding.changePassword.setVisibility(View.VISIBLE);
-            binding.addUser.setVisibility(View.VISIBLE);
-        }
+//            binding.addUser.setVisibility(View.GONE);
+//        }else {
+//            binding.changePassword.setVisibility(View.VISIBLE);
+//            binding.addUser.setVisibility(View.VISIBLE);
+//        }
     }
 
     private void openActivities() {
@@ -112,7 +117,7 @@ public class SettingsFragment extends Fragment {
         binding.logOut.setOnClickListener(View -> {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
-            AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.LOGIN, "");
+            preferences.clearPreferences();
         });
     }
 

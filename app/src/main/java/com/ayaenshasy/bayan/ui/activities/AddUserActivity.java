@@ -7,16 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.base.BaseActivity;
 import com.ayaenshasy.bayan.databinding.ActivityAddUserBinding;
+import com.ayaenshasy.bayan.model.Role;
+import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
@@ -38,18 +42,24 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
-public class AddUserActivity extends BaseActivity {
+public class AddUserActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
     ActivityAddUserBinding binding;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
     String image1;
     ActivityResultLauncher<String> al1;
-    boolean img=false;
+    boolean img = false;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
+    Role user_role;
+    private Calendar calendar;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -61,63 +71,117 @@ public class AddUserActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
+        user_role = preferences.getUserRole();
+        calendar = Calendar.getInstance();
+        showET();
         clickListener();
         userImage();
         requestStoragePermission();
     }
 
+    private void showET() {
+        if (user_role == Role.TEACHER) {
+            binding.etParentId.setVisibility(View.VISIBLE);
+            binding.tvParentId.setVisibility(View.VISIBLE);
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void clickListener() {
-        binding.userImage.setOnClickListener(View -> {
+        binding.imgUser.setOnClickListener(View -> {
             al1.launch("image/*");
         });
-        binding.addBtn.setOnClickListener(View -> {
-            if (binding.name.getText().toString().equals(""))
+        binding.btnSave.setOnClickListener(View -> {
+            if (binding.etName.getText().toString().equals(""))
                 Toast.makeText(this, "اضف الاسم", Toast.LENGTH_SHORT).show();
-            else if (binding.identifier.getText().toString().equals(""))
+            else if (binding.etId.getText().toString().equals(""))
                 Toast.makeText(this, "اضف رقم الهوية", Toast.LENGTH_SHORT).show();
+            else if (binding.etPhone.getText().toString().equals(""))
+                Toast.makeText(this, "اضف رقم الهاتف", Toast.LENGTH_SHORT).show();
 //            else if (img==false)
 //                Toast.makeText(this, "اضف صورة لو سمحت", Toast.LENGTH_SHORT).show();
-          else
-              addUser();
+            else
+                addUser();
 
             closeKeyboard();
         });
-        binding.backArrow.setOnClickListener(View -> {
-            finish();
+        binding.btnSelectDate.setOnClickListener(View -> {
+            showDatePickerDialog();
         });
+
+//        binding.backArrow.setOnClickListener(View -> {
+//            finish();
+//        });
     }
 
     private void addUser() {
         loaderDialog();
-         Map<String, Object> map = new HashMap<>();
-        map.put("name", binding.name.getText().toString());
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", binding.etName.getText().toString());
         map.put("image", image1);
-        map.put("id", binding.identifier.getText().toString());
+        map.put("id", binding.etId.getText().toString());
+        map.put("phone", binding.etPhone.getText().toString());
+        map.put("birthDate", binding.etBrithDate.getText().toString());
+        //parent id only when we add student
+        map.put("parentId", binding.etParentId.getText().toString());
+        if (binding.radioFemale.isChecked())
+            map.put("gender", binding.radioFemale.getText().toString());
+        else map.put("gender", binding.radioMale.getText().toString());
 
+        switch (user_role) {
+            case TEACHER:
+                addNewUser("users", Role.STUDENT);
+                break;
+            case supervisor:
+                addNewUser("users", Role.ADMIN);
+                break;
+            case ADMIN:
+                addNewUser("users", Role.TEACHER);
+                break;
+        }
+    }
+
+    private void addNewUser(String db_name, Role role) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
+        DatabaseReference usersRef = database.getReference(db_name);
 
-        User user = new User(binding.identifier.getText().toString(), binding.name.getText().toString(), image1);
+        // Create a new User or Student object based on the role
+        User newUser;
+        String name = binding.etName.getText().toString();
+        String id = binding.etId.getText().toString();
+        String phone = binding.etPhone.getText().toString();
+        String image = image1;
+        String birthDate = binding.etBrithDate.getText().toString();
 
-        usersRef.child(binding.identifier.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
+        if (role == Role.STUDENT) {
+            String parentId = binding.etParentId.getText().toString();
+            newUser = new Student(name, id, parentId, phone, birthDate, image);
+        } else {
+            newUser = new User(name, id, phone, image, role,birthDate);
+        }
 
-                Toast.makeText(AddUserActivity.this, "Add Successfully", Toast.LENGTH_SHORT).show();
-                binding.progressBar.setVisibility(View.GONE);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("TAG", "Error adding document", e);
-                Toast.makeText(AddUserActivity.this, "حاول مجددا", Toast.LENGTH_SHORT).show();
-                loader_dialog.dismiss();
-            }
-        });
+        // Generate a new unique key for the user
+        String userId = usersRef.push().getKey();
 
+        // Add the user to the database under the generated key
+//        assert userId != null;
+        usersRef.child(userId).setValue(newUser)
+                .addOnCompleteListener(task -> {
+                    // Check if the user addition was successful
+                    if (task.isSuccessful()) {
+                        // User added successfully
+                        // Perform any additional actions or show success message
+                        Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show();
+                        loader_dialog.dismiss();
+                    } else {
+                        // User addition failed
+                        // Handle the error or show an error message
+                        Toast.makeText(this, "Failed to add user", Toast.LENGTH_SHORT).show();
+//                        Toasty.error(getApplicationContext(), "Failed to add user", Toast.LENGTH_SHORT).show();
+                        loader_dialog.dismiss();
 
+                    }
+                });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -133,7 +197,8 @@ public class AddUserActivity extends BaseActivity {
                     @Override
                     public void onActivityResult(Uri result) {
 
-                        Glide.with(getBaseContext()).load(result.toString()).transform(new RoundedCorners(8)).error(R.drawable.ic_user_circle_svgrepo_com).into(binding.userImage);
+                        Glide.with(getBaseContext()).load(result.toString()).transform(new RoundedCorners(8)).
+                                error(R.drawable.ic_user_circle_svgrepo_com).into(binding.imgUser);
 
                         if (result != null) {
                             storageReference = firebaseStorage.getReference("images/" + result.getLastPathSegment());
@@ -145,9 +210,10 @@ public class AddUserActivity extends BaseActivity {
                                             storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Uri> task) {
-                                                    img=true;
+                                                    img = true;
                                                     image1 = task.getResult().toString();
-                                                    Glide.with(getBaseContext()).load(image1).transform(new RoundedCorners(8)).error(R.drawable.ic_user_circle_svgrepo_com).into(binding.userImage);
+                                                    Glide.with(getBaseContext()).load(image1).transform(new RoundedCorners(8))
+                                                            .error(R.drawable.ic_user_circle_svgrepo_com).into(binding.imgUser);
                                                     Log.e("UploadActivity1", image1);
 
                                                 }
@@ -169,4 +235,26 @@ public class AddUserActivity extends BaseActivity {
 
     }
 
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                this,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        String selectedDate = dateFormat.format(calendar.getTime());
+
+        binding.etBrithDate.setText(selectedDate);
+    }
 }

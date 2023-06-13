@@ -31,41 +31,41 @@ public class ChangePasswordActivity extends BaseActivity {
         binding = ActivityChangePasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.addBtn.setOnClickListener(View->{changePassword();});
+//        binding.addBtn.setOnClickListener(View->{changePassword();});
 
         binding.backArrow.setOnClickListener(View->{finish();});
 
     }
 
-    private void changePassword() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-
-        DatabaseReference passwordRef = database.getReference("Password").child(AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.password));
-
-        loaderDialog();
-
-        passwordRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
-                     dataSnapshot.getRef().setValue(binding.password.getText().toString());
-                    Toast.makeText(ChangePasswordActivity.this, "تم التعديل بنجاح", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    // Password does not exist or is null
-                    Toast.makeText(ChangePasswordActivity.this, "كلمة المرور غير صحيحة", Toast.LENGTH_SHORT).show();
-                }
-                loader_dialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                loader_dialog.dismiss();
-                Toast.makeText(ChangePasswordActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("Password", databaseError.getMessage());
-            }
-        });
-    }
+//    private void changePassword() {
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//
+//
+//        DatabaseReference passwordRef = database.getReference("Password").child(AppPreferences.getInstance(getBaseContext()).getStringPreferences(Constant.password));
+//
+//        loaderDialog();
+//
+//        passwordRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
+//                     dataSnapshot.getRef().setValue(binding.password.getText().toString());
+//                    Toast.makeText(ChangePasswordActivity.this, "تم التعديل بنجاح", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                } else {
+//                    // Password does not exist or is null
+//                    Toast.makeText(ChangePasswordActivity.this, "كلمة المرور غير صحيحة", Toast.LENGTH_SHORT).show();
+//                }
+//                loader_dialog.dismiss();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                loader_dialog.dismiss();
+//                Toast.makeText(ChangePasswordActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+//                Log.e("Password", databaseError.getMessage());
+//            }
+//        });
+//    }
 
 }

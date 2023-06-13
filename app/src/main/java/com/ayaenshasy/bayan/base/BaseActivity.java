@@ -28,18 +28,19 @@ import com.google.firebase.FirebaseApp;
 import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
-     public Dialog   loader_dialog;
+    public Dialog loader_dialog;
     public static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
-      AppPreferences preferences;
-     @Override
+    public AppPreferences preferences;
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         preferences = AppPreferences.getInstance(this);
 
 
-         loader_dialog = new Dialog(this);
+        loader_dialog = new Dialog(this);
 
         sp = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         editor = sp.edit();

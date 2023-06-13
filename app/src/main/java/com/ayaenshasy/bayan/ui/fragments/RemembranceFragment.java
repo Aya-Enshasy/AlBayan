@@ -73,69 +73,69 @@ public class RemembranceFragment extends Fragment {
         View view = binding.getRoot();
 
         RemembranceAdapter();
-        getData();
-        getDataFromShared();
+//        getData();
+//        getDataFromShared();
 
         return view;
     }
 
-    private void getData() {
+//    private void getData() {
+//
+//            FirebaseDatabase database = FirebaseDatabase.getInstance();
+//            DatabaseReference remembranceRef = database.getReference("Remembrance");
+//
+//            remembranceRef.addValueEventListener(new ValueEventListener() {
+//                @SuppressLint("RestrictedApi")
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        RemembranceModel remembranceModel = new RemembranceModel();
+//                        remembranceModel.setId(dataSnapshot.child("id").getValue(Integer.class));
+//                        remembranceModel.setName(dataSnapshot.child("name").getValue(String.class));
+//
+//                        ArrayList<RemembranceDetailsModel> itemList = new ArrayList<>();
+//                        for (DataSnapshot itemSnapshot : dataSnapshot.child("list").getChildren()) {
+//                            RemembranceDetailsModel remembranceItem = itemSnapshot.getValue(RemembranceDetailsModel.class);
+//
+//                            itemList.add(remembranceItem);
+//                        }
+//                        remembranceModel.setList(itemList);
+//
+//                        list.add(remembranceModel);
+//                        Gson gson = new Gson();
+//                        String remembranceItemListJson = gson.toJson(list);
+//                        AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.Remembrance_List,remembranceItemListJson);
+//
+//                        Log.e("remembranceModel", dataSnapshot.toString());
+//                    }
+//
+//                    adapter.notifyDataSetChanged();
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//                    Toast.makeText(getActivity(),"no data",Toast.LENGTH_LONG).show();
+//                    Log.e("error","error");
+//                }
+//            });
+//
+//    }
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference remembranceRef = database.getReference("Remembrance");
-
-            remembranceRef.addValueEventListener(new ValueEventListener() {
-                @SuppressLint("RestrictedApi")
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        RemembranceModel remembranceModel = new RemembranceModel();
-                        remembranceModel.setId(dataSnapshot.child("id").getValue(Integer.class));
-                        remembranceModel.setName(dataSnapshot.child("name").getValue(String.class));
-
-                        ArrayList<RemembranceDetailsModel> itemList = new ArrayList<>();
-                        for (DataSnapshot itemSnapshot : dataSnapshot.child("list").getChildren()) {
-                            RemembranceDetailsModel remembranceItem = itemSnapshot.getValue(RemembranceDetailsModel.class);
-
-                            itemList.add(remembranceItem);
-                        }
-                        remembranceModel.setList(itemList);
-
-                        list.add(remembranceModel);
-                        Gson gson = new Gson();
-                        String remembranceItemListJson = gson.toJson(list);
-                        AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.Remembrance_List,remembranceItemListJson);
-
-                        Log.e("remembranceModel", dataSnapshot.toString());
-                    }
-
-                    adapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(getActivity(),"no data",Toast.LENGTH_LONG).show();
-                    Log.e("error","error");
-                }
-            });
-
-    }
-
-    private void getDataFromShared() {
-
-        String jsonString = AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.Remembrance_List);
-
-        if (!jsonString.equals("")) {
-            Type type = new TypeToken<ArrayList<RemembranceModel>>() {
-            }.getType();
-            ArrayList<RemembranceModel> dataList = new Gson().fromJson(jsonString, type);
-
-            RemembranceAdapter adapter = new RemembranceAdapter(getActivity(), dataList);
-            binding.recyclerview.setAdapter(adapter);
-
-        }
-    }
+//    private void getDataFromShared() {
+//
+//        String jsonString = AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.Remembrance_List);
+//
+//        if (!jsonString.equals("")) {
+//            Type type = new TypeToken<ArrayList<RemembranceModel>>() {
+//            }.getType();
+//            ArrayList<RemembranceModel> dataList = new Gson().fromJson(jsonString, type);
+//
+//            RemembranceAdapter adapter = new RemembranceAdapter(getActivity(), dataList);
+//            binding.recyclerview.setAdapter(adapter);
+//
+//        }
+//    }
 
     private void RemembranceAdapter() {
 

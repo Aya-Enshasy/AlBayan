@@ -59,40 +59,40 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getUserData();
+//        getUserData();
 
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
-    private void getUserData(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String user_id = AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID);
-
-        DatabaseReference usersRef = database.getReference("users").child(user_id);
-
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                if (dataSnapshot.exists()) {
-                    String name = dataSnapshot.child("name").getValue(String.class);
-                    String image = dataSnapshot.child("image").getValue(String.class);
-                    AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.USER_NAME,name);
-                    AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.USER_IMAGE,image);
-
-                    // Do something with the retrieved user data
-                    Log.e("UserData", "Name: " + name);
-                    Log.e("UserData", "img  : " + image);
-                }}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                // Handle any errors or cancellations
-            }
-        });
-
-
-    }
+//    private void getUserData(){
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        String user_id = AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID);
+//
+//        DatabaseReference usersRef = database.getReference("users").child(user_id);
+//
+//        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//
+//                if (dataSnapshot.exists()) {
+//                    String name = dataSnapshot.child("name").getValue(String.class);
+//                    String image = dataSnapshot.child("image").getValue(String.class);
+//                    AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.USER_NAME,name);
+//                    AppPreferences.getInstance(getActivity()).setStringPreferences(Constant.USER_IMAGE,image);
+//
+//                    // Do something with the retrieved user data
+//                    Log.e("UserData", "Name: " + name);
+//                    Log.e("UserData", "img  : " + image);
+//                }}
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//                // Handle any errors or cancellations
+//            }
+//        });
+//
+//
+//    }
 }

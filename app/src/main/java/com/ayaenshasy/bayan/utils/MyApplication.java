@@ -19,12 +19,13 @@ public class MyApplication extends Application {
         super.onCreate();
         mAppInstance = this;
         AppPreferences preferences = AppPreferences.getInstance(this);
-        String language = preferences.getStringPreferences(AppPreferences.SELECTED_LANGUAGE);
+        String language = preferences.getStringPreference(AppPreferences.SELECTED_LANGUAGE);
         if (TextUtils.isEmpty(language)) {
             language = "ar";
-            preferences.setStringPreferences(AppPreferences.SELECTED_LANGUAGE, language);
+            preferences.setStringPreference(AppPreferences.SELECTED_LANGUAGE, language);
         }
     }
+
 
 
     public static synchronized MyApplication getInstance() {
