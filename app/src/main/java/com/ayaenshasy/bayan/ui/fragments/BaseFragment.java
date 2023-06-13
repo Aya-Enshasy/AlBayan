@@ -30,7 +30,7 @@ public class BaseFragment extends Fragment {
     Context context;
     Role role;
     String role_name;
-    User user;
+    User currentUser;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -43,7 +43,7 @@ public class BaseFragment extends Fragment {
         preferences = new AppPreferences(context);
         role = preferences.getUserRole();
         role_name = preferences.getUserRole().name();
-         user = preferences.getUserProfile();
+        currentUser = preferences.getUserProfile();
 
 //        lang = sharedPreferences.readString(AppSharedPreferences.LANG);
     }

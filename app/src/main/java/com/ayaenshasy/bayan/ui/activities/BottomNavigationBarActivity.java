@@ -26,6 +26,7 @@ public class BottomNavigationBarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_navigation_bar);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        openFragment(HomeFragment.newInstance());
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

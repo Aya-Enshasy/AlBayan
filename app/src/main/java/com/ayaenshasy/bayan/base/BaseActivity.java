@@ -21,6 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.model.Role;
+import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.AppContextWrapper;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.google.firebase.FirebaseApp;
@@ -32,12 +34,20 @@ public class BaseActivity extends AppCompatActivity {
     public static SharedPreferences sp;
     public static SharedPreferences.Editor editor;
     public AppPreferences preferences;
+    Context context;
+    public Role role;
+    public String role_name;
+    public User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         preferences = AppPreferences.getInstance(this);
+        context = this;
+        role = preferences.getUserRole();
+        role_name = preferences.getUserRole().name();
+        user = preferences.getUserProfile();
 
 
         loader_dialog = new Dialog(this);

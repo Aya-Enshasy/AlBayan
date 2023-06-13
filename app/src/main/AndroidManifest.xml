@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Quraney"
         tools:targetApi="31">
         <activity
+            android:name=".addNewAttendanceActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.ChangePasswordActivity"
             android:exported="false" />
         <activity

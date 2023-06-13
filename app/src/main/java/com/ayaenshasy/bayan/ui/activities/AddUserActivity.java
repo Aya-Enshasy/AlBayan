@@ -32,8 +32,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -130,7 +134,7 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
 
         switch (user_role) {
             case TEACHER:
-                addNewUser("users", Role.STUDENT);
+                addNewUser("students", Role.STUDENT);
                 break;
             case supervisor:
                 addNewUser("users", Role.ADMIN);
@@ -146,42 +150,56 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
         DatabaseReference usersRef = database.getReference(db_name);
 
         // Create a new User or Student object based on the role
-        User newUser;
+        Student newUser;
         String name = binding.etName.getText().toString();
         String id = binding.etId.getText().toString();
         String phone = binding.etPhone.getText().toString();
         String image = image1;
         String birthDate = binding.etBrithDate.getText().toString();
+        String teacherId = user.getIdNumber();  // Assuming the teacher ID is retrieved from the "user" object
 
         if (role == Role.STUDENT) {
             String parentId = binding.etParentId.getText().toString();
-            newUser = new Student(name, id, parentId, phone, birthDate, image);
+            newUser = new Student(name, id, phone, image, role, birthDate, parentId, teacherId);
         } else {
-            newUser = new User(name, id, phone, image, role,birthDate);
+            
+            newUser = new Student(name, id, phone, image, role, birthDate, "", teacherId);
         }
 
-        // Generate a new unique key for the user
-        String userId = usersRef.push().getKey();
+        // Check if the ID already exists in the database
+        Query query = usersRef.child(id);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // ID already exists, show an error message or handle the case accordingly
+                    Toast.makeText(getApplicationContext(), "ID already exists", Toast.LENGTH_SHORT).show();
+                } else {
+                    // ID is unique, proceed with adding the user to the database
+                    // Set the user object at the specified key (ID)
+                    usersRef.child(id).setValue(newUser)
+                            .addOnCompleteListener(task -> {
+                                // Check if the user addition was successful
+                                if (task.isSuccessful()) {
+                                    // User added successfully
+                                    // Perform any additional actions or show success message
+                                    Toast.makeText(getApplicationContext(), "User added successfully", Toast.LENGTH_SHORT).show();
+                                    loader_dialog.dismiss();
+                                } else {
+                                    // User addition failed
+                                    // Handle the error or show an error message
+                                    Toast.makeText(getApplicationContext(), "Failed to add user", Toast.LENGTH_SHORT).show();
+                                    loader_dialog.dismiss();
+                                }
+                            });
+                }
+            }
 
-        // Add the user to the database under the generated key
-//        assert userId != null;
-        usersRef.child(userId).setValue(newUser)
-                .addOnCompleteListener(task -> {
-                    // Check if the user addition was successful
-                    if (task.isSuccessful()) {
-                        // User added successfully
-                        // Perform any additional actions or show success message
-                        Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show();
-                        loader_dialog.dismiss();
-                    } else {
-                        // User addition failed
-                        // Handle the error or show an error message
-                        Toast.makeText(this, "Failed to add user", Toast.LENGTH_SHORT).show();
-//                        Toasty.error(getApplicationContext(), "Failed to add user", Toast.LENGTH_SHORT).show();
-                        loader_dialog.dismiss();
-
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

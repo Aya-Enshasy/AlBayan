@@ -74,10 +74,10 @@ public class SettingsFragment extends BaseFragment {
 
     @SuppressLint("SetTextI18n")
     private void getData() {
-        binding.userName.setText(user.getName());
+        binding.userName.setText(currentUser.getName());
         binding.userRole.setText(role_name);
-        binding.identifier.setText(user.getName() + "");
-        Glide.with(context).load(user.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        binding.identifier.setText(currentUser.getName() + "");
+        Glide.with(context).load(currentUser.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
 
 //         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
