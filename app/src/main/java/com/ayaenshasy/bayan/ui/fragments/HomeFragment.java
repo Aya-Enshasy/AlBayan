@@ -1,28 +1,41 @@
 package com.ayaenshasy.bayan.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
+import com.ayaenshasy.bayan.databinding.AddNewAttendanceLayoutBinding;
 import com.ayaenshasy.bayan.databinding.FragmentHomeBinding;
 import com.ayaenshasy.bayan.databinding.FragmentSettingsBinding;
+import com.ayaenshasy.bayan.listeners.DataListener;
+import com.ayaenshasy.bayan.model.Attendance;
 import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,8 +43,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,12 +59,15 @@ public class HomeFragment extends BaseFragment {
     FragmentHomeBinding binding;
     private StudentAdapter adapter;
     private DatabaseReference studentsRef;
+    private View progressView;
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
+    private Context context;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -59,6 +78,12 @@ public class HomeFragment extends BaseFragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -90,10 +115,15 @@ public class HomeFragment extends BaseFragment {
 
     private void setRvData() {
         if (role == Role.TEACHER) {
-            binding.rvUser.setLayoutManager(new LinearLayoutManager(context));
+            binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
             List<Student> students = new ArrayList<>();
-            adapter = new StudentAdapter(students, context);
+            adapter = new StudentAdapter(students, context, new DataListener<Student>() {
+                @Override
+                public void sendData(Student student) {
+                    showBottomSheet(student);
+                }
+            });
             binding.rvUser.setAdapter(adapter);
 
             // Retrieve teacher ID from Firebase
@@ -107,14 +137,14 @@ public class HomeFragment extends BaseFragment {
                             // Query students based on teacher ID
                             DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
                             Query query = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
-                            query.addValueEventListener(new ValueEventListener() {
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    List<Student> students = new ArrayList<>();
                                     for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
                                         Student student = studentSnapshot.getValue(Student.class);
                                         students.add(student);
                                     }
+                                    binding.progressBar3.setVisibility(View.GONE);
                                     adapter.setStudents(students);
                                 }
 
@@ -135,7 +165,6 @@ public class HomeFragment extends BaseFragment {
         } else {
             // Handle the case for non-teacher role if needed
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -146,4 +175,101 @@ public class HomeFragment extends BaseFragment {
         Glide.with(context).load(currentUser.getImage()).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
     }
+
+    private void showBottomSheet(Student student) {
+        // Check if the fragment is attached to the activity and the context is not null
+        if (isAdded() && context != null) {
+            // Create and show the bottom sheet
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+            AddNewAttendanceLayoutBinding bottomSheetBinding = AddNewAttendanceLayoutBinding.inflate(LayoutInflater.from(context));
+            bottomSheetDialog.setContentView(bottomSheetBinding.getRoot());
+
+            // Get references to the views
+            EditText etPlanToday = bottomSheetBinding.etPlanToday;
+            EditText etTodayPercentage = bottomSheetBinding.etTodayPercentage;
+            EditText etRepeated = bottomSheetBinding.etRepeated;
+            EditText etPlanTomorrow = bottomSheetBinding.etPlanTomorrow;
+            Button btnSave = bottomSheetBinding.btnSave;
+            ProgressBar progressView = bottomSheetBinding.progressBar;
+
+            // Set click listener for the save button
+            btnSave.setOnClickListener(v -> {
+                // Get the values entered by the user
+                String planToday = etPlanToday.getText().toString().trim();
+                String todayPercentage = etTodayPercentage.getText().toString().trim();
+                String repeated = etRepeated.getText().toString().trim();
+                String planTomorrow = etPlanTomorrow.getText().toString().trim();
+
+                // Show the progress view
+                showProgress(true, progressView);
+
+                // Save the data to Firebase Realtime Database
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
+                String attendanceId = databaseReference.push().getKey();
+                String currentDate = getCurrentDate();
+
+                // Create an attendance object
+                Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planTomorrow);
+
+                // Save the attendance object to the database
+                databaseReference.child(attendanceId).setValue(attendance)
+                        .addOnSuccessListener(aVoid -> {
+                            // Data saved successfully
+                            Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show();
+                            bottomSheetDialog.dismiss();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Failed to save data
+                            Toast.makeText(context, "Failed to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnCompleteListener(task -> {
+                            // Hide the progress view
+                            showProgress(false, progressView);
+                        });
+            });
+
+            bottomSheetDialog.show();
+
+            // Animate the bottom sheet dialog
+            animateBottomSheet(bottomSheetDialog);
+        }
+    }
+
+    private void showProgress(boolean show, ProgressBar progressView) {
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        progressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    }
+                });
+    }
+
+    private void animateBottomSheet(BottomSheetDialog bottomSheetDialog) {
+        View bottomSheetView = bottomSheetDialog.findViewById(R.id.bottom_sheet_layout);
+
+        if (bottomSheetView != null && bottomSheetView.isAttachedToWindow()) {
+            int centerX = (bottomSheetView.getLeft() + bottomSheetView.getRight()) / 2;
+            int centerY = (bottomSheetView.getTop() + bottomSheetView.getBottom()) / 2;
+
+            int startRadius = 0;
+            int endRadius = Math.max(bottomSheetView.getWidth(), bottomSheetView.getHeight());
+
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(bottomSheetView, centerX, centerY, startRadius, endRadius);
+            circularReveal.setDuration(500);
+            bottomSheetView.setVisibility(View.VISIBLE);
+            circularReveal.start();
+        }
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date currentDate = new Date();
+        return dateFormat.format(currentDate);
+    }
+
 }
+

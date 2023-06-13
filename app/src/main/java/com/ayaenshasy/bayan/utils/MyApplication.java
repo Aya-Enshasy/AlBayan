@@ -9,6 +9,11 @@ public class MyApplication extends Application {
     static MyApplication mAppInstance;
 
 
+    public static Context getContext() {
+        return getInstance().getApplicationContext();
+    }
+
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -25,8 +30,6 @@ public class MyApplication extends Application {
             preferences.setStringPreference(AppPreferences.SELECTED_LANGUAGE, language);
         }
     }
-
-
 
     public static synchronized MyApplication getInstance() {
         return mAppInstance;
