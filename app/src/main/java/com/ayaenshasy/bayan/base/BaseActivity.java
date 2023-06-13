@@ -45,8 +45,8 @@ public class BaseActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         preferences = AppPreferences.getInstance(this);
         context = this;
-        role = preferences.getUserRole();
-        role_name = preferences.getUserRole().name();
+//        role = preferences.getUserRole();
+//        role_name = preferences.getUserRole().name();
         user = preferences.getUserProfile();
 
 

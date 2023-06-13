@@ -11,6 +11,7 @@ import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -51,18 +52,20 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class AddUserActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
     ActivityAddUserBinding binding;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
-    String image1;
+    Uri imageUri;
     ActivityResultLauncher<String> al1;
     boolean img = false;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
     Role user_role;
     private Calendar calendar;
+    Map<String, Object> map;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -120,78 +123,84 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
 
     private void addUser() {
         loaderDialog();
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", binding.etName.getText().toString());
-        map.put("image", image1);
-        map.put("id", binding.etId.getText().toString());
-        map.put("phone", binding.etPhone.getText().toString());
-        map.put("birthDate", binding.etBrithDate.getText().toString());
-        //parent id only when we add student
-        map.put("parentId", binding.etParentId.getText().toString());
-        if (binding.radioFemale.isChecked())
-            map.put("gender", binding.radioFemale.getText().toString());
-        else map.put("gender", binding.radioMale.getText().toString());
 
         switch (user_role) {
             case TEACHER:
                 addNewUser("students", Role.STUDENT);
                 break;
-            case supervisor:
+            case SUPERVISOR:
                 addNewUser("users", Role.ADMIN);
                 break;
             case ADMIN:
                 addNewUser("users", Role.TEACHER);
                 break;
+            case BIG_BOSS:
+                addNewUser("users", Role.SUPERVISOR);
+                break;
         }
     }
 
     private void addNewUser(String db_name, Role role) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference(db_name);
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(db_name);
 
-        // Create a new User or Student object based on the role
-        Student newUser;
-        String name = binding.etName.getText().toString();
         String id = binding.etId.getText().toString();
+        String responsibleId = user.getId(); // Assuming the teacher ID is retrieved from the "user" object
+
+        String name = binding.etName.getText().toString();
         String phone = binding.etPhone.getText().toString();
-        String image = image1;
         String birthDate = binding.etBrithDate.getText().toString();
-        String teacherId = user.getIdNumber();  // Assuming the teacher ID is retrieved from the "user" object
+        String gender = binding.radioFemale.isChecked() ? binding.radioFemale.getText().toString() : binding.radioMale.getText().toString();
+
+        // Validate input fields before proceeding
+        if (TextUtils.isEmpty(name)) {
+            showErrorMessage("Name field is empty");
+            return;
+        }
+
+        if (TextUtils.isEmpty(phone)) {
+            showErrorMessage("Phone field is empty");
+            return;
+        }
+
+        if (TextUtils.isEmpty(birthDate)) {
+            showErrorMessage("Birth date field is empty");
+            return;
+        }
+
+        // Create a map to store user data
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("id", id);
+        map.put("phone", phone);
+        map.put("birthDate", birthDate);
+        map.put("responsible_id", responsibleId);
+        map.put("gender", gender);
+        map.put("role", role.toString());
 
         if (role == Role.STUDENT) {
             String parentId = binding.etParentId.getText().toString();
-            newUser = new Student(name, id, phone, image, role, birthDate, parentId, teacherId);
-        } else {
-            
-            newUser = new Student(name, id, phone, image, role, birthDate, "", teacherId);
+
+            // Validate the parent ID field for students
+            if (TextUtils.isEmpty(parentId)) {
+                showErrorMessage("Parent ID field is empty");
+                return;
+            }
+
+            map.put("parentId", parentId);
         }
 
         // Check if the ID already exists in the database
-        Query query = usersRef.child(id);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // ID already exists, show an error message or handle the case accordingly
-                    Toast.makeText(getApplicationContext(), "ID already exists", Toast.LENGTH_SHORT).show();
+                    showErrorMessage("ID already exists");
                 } else {
                     // ID is unique, proceed with adding the user to the database
-                    // Set the user object at the specified key (ID)
-                    usersRef.child(id).setValue(newUser)
-                            .addOnCompleteListener(task -> {
-                                // Check if the user addition was successful
-                                if (task.isSuccessful()) {
-                                    // User added successfully
-                                    // Perform any additional actions or show success message
-                                    Toast.makeText(getApplicationContext(), "User added successfully", Toast.LENGTH_SHORT).show();
-                                    loader_dialog.dismiss();
-                                } else {
-                                    // User addition failed
-                                    // Handle the error or show an error message
-                                    Toast.makeText(getApplicationContext(), "Failed to add user", Toast.LENGTH_SHORT).show();
-                                    loader_dialog.dismiss();
-                                }
-                            });
+
+                    // Upload the image to Firebase Storage
+                    uploadUserImage(usersRef.child(id), map);
                 }
             }
 
@@ -202,56 +211,84 @@ public class AddUserActivity extends BaseActivity implements DatePickerDialog.On
         });
     }
 
+    private void uploadUserImage(DatabaseReference userRef, Map<String, Object> userData) {
+        if (imageUri != null) {
+            // Generate a unique filename for the image
+            String filename = UUID.randomUUID().toString();
+
+            // Get a reference to the Firebase Storage location
+            StorageReference storageReference = firebaseStorage.getReference().child("images/" + filename);
+
+            // Upload the image file to Firebase Storage
+            UploadTask uploadTask = storageReference.putFile(Uri.parse(String.valueOf(imageUri)));
+
+            // Monitor the upload process
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                // Get the download URL of the uploaded image
+                storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String imageUrl = uri.toString();
+
+                    // Add the image URL to the user data
+                    userData.put("image", imageUrl);
+
+                    // Add the user to the database with the complete user data
+                    addUserWithUserData(userRef, userData);
+                }).addOnFailureListener(e -> {
+                    // Handle any errors during URL retrieval
+                    showErrorMessage("Failed to retrieve image URL");
+                });
+            }).addOnFailureListener(e -> {
+                // Handle any errors during the upload process
+                showErrorMessage("Image upload failed");
+            });
+        } else {
+            // No image selected, proceed without uploading an image
+            addUserWithUserData(userRef, userData);
+        }
+    }
+
+    private void addUserWithUserData(DatabaseReference userRef, Map<String, Object> userData) {
+        userRef.setValue(userData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // User added successfully
+                        showSuccessMessage("User added successfully");
+                    } else {
+                        // User addition failed
+                        showErrorMessage("Failed to add user");
+                    }
+                });
+    }
+
+    private void userImage() {
+        al1 = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                result -> {
+                    if (result != null) {
+                        imageUri = result;
+                        Glide.with(getBaseContext()).load(imageUri).transform(new RoundedCorners(8))
+                                .error(R.drawable.ic_user_circle_svgrepo_com).into(binding.imgUser);
+                    }
+                });
+    }
+
+
+    private void showErrorMessage(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        loader_dialog.dismiss();
+    }
+
+    private void showSuccessMessage(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        loader_dialog.dismiss();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestStoragePermission() {
         requestPermissions(new String[]{
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
     }
 
-    private void userImage() {
-        al1 = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri result) {
-
-                        Glide.with(getBaseContext()).load(result.toString()).transform(new RoundedCorners(8)).
-                                error(R.drawable.ic_user_circle_svgrepo_com).into(binding.imgUser);
-
-                        if (result != null) {
-                            storageReference = firebaseStorage.getReference("images/" + result.getLastPathSegment());
-                            StorageTask<UploadTask.TaskSnapshot> uploadTask = storageReference.putFile(result);
-
-                            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Uri> task) {
-                                                    img = true;
-                                                    image1 = task.getResult().toString();
-                                                    Glide.with(getBaseContext()).load(image1).transform(new RoundedCorners(8))
-                                                            .error(R.drawable.ic_user_circle_svgrepo_com).into(binding.imgUser);
-                                                    Log.e("UploadActivity1", image1);
-
-                                                }
-                                            });
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-
-                                            e.printStackTrace();
-                                            Toast.makeText(getBaseContext(), "Image Uploaded Failed!!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    }
-                });
-
-
-    }
 
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(

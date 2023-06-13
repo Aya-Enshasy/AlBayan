@@ -66,30 +66,27 @@ public class LoginActivity extends BaseActivity {
 
         String desiredValue = binding.identifier.getText().toString();
 
-        Query query = usersRef.orderByChild("idNumber").equalTo(desiredValue);
+        Query query = usersRef.orderByChild("id").equalTo(desiredValue);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-                        if (user != null && user.getPhoneNumber().equals(binding.etPhoneNumber.getText().toString())) {
+                        if (user != null && user.getPhone().equals(binding.etPhoneNumber.getText().toString())) {
                             Toast.makeText(LoginActivity.this, "تم تسجيل الدخول بنجاح", Toast.LENGTH_SHORT).show();
-//                            Log.e("maryam",preferences.getUserProfile().getIdNumber());
-//                            Log.e("maryam",preferences.getUserProfile().getImageUri());
-//                            Log.e("maryam",preferences.getUserProfile().getRole().toString());
-//
+//                            preferences.setBooleanPreference(AppPreferences.IS_FIRST_TIME, false);
                             preferences.setUserProfile(user);
                             startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
                             finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلةmmmm ", Toast.LENGTH_SHORT).show();
                             loader_dialog.dismiss();
                         }
                     }
                 } else {
                     loader_dialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلةa ", Toast.LENGTH_SHORT).show();
                 }
             }
 

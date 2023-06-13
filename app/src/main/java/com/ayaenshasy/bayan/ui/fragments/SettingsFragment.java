@@ -77,7 +77,7 @@ public class SettingsFragment extends BaseFragment {
         binding.userName.setText(currentUser.getName());
         binding.userRole.setText(role_name);
         binding.identifier.setText(currentUser.getName() + "");
-        Glide.with(context).load(currentUser.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context).load(currentUser.getImage()).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
 
 //         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){

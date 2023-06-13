@@ -78,7 +78,7 @@
             android:elevation="4dp"
             android:ems="10"
             android:hint="* * * * * * * * *"
-            android:inputType="textPassword"
+            android:inputType="number"
             android:outlineSpotShadowColor="#D8D8D8"
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"

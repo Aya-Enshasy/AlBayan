@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
@@ -96,30 +97,33 @@ public class HomeFragment extends BaseFragment {
             binding.rvUser.setAdapter(adapter);
 
             // Retrieve teacher ID from Firebase
-            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users").child("your_teacher_node");
+            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
             teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String teacherId = snapshot.getValue(String.class);
-                    if (teacherId != null) {
-                        // Query students based on teacher ID
-                        Query query = studentsRef.orderByChild("teacherId").equalTo(currentUser.getIdNumber());
-                        query.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                List<Student> students = new ArrayList<>();
-                                for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                                    Student student = studentSnapshot.getValue(Student.class);
-                                    students.add(student);
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
+                        if (teacherId != null) {
+                            // Query students based on teacher ID
+                            DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+                            Query query = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
+                            query.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    List<Student> students = new ArrayList<>();
+                                    for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
+                                        Student student = studentSnapshot.getValue(Student.class);
+                                        students.add(student);
+                                    }
+                                    adapter.setStudents(students);
                                 }
-                                adapter.setStudents(students);
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                // Handle any errors
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // Handle any errors
+                                }
+                            });
+                        }
                     }
                 }
 
@@ -131,6 +135,7 @@ public class HomeFragment extends BaseFragment {
         } else {
             // Handle the case for non-teacher role if needed
         }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -138,7 +143,7 @@ public class HomeFragment extends BaseFragment {
         binding.userName.setText(currentUser.getName());
         binding.userRole.setText(role_name);
         binding.identifier.setText(currentUser.getName() + "");
-        Glide.with(context).load(currentUser.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context).load(currentUser.getImage()).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
     }
 }

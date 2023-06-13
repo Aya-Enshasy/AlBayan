@@ -42,13 +42,16 @@ public class SplashActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-          if (!preferences.getBooleanPreference(AppPreferences.is_Login)) {
+          if (preferences.getUserProfile().getRole() == null) {
                     startActivity(new Intent(getBaseContext(), LoginActivity.class));
                     finish();
                 } else {
-                  startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
+              preferences.getUserProfile();
+              startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
                     finish();
                 }
+
+
             }
         }, 1000);
     }

@@ -18,7 +18,8 @@ public class AppPreferences {
     public static final String SELECTED_LANGUAGE = "language";
     public static final String USER_ROLE = "role";
     public static final String USER_DATA = "USER_DATA";
-    public static final String is_Login = "is_Login";
+//    public static final String is_Login = "is_Login";
+//    public static final String IS_FIRST_TIME = "IS_FIRST_TIME";
 
     public static synchronized AppPreferences getInstance(Context context) {
         if (instance == null) {
@@ -32,7 +33,10 @@ public class AppPreferences {
     }
 
     public void clearPreferences() {
-        prefs.edit().clear().apply();
+//        setBooleanPreference(IS_FIRST_TIME,true);
+//        setUserProfile(null);
+
+        prefs.edit().putString(USER_DATA,"{}").apply();
     }
 
     public void setUserProfile(User userProfile) {
@@ -40,7 +44,6 @@ public class AppPreferences {
     }
 
     public User getUserProfile() {
-        setBooleanPreference(is_Login,true);
         String userProfileJson = prefs.getString(USER_DATA, "{}");
         return gson.fromJson(userProfileJson, User.class);
     }

@@ -6,18 +6,13 @@ import com.ayaenshasy.bayan.model.Role;
 
 public class Student extends User {
     private String parentIdNumber;
-    private String teacherIdNumber;
 
-//    public Student(String parentIdNumber, String teacherIdNumber) {
-//        this.parentIdNumber = parentIdNumber;
-//        this.teacherIdNumber = teacherIdNumber;
-//    }
+    public Student() {
+    }
 
-    public Student(String name, String idNumber, String phoneNumber, String imageUri, Role role, String birthDate,
-                   String parentIdNumber, String teacherIdNumber) {
-        super(name, idNumber, phoneNumber, imageUri, role, birthDate);
+    public Student(String name, String id, String phone, String image, Role role, String birthDate, String gender, String parentIdNumber ) {
+        super(name, id, phone, image, role, birthDate, gender);
         this.parentIdNumber = parentIdNumber;
-        this.teacherIdNumber = teacherIdNumber;
     }
 }
 

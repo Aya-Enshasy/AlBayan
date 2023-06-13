@@ -6,46 +6,56 @@ import com.ayaenshasy.bayan.model.Role;
 
 public class User {
     private String name;
-    private String idNumber;
-    private String phoneNumber;
-    private String imageUri;
+    private String id;
+    private String phone;
+    private String image;
     private Role role;
     private String birthDate;
+    private String gender;
 
     public User() {
     }
 
-    public User(String name, String idNumber, String phoneNumber, String imageUri, Role role, String birthDate) {
+    public User(String name, String id, String phone, String image, Role role, String birthDate, String gender) {
         this.name = name;
-        this.idNumber = idNumber;
-        this.phoneNumber = phoneNumber;
-        this.imageUri = imageUri;
+        this.id = id;
+        this.phone = phone;
+        this.image = image;
         this.role = role;
         this.birthDate = birthDate;
+        this.gender = gender;
     }
 
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public String getId() {
+        return id;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Role getRole() {
@@ -56,19 +66,19 @@ public class User {
         this.role = role;
     }
 
-    public String getName() {
-        return name;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public String getIdNumber() {
-        return idNumber;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getGender() {
+        return gender;
     }
 
-    public String getImageUri() {
-        return imageUri;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

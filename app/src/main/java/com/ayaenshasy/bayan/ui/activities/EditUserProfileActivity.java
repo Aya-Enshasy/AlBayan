@@ -72,8 +72,8 @@ public class EditUserProfileActivity extends BaseActivity {
     private void getData() {
         User user = preferences.getUserProfile();
         binding.name.setText(user.getName());
-        binding.identifier.setText(user.getIdNumber() + "");
-        Glide.with(getBaseContext()).load(user.getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
+        binding.identifier.setText(user.getId() + "");
+        Glide.with(getBaseContext()).load(user.getImage()).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(binding.userImage);
 
     }
 

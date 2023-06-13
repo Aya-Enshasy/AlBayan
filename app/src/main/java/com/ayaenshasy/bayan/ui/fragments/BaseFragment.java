@@ -31,19 +31,23 @@ public class BaseFragment extends Fragment {
     Role role;
     String role_name;
     User currentUser;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=getActivity().getApplicationContext();
+        context = getActivity().getApplicationContext();
         preferences = new AppPreferences(context);
-        role = preferences.getUserRole();
-        role_name = preferences.getUserRole().name();
-        currentUser = preferences.getUserProfile();
+        if (preferences.getUserProfile().getRole() != null && !preferences.getUserProfile().getName().isEmpty()) {
+            role = preferences.getUserRole();
+            role_name = preferences.getUserRole().name();
+            currentUser = preferences.getUserProfile();
+        }
 
 //        lang = sharedPreferences.readString(AppSharedPreferences.LANG);
     }

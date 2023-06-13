@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,10 +43,11 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).load(list.get(position).getImageUri()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context).load(list.get(position).getImage()).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(holder.binding.imgUser);
         holder.binding.tvName.setText(list.get(position).getName());
-        holder.binding.tvId.setText(list.get(position).getIdNumber());
+        holder.binding.tvId.setText(list.get(position).getId());
+        Toast.makeText(context, list.get(position).getId()+"", Toast.LENGTH_SHORT).show();
         holder.binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
