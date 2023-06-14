@@ -273,6 +273,7 @@ public class HomeFragment extends BaseFragment {
     private void animateBottomSheet(BottomSheetDialog bottomSheetDialog) {
         View bottomSheetView = bottomSheetDialog.findViewById(R.id.bottom_sheet_layout);
         bottomSheetView.setBackgroundResource(R.drawable.buttombar);
+
         if (bottomSheetView != null && bottomSheetView.isAttachedToWindow()) {
             int centerX = (bottomSheetView.getLeft() + bottomSheetView.getRight()) / 2;
             int centerY = (bottomSheetView.getTop() + bottomSheetView.getBottom()) / 2;
@@ -305,25 +306,22 @@ public class HomeFragment extends BaseFragment {
             });
             binding.rvUser.setAdapter(adapter);
 
-            // Retrieve teacher ID from Firebase
-            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
+             DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
             teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    students.clear(); // Clear the list before adding new students
+                    students.clear();
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
+                        String teacherId = childSnapshot.getKey();
                         if (teacherId != null) {
-                            // Query students based on teacher ID and name
-                            DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+                             DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
                             Query studentsQuery = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
                             studentsQuery.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
                                         Student student = studentSnapshot.getValue(Student.class);
-                                        // Perform your filtering logic here based on the student name
-                                        if (student != null && student.getName().contains(query)) {
+                                         if (student != null && student.getName().contains(query)) {
                                             students.add(student);
                                         }
                                     }
@@ -333,7 +331,7 @@ public class HomeFragment extends BaseFragment {
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    // Handle any errors
+
                                 }
                             });
                         }
@@ -342,12 +340,12 @@ public class HomeFragment extends BaseFragment {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle any errors
+
                 }
             });
         }
 
-        // Handle the case for non-teacher role if needed
+
     }
 
 
