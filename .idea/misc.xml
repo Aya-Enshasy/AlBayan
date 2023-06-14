@@ -14,12 +14,15 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_bottom_navigation_bar.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_change_password.xml" value="0.152" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_daily_history.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_daily_history.xml" value="0.3144560357675112" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_monthly_history.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_studet_details.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_support.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_exam_layout.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.264" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_add_new_teacher.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.46647230320699706" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.536" />

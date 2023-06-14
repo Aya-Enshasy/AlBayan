@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="@dimen/_30sdp"
+    android:layout_height="match_parent"
+    tools:context=".StudentDetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/_30sdp"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView51"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="تفاصيل بيانات الطالب"
+            android:textColor="#23253A"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_25sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:tint="#23253A"
+            tools:ignore="VectorDrawableCompat" />
+
+        <com.ramotion.foldingcell.FoldingCell
+            android:id="@+id/folding_cell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView51"
+            folding-cell:additionalFlipsCount="7"
+            folding-cell:animationDuration="1000"
+            folding-cell:backSideColor="#939393"
+            folding-cell:cameraHeight="30">
+
+            <FrameLayout
+                android:id="@+id/cell_content_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_background"
+                android:backgroundTint="#48D29322"
+                android:visibility="gone">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/container1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_44sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_plan_yesterday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="52dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="مراجعة اليوم"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/et_plan_yesterday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="اية 1 ال 20 من سورة البقرة"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_plan_yesterday" />
+
+                    <TextView
+                        android:id="@+id/tv_yesterday_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="نسبة المراجعة"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_plan_yesterday" />
+
+                    <TextView
+                        android:id="@+id/et_yesterday_percentage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:ems="10"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="90%"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textDirection="rtl"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_yesterday_percentage"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_yesterday_percentage"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_yesterday_percentage" />
+
+                    <TextView
+                        android:id="@+id/tv_repeated_yesterday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="عدد التكرار"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_yesterday_percentage" />
+
+                    <TextView
+                        android:id="@+id/et_repeated_yesterday"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:ems="10"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="3"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textDirection="rtl"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_repeated_yesterday"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_repeated_yesterday"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_repeated_yesterday" />
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="#4FD29322"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_repeated_yesterday" />
+
+
+                    <TextView
+                        android:id="@+id/tv_plan_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="حفظ اليوم"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+                    <TextView
+                        android:id="@+id/et_plan_today"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="اية 1 ال 20 من سورة البقرة"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_plan_today" />
+
+                    <TextView
+                        android:id="@+id/tv_today_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="نسبة الحفظ"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_plan_today" />
+
+                    <TextView
+                        android:id="@+id/et_today_percentage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:ems="10"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="90%"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textDirection="rtl"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_today_percentage"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_today_percentage"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_today_percentage" />
+
+                    <TextView
+                        android:id="@+id/tv_repeated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="عدد التكرار"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_today_percentage" />
+
+                    <TextView
+                        android:id="@+id/et_repeated"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:ems="10"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="90%"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textDirection="rtl"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_repeated"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_repeated"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_repeated" />
+
+                    <View
+                        android:id="@+id/view3"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="#4FD29322"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
+
+                    <TextView
+                        android:id="@+id/tv_plan_tomorrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="12dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="خطة الغد"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
+
+                    <TextView
+                        android:id="@+id/et_plan_tomorrow"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:ems="10"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="حفظ سورة البلد"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textDirection="rtl"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_plan_tomorrow" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_title_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_background">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/cairo_bold"
+
+                            android:text="اية سامي انشاصي"
+                            android:textColor="@color/white"
+                            android:textDirection="rtl"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
+
+                        <TextView
+                            android:id="@+id/tv_user_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="@dimen/_7sdp"
+                            android:fontFamily="@font/cairo_semibold"
+                            android:text="412523855"
+                            android:textColor="#000000"
+                            android:textDirection="rtl"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView51" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/_9sdp"
+                        android:layout_weight="4"
+                        android:adjustViewBounds="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.4"
+                        app:lottie_loop="true"
+                        app:lottie_speed="1"
+                        app:srcCompat="@drawable/ic_user_circle_svgrepo_com"
+                        tools:ignore="ContentDescription" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            </FrameLayout>
+
+        </com.ramotion.foldingcell.FoldingCell>
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="#4FD29322"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/folding_cell" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="صلاوات اليوم"
+            android:textColor="#23253A"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView1">
+
+
+            <CheckBox
+                android:id="@+id/fajer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/orange"
+                android:fontFamily="@font/cairo_semibold"
+
+                android:layoutDirection="rtl"
+                android:text="الفجر" />
+
+            <CheckBox
+                android:id="@+id/dohor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/orange"
+                android:fontFamily="@font/cairo_semibold"
+
+                android:layoutDirection="rtl"
+                android:text="الظهر" />
+
+            <CheckBox
+                android:id="@+id/aser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/orange"
+                android:fontFamily="@font/cairo_semibold"
+                android:layoutDirection="rtl"
+
+                android:text="العصر" />
+
+            <CheckBox
+                android:id="@+id/magreb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/orange"
+                android:fontFamily="@font/cairo_semibold"
+                android:layoutDirection="rtl"
+
+                android:text="المغرب" />
+
+            <CheckBox
+                android:id="@+id/eshaa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/orange"
+                android:fontFamily="@font/cairo_semibold"
+                android:layoutDirection="rtl"
+
+                android:text="العشاء" />
+        </RadioGroup>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="التقيم التربوي"
+            android:textColor="#23253A"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+
+        <com.ramotion.fluidslider.FluidSlider
+            android:id="@+id/fluidSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            app:bar_color="#86000000"
+            app:bar_text_color="@color/white"
+            app:bubble_text_color="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            app:size="small"
+            tools:targetApi="lollipop" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/add_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/btn_background"
+            android:fontFamily="@font/cairo_bold"
+            android:text="ادخل البيانات"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fluidSlider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
