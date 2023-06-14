@@ -1,30 +1,32 @@
 package com.ayaenshasy.bayan.model.quran;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
- import com.google.gson.annotations.Expose;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
- public class Verse implements Serializable
-{
-
+@Entity
+public class Verse implements Serializable {
+    @PrimaryKey()
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @ColumnInfo(name = "text")
     @SerializedName("text")
     @Expose
     private String text;
+
+    @ColumnInfo(name = "transliteration")
     @SerializedName("transliteration")
     @Expose
     private String transliteration;
+
     private final static long serialVersionUID = 1230110422238811668L;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getText() {
         return text;
@@ -42,4 +44,11 @@ import com.google.gson.annotations.SerializedName;
         this.transliteration = transliteration;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

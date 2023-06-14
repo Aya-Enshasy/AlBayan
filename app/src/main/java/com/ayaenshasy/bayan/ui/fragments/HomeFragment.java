@@ -53,9 +53,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -210,6 +213,9 @@ public class HomeFragment extends BaseFragment {
             EditText etPlanToday = bottomSheetBinding.etPlanToday;
             EditText etTodayPercentage = bottomSheetBinding.etTodayPercentage;
             EditText etRepeated = bottomSheetBinding.etRepeated;
+            EditText etPlanYesterday = bottomSheetBinding.etPlanYesterday;
+            EditText etYesterdayPercentage = bottomSheetBinding.etYesterdayPercentage;
+            EditText etRepeatedYesterday = bottomSheetBinding.etRepeatedYesterday;
             EditText etPlanTomorrow = bottomSheetBinding.etPlanTomorrow;
             Button btnSave = bottomSheetBinding.btnSave;
             ProgressBar progressView = bottomSheetBinding.progressBar;
@@ -217,9 +223,15 @@ public class HomeFragment extends BaseFragment {
             // Set click listener for the save button
             btnSave.setOnClickListener(v -> {
                 // Get the values entered by the user
+                //today
                 String planToday = etPlanToday.getText().toString().trim();
                 String todayPercentage = etTodayPercentage.getText().toString().trim();
                 String repeated = etRepeated.getText().toString().trim();
+                //yesterday
+                String planYesterday = etPlanYesterday.getText().toString().trim();
+                String yesterdayPercentage = etYesterdayPercentage.getText().toString().trim();
+                String repeatedYesterday = etRepeatedYesterday.getText().toString().trim();
+                //Tomorrow
                 String planTomorrow = etPlanTomorrow.getText().toString().trim();
 
                 // Show the progress view
@@ -229,12 +241,19 @@ public class HomeFragment extends BaseFragment {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
                 String attendanceId = databaseReference.push().getKey();
                 String currentDate = getCurrentDate();
-
+//                List<String> islamicPrayers = Arrays.asList("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha");
+                Map<String, Boolean> islamicPrayers = new HashMap<>();
+                islamicPrayers.put("Fajr", false);
+                islamicPrayers.put("Dhuhr", false);
+                islamicPrayers.put("Asr", false);
+                islamicPrayers.put("Maghrib", false);
+                islamicPrayers.put("Isha", false);
                 // Create an attendance object
-                Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planTomorrow);
+                Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planYesterday,
+                        yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
 
                 // Save the attendance object to the database
-                databaseReference.child(attendanceId).setValue(attendance)
+                databaseReference.child(currentDate).child(student.getId()).setValue(attendance)
                         .addOnSuccessListener(aVoid -> {
                             // Data saved successfully
                             Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show();
@@ -306,7 +325,7 @@ public class HomeFragment extends BaseFragment {
             });
             binding.rvUser.setAdapter(adapter);
 
-             DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
+            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
             teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -314,14 +333,14 @@ public class HomeFragment extends BaseFragment {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         String teacherId = childSnapshot.getKey();
                         if (teacherId != null) {
-                             DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+                            DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
                             Query studentsQuery = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
                             studentsQuery.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
                                         Student student = studentSnapshot.getValue(Student.class);
-                                         if (student != null && student.getName().contains(query)) {
+                                        if (student != null && student.getName().contains(query)) {
                                             students.add(student);
                                         }
                                     }

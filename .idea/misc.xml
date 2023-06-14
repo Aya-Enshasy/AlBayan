@@ -3,10 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/buttombar.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_brightness_1_24.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.2545" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/search.xml" value="0.2545" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/support_details.xml" value="0.218" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/font/roboto_bold.xml" value="0.28020833333333334" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.264" />
@@ -16,10 +14,9 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_support.xml" value="0.264" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.4" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.46647230320699706" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.536" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/loader_dialog.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/remembrance_details_item.xml" value="0.264" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/btn_background.xml" value="0.2545" />
@@ -50,8 +47,12 @@
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/activity_add_new_attendance.xml" value="0.2359375" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.22826086956521738" />
+        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/activity_sora.xml" value="0.10989583333333333" />
+        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/add_exam_layout.xml" value="0.25" />
+        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.176" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_add_new_teacher.xml" value="0.2359375" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.16799999999999998" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_teacher.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.22826086956521738" />

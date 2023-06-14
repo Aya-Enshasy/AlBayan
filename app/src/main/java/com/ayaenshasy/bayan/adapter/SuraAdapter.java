@@ -1,5 +1,6 @@
 package com.ayaenshasy.bayan.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class SuraAdapter extends RecyclerView.Adapter<SuraAdapter.ViewHolder> {
         return new ViewHolder(binding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -45,7 +47,7 @@ public class SuraAdapter extends RecyclerView.Adapter<SuraAdapter.ViewHolder> {
         }
 
         holder.binding.mark.setOnClickListener(View->{
-            if(mark==false){
+            if(!mark){
                 mark=true;
                 holder.binding.mark.setImageResource(R.drawable.ic_baseline_bookmark_24);
             }else {

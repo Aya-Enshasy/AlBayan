@@ -1,15 +1,27 @@
 package com.ayaenshasy.bayan.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class QuranChapter {
-    private String name,type;
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
-    public String getName() {
-        return name;
+    @ColumnInfo(name = "name")
+    private String name;
+    @ColumnInfo(name = "type")
+    private String type;
+    @ColumnInfo(name = "num")
+    private int num;
+
+    public int getNum() {
+        return num;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public int getId() {
@@ -20,6 +32,14 @@ public class QuranChapter {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getType() {
         return type;
     }
@@ -27,6 +47,4 @@ public class QuranChapter {
     public void setType(String type) {
         this.type = type;
     }
-
-
 }

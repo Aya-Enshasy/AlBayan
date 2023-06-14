@@ -1,5 +1,6 @@
 package com.ayaenshasy.bayan.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class QuranChapterAdapter extends RecyclerView.Adapter<QuranChapterAdapter.ViewHolder> {
 
-    private List<QuranChapter> chaptersList;
+    private final List<QuranChapter> chaptersList;
     Context context;
 
     public QuranChapterAdapter(List<QuranChapter> chaptersList,Context context) {
@@ -39,6 +40,7 @@ public class QuranChapterAdapter extends RecyclerView.Adapter<QuranChapterAdapte
         return new ViewHolder(quranChapterView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         QuranChapter quranChapter = chaptersList.get(position);
@@ -49,7 +51,7 @@ public class QuranChapterAdapter extends RecyclerView.Adapter<QuranChapterAdapte
         ImageView imageView3 = holder.imageView3;
 
         textViewChapterName.setText(quranChapter.getName());
-        textViewChapterNumber.setText(quranChapter.getId()+"");
+        textViewChapterNumber.setText(quranChapter.getNum()+"");
         if (quranChapter.getType().equals("meccan")){
             type.setText("سورة مكية");
             imageView3.setImageResource(R.drawable.ic_kaaba_svgrepo_com);
@@ -60,7 +62,7 @@ public class QuranChapterAdapter extends RecyclerView.Adapter<QuranChapterAdapte
 
         holder.itemView.setOnClickListener(View->{
             context.startActivity(new Intent(context, SoraActivity.class)
-                    .putExtra(Constant.AYA_ID,quranChapter.getId()+""));});
+                    .putExtra(Constant.AYA_ID,quranChapter.getNum()+""));});
     }
 
     @Override
@@ -68,7 +70,7 @@ public class QuranChapterAdapter extends RecyclerView.Adapter<QuranChapterAdapte
         return chaptersList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewChapterName;
         TextView textViewChapterNumber;
         TextView type;

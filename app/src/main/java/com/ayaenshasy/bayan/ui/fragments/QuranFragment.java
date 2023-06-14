@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.databinding.FragmentQuranBinding;
 import com.ayaenshasy.bayan.ui.activities.QuranLoader;
 import com.ayaenshasy.bayan.adapter.QuranChapterAdapter;
@@ -62,7 +64,9 @@ public class QuranFragment extends Fragment {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        QuranLoader quranLoader = new QuranLoader(this);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+
+        QuranLoader quranLoader = new QuranLoader(this, progressBar);
         quranLoader.execute();
 
         return view;
