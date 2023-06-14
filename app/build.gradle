@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.ayaenshasy.bayan"
@@ -62,15 +62,10 @@ dependencies {
     implementation 'com.intuit.ssp:ssp-android:1.1.0'
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.mikhaellopez:lazydatepicker:1.1.0'
-
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-//    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-//    implementation 'com.google.firebase:firebase-analytics-ktx'
-    // Add the dependency for the Crashlytics Gradle plugin
-//    classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
+    implementation 'androidx.room:room-runtime:2.5.1'
+    annotationProcessor 'androidx.room:room-compiler:2.5.1'
 
 
 
-//    implementation 'com.github.Grenderg:toasty:1.5.2'
 
 }
