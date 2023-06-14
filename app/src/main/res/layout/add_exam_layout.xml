@@ -15,17 +15,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_user"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/rounded" />
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo_bold"
             android:text=" اسم الطالب "
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/img_user" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_name"
@@ -38,6 +54,7 @@
             android:backgroundTint="#F3F3F3"
             android:inputType="textPersonName"
             android:padding="10dp"
+            android:textDirection="rtl"
             android:text="فلان بن فلان"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -48,7 +65,7 @@
             android:id="@+id/tv_degree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo_bold"
             android:text=" درجة الطالب "
@@ -67,6 +84,7 @@
             android:background="@drawable/input_background"
             android:backgroundTint="#F3F3F3"
             android:hint="90%"
+android:textDirection="rtl"
             android:inputType="number"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +96,7 @@
             android:id="@+id/tv_mosque"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo_bold"
             android:text="اسم المسجد"
@@ -98,6 +116,7 @@
             android:hint="مسجد الفرقان"
             android:inputType="textPersonName"
             android:padding="10dp"
+            android:textDirection="rtl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +126,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo_bold"
             android:text="تاريخ الاختبار"
@@ -123,9 +142,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/input_background"
-            android:elevation="4dp"
-            android:outlineSpotShadowColor="#9A9A9A"
-            android:padding="12dp"
+             android:padding="12dp"
+            android:backgroundTint="#F3F3F3"
             android:textDirection="ltr"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -134,7 +152,7 @@
             app:ldp_date_format="dd-mm-yyyy"
             app:ldp_hint_color="#989898"
             app:ldp_text_color="@color/orange"
-            tools:ignore="NotSibling" />
+         />
 
         <ProgressBar
             android:id="@+id/progressBar"
