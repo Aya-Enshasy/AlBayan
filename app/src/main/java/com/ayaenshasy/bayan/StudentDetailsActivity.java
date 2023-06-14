@@ -1,5 +1,8 @@
 package com.ayaenshasy.bayan;
 
+import static com.ayaenshasy.bayan.utils.Constant.USER_ID;
+import static com.ayaenshasy.bayan.utils.Constant.USER_NAME;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -23,6 +26,10 @@ public class StudentDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityStudentDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.tvUserName.setText(getIntent().getStringExtra(USER_NAME));
+        binding.tvUserId.setText(getIntent().getStringExtra(USER_ID));
+
 
 
         foldingCell();

@@ -1,5 +1,8 @@
 package com.ayaenshasy.bayan.adapter;
 
+import static com.ayaenshasy.bayan.utils.Constant.USER_ID;
+import static com.ayaenshasy.bayan.utils.Constant.USER_NAME;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.StudentDetailsActivity;
 import com.ayaenshasy.bayan.databinding.ItemStudentMainBinding;
 import com.ayaenshasy.bayan.databinding.SoraItemBinding;
 import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Attendance;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
+import com.ayaenshasy.bayan.ui.activities.DailyHistoryActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -83,6 +88,14 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                 }
             }
         });
+
+        holder.itemView.setOnClickListener(View->{
+            context.startActivity(new Intent(context, StudentDetailsActivity.class)
+                    .putExtra(USER_NAME,list.get(position).getName())
+                    .putExtra(USER_ID,list.get(position).getId())
+             );
+        });
+
     }
 
     @Override
