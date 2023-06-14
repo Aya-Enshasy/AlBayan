@@ -271,7 +271,6 @@ public class AddUserActivity extends BaseActivity {
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
     }
 
-
      private void showDatePickerDialog() throws ParseException {
         LazyDatePicker lazyDatePicker = findViewById(R.id.lazyDatePicker);
         lazyDatePicker.setDateFormat(LazyDatePicker.DateFormat.MM_DD_YYYY);
