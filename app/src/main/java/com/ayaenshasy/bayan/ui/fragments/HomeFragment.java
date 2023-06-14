@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +36,20 @@ import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +63,7 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class HomeFragment extends BaseFragment {
-
+    List<Student> students = new ArrayList<>();
     FragmentHomeBinding binding;
     private StudentAdapter adapter;
     private DatabaseReference studentsRef;
@@ -105,6 +113,20 @@ public class HomeFragment extends BaseFragment {
         studentsRef = firebaseDatabase.getReference("students");
 
         setData();
+
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByName(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByName(newText);
+                return false;
+            }
+        });
         return view;
     }
 
@@ -117,7 +139,7 @@ public class HomeFragment extends BaseFragment {
         if (role == Role.TEACHER) {
             binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
-            List<Student> students = new ArrayList<>();
+
             adapter = new StudentAdapter(students, context, new DataListener<Student>() {
                 @Override
                 public void sendData(Student student) {
@@ -172,7 +194,7 @@ public class HomeFragment extends BaseFragment {
         binding.userName.setText(currentUser.getName());
         binding.userRole.setText(role_name);
         binding.identifier.setText(currentUser.getName() + "");
-        Glide.with(context).load(currentUser.getImage()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context).load(currentUser.getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
     }
 
@@ -250,7 +272,7 @@ public class HomeFragment extends BaseFragment {
 
     private void animateBottomSheet(BottomSheetDialog bottomSheetDialog) {
         View bottomSheetView = bottomSheetDialog.findViewById(R.id.bottom_sheet_layout);
-
+        bottomSheetView.setBackgroundResource(R.drawable.buttombar);
         if (bottomSheetView != null && bottomSheetView.isAttachedToWindow()) {
             int centerX = (bottomSheetView.getLeft() + bottomSheetView.getRight()) / 2;
             int centerY = (bottomSheetView.getTop() + bottomSheetView.getBottom()) / 2;
@@ -270,6 +292,64 @@ public class HomeFragment extends BaseFragment {
         Date currentDate = new Date();
         return dateFormat.format(currentDate);
     }
+
+    private void searchByName(String query) {
+        if (role == Role.TEACHER) {
+            binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+            adapter = new StudentAdapter(students, context, new DataListener<Student>() {
+                @Override
+                public void sendData(Student student) {
+                    showBottomSheet(student);
+                }
+            });
+            binding.rvUser.setAdapter(adapter);
+
+            // Retrieve teacher ID from Firebase
+            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
+            teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    students.clear(); // Clear the list before adding new students
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
+                        if (teacherId != null) {
+                            // Query students based on teacher ID and name
+                            DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+                            Query studentsQuery = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
+                            studentsQuery.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
+                                        Student student = studentSnapshot.getValue(Student.class);
+                                        // Perform your filtering logic here based on the student name
+                                        if (student != null && student.getName().contains(query)) {
+                                            students.add(student);
+                                        }
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                    binding.progressBar3.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // Handle any errors
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle any errors
+                }
+            });
+        }
+
+        // Handle the case for non-teacher role if needed
+    }
+
 
 }
 

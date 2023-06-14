@@ -47,8 +47,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     }
 
     public void setStudents(List<Student> students) {
-//        Toast.makeText(context, students.size()+"9", Toast.LENGTH_SHORT).show();
-        this.list = students;
+         this.list = students;
         notifyDataSetChanged();
     }
 
@@ -61,7 +60,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Glide.with(context).load(list.get(position).getImage())
+        Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true)
                 .into(holder.binding.imgUser);

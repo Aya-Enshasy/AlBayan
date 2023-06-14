@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.fragments.HomeFragment">
 
     <TextView
@@ -13,16 +14,21 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:text="teacher"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/user_image"
         app:layout_constraintTop_toBottomOf="@+id/identifier" />
+
 
     <TextView
         android:id="@+id/identifier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/cairo_semibold"
         android:text="12345678"
+        android:textColor="#7A7A7A"
+        android:textSize="@dimen/_11sdp"
         app:layout_constraintEnd_toStartOf="@+id/user_image"
         app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
@@ -30,17 +36,26 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/cairo_bold"
         android:text="maryam"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toStartOf="@+id/user_image"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/user_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_user_circle_svgrepo_com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        app:shapeAppearanceOverlay="@style/roundedImageVRounded" />
 
     <ProgressBar
         android:id="@+id/progressBar3"
@@ -55,11 +70,45 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_user"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_image" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="#11D29322"
+        android:background="@drawable/search"
+         android:gravity="end"
+         android:theme="@style/SearchViewTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_image"
+        app:queryBackground="@null"
+        app:queryHint="بحث" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="جميع الطلاب"
+        android:textSize="@dimen/_13sdp"
+        android:textColor="@color/orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

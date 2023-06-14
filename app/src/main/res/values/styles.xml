@@ -16,4 +16,13 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="SearchViewTheme" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColorHint">#959595</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="queryHint">بحث</item>
+        <item name="iconifiedByDefault">false</item>
+    </style>
 </resources>

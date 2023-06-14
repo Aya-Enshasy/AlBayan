@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/bottom_sheet_layout"
+     android:id="@+id/bottom_sheet_layout"
+    android:paddingBottom="@dimen/_100sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tv_plan_today"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:text="حفظ اليوم"
+        android:textColor="@color/black"
+        android:fontFamily="@font/cairo_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_plan_today"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/input_background"
+        android:elevation="2dp"
+        android:hint="اية 1 ال 20 من سورة البقرة"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:outlineSpotShadowColor="#A8A8A8"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plan_today"
         app:layout_constraintEnd_toStartOf="@+id/tv_plan_today"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_plan_today" />
 
@@ -33,18 +45,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="12dp"
-        android:text="TextView"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="نسبة الحفظ"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_plan_today" />
+        app:layout_constraintTop_toBottomOf="@+id/et_plan_today" />
 
     <EditText
         android:id="@+id/et_today_percentage"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/input_background"
+        android:elevation="2dp"
         android:ems="10"
+        android:textDirection="rtl"
+        android:hint="90%"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:outlineSpotShadowColor="#A8A8A8"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_today_percentage"
         app:layout_constraintEnd_toStartOf="@+id/tv_today_percentage"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,18 +76,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="12dp"
-        android:text="TextView"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/cairo_bold"
+        android:text="عدد التكرار"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_today_percentage" />
+        app:layout_constraintTop_toBottomOf="@+id/et_today_percentage" />
 
     <EditText
         android:id="@+id/et_repeated"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/input_background"
+        android:elevation="2dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
+        android:textDirection="rtl"
+        android:hint="عدد مرات الخطأ والتكرار بالقراءة"
+        android:inputType="number"
+        android:outlineSpotShadowColor="#A8A8A8"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_repeated"
         app:layout_constraintEnd_toStartOf="@+id/tv_repeated"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,19 +106,28 @@
         android:id="@+id/tv_plan_tomorrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="12dp"
-        android:text="TextView"
+        android:fontFamily="@font/cairo_bold"
+        android:text="خطة الغد"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_repeated" />
+        app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
 
     <EditText
         android:id="@+id/et_plan_tomorrow"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/input_background"
+        android:elevation="2dp"
         android:ems="10"
+        android:textDirection="rtl"
+        android:hint="حفظ سورة البلد"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:outlineSpotShadowColor="#A8A8A8"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_plan_tomorrow"
         app:layout_constraintEnd_toStartOf="@+id/tv_plan_tomorrow"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,15 +143,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_plan_tomorrow" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_save"
-        android:layout_width="289dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="224dp"
-        android:text="Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn_background"
+        android:fontFamily="@font/cairo_bold"
+        android:text="اضافة"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_plan_tomorrow" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
