@@ -95,7 +95,7 @@ public class NotCommittedStudentsFragment extends BaseFragment {
         adapter = new StudentAdapter(students, context, new DataListener<Student>() {
             @Override
             public void sendData(Student student) {
-//                showBottomSheet(student);
+                // showBottomSheet(student);
             }
         });
         binding.rvUser.setAdapter(adapter);
@@ -107,64 +107,67 @@ public class NotCommittedStudentsFragment extends BaseFragment {
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                     String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
                     if (teacherId != null && teacherId.equals(currentUser.getId())) { // Replace 'userId' with the actual teacher ID
-                        DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference("attendance");
-                        attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot attendanceSnapshot) {
-                                List<Student> attendingStudents = new ArrayList<>(); // Create a local list to hold the attending students
-                                String today = getCurrentDate(); // Assuming you have a method to get the current date in the format "yyyy-MM-dd"
-                                DataSnapshot todaySnapshot = attendanceSnapshot.child(today);
-                                if (todaySnapshot.exists()) {
-                                    for (DataSnapshot studentSnapshot : todaySnapshot.getChildren()) {
-                                        String studentId = studentSnapshot.getKey();
-                                        if (studentId != null) {
-                                            DatabaseReference studentRef = FirebaseDatabase.getInstance().getReference("students").child(studentId);
-                                            studentRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot studentDataSnapshot) {
-                                                    Student student = studentDataSnapshot.getValue(Student.class);
-                                                    if (student != null) {
-                                                        attendingStudents.add(student);
+                        String responsibleId = "12345678"; // Replace with the desired responsible ID
+                        if (childSnapshot.child("responsible_id").getValue(String.class).equals(responsibleId)) {
+                            DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference("attendance");
+                            attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot attendanceSnapshot) {
+                                    List<Student> attendingStudents = new ArrayList<>(); // Create a local list to hold the attending students
+                                    String today = getCurrentDate(); // Assuming you have a method to get the current date in the format "yyyy-MM-dd"
+                                    DataSnapshot todaySnapshot = attendanceSnapshot.child(today);
+                                    if (todaySnapshot.exists()) {
+                                        for (DataSnapshot studentSnapshot : todaySnapshot.getChildren()) {
+                                            String studentId = studentSnapshot.getKey();
+                                            if (studentId != null) {
+                                                DatabaseReference studentRef = FirebaseDatabase.getInstance().getReference("students").child(studentId);
+                                                studentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot studentDataSnapshot) {
+                                                        Student student = studentDataSnapshot.getValue(Student.class);
+                                                        if (student != null) {
+                                                            attendingStudents.add(student);
+                                                        }
                                                     }
-                                                }
 
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    // Handle any errors
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                                DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
-                                studentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        List<Student> allStudents = new ArrayList<>(); // Create a local list to hold all students
-                                        for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                                            Student student = studentSnapshot.getValue(Student.class);
-                                            if (student != null) {
-                                                allStudents.add(student);
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                        // Handle any errors
+                                                    }
+                                                });
                                             }
                                         }
-                                        List<Student> notAttendingStudents = new ArrayList<>(allStudents);
-                                        notAttendingStudents.removeAll(attendingStudents); // Remove attending students from the list
-                                        adapter.setStudents(notAttendingStudents); // Set the list with not attending students
-                                        binding.progressBar4.setVisibility(View.GONE);
                                     }
+                                    DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+                                    studentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            List<Student> allStudents = new ArrayList<>(); // Create a local list to hold all students
+                                            for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
+                                                Student student = studentSnapshot.getValue(Student.class);
+                                                if (student != null) {
+                                                    allStudents.add(student);
+                                                }
+                                            }
+                                            List<Student> notAttendingStudents = new ArrayList<>(allStudents);
+                                            notAttendingStudents.removeAll(attendingStudents); // Remove attending students from the list
+                                            adapter.setStudents(notAttendingStudents); // Set the list with not attending students
+                                            binding.progressBar4.setVisibility(View.GONE);
+                                        }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        // Handle any errors
-                                    }
-                                });
-                            }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            // Handle any errors
+                                        }
+                                    });
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                // Handle any errors
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    // Handle any errors
+                                }
+                            });
+                        }
                     }
                 }
             }

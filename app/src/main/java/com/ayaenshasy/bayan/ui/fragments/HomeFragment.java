@@ -32,6 +32,7 @@ import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Attendance;
 import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
+import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
 import com.bumptech.glide.Glide;
@@ -188,7 +189,30 @@ public class HomeFragment extends BaseFragment {
                 }
             });
         } else {
-            // Handle the case for non-teacher role if needed
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference usersRef = database.getReference("users");
+
+            Query query = usersRef.orderByChild("responsible_id").equalTo(currentUser.getId());
+
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        // Retrieve the user data
+                        User user = userSnapshot.getValue(User.class);
+
+                        // Do something with the user data
+                        // For example, print the user's name
+                        System.out.println(user.getName());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle any errors that occur
+                    System.out.println("Error: " + databaseError.getMessage());
+                }
+            });
         }
     }
 
