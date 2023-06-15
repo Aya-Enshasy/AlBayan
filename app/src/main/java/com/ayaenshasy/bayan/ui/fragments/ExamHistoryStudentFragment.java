@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -30,16 +32,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.adapter.ExamAdapter;
+import com.ayaenshasy.bayan.adapter.StudentAdapter;
 import com.ayaenshasy.bayan.databinding.AddExamLayoutBinding;
 import com.ayaenshasy.bayan.databinding.AddNewAttendanceLayoutBinding;
 import com.ayaenshasy.bayan.databinding.FragmentExamHistoryStudentBinding;
 import com.ayaenshasy.bayan.databinding.FragmentSettingsBinding;
+import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Attendance;
+import com.ayaenshasy.bayan.model.Exam;
+import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
+import com.ayaenshasy.bayan.model.user.User;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.lazydatepicker.LazyDatePicker;
@@ -48,6 +60,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -63,6 +76,8 @@ public class ExamHistoryStudentFragment extends BaseFragment {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int REQUEST_PICK_IMAGE = 2;
     private static final int REQUEST_CAPTURE_IMAGE = 3;
+    ExamAdapter adapter;
+    private List<Exam> list;
     private ShapeableImageView imgUser; // Declare imgUser as a class member
     String date;
     String user_id;
@@ -83,15 +98,6 @@ public class ExamHistoryStudentFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExamHistoryStudentFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ExamHistoryStudentFragment newInstance(String param1, String param2) {
         ExamHistoryStudentFragment fragment = new ExamHistoryStudentFragment();
         Bundle args = new Bundle();
@@ -124,6 +130,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 showBottomSheet();
             }
         });
+
         return view;
     }
 
@@ -363,4 +370,5 @@ public class ExamHistoryStudentFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
+
 }
