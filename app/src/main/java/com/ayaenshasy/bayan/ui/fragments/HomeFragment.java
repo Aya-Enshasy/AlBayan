@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
+import com.ayaenshasy.bayan.adapter.UserAdapter;
 import com.ayaenshasy.bayan.databinding.AddNewAttendanceLayoutBinding;
 import com.ayaenshasy.bayan.databinding.FragmentHomeBinding;
 import com.ayaenshasy.bayan.databinding.FragmentSettingsBinding;
@@ -68,6 +69,7 @@ import java.util.Map;
  */
 public class HomeFragment extends BaseFragment {
     List<Student> students = new ArrayList<>();
+    List<User> users = new ArrayList<>();
     FragmentHomeBinding binding;
     private StudentAdapter adapter;
     private DatabaseReference studentsRef;
@@ -143,7 +145,6 @@ public class HomeFragment extends BaseFragment {
         if (role == Role.TEACHER) {
             binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
-
             adapter = new StudentAdapter(students, context, new DataListener<Student>() {
                 @Override
                 public void sendData(Student student) {
@@ -160,25 +161,8 @@ public class HomeFragment extends BaseFragment {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
                         if (teacherId != null) {
-                            // Query students based on teacher ID
-                            DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
-                            Query query = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
-                            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                                        Student student = studentSnapshot.getValue(Student.class);
-                                        students.add(student);
-                                    }
-                                    binding.progressBar3.setVisibility(View.GONE);
-                                    adapter.setStudents(students);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    // Handle any errors
-                                }
-                            });
+                            queryStudentsByTeacherId(teacherId);
+                            break; // Break after finding the teacher ID
                         }
                     }
                 }
@@ -189,22 +173,28 @@ public class HomeFragment extends BaseFragment {
                 }
             });
         } else {
+            binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+            UserAdapter userAdapter = new UserAdapter(users, context);
+            binding.rvUser.setAdapter(userAdapter);
+
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference usersRef = database.getReference("users");
 
             Query query = usersRef.orderByChild("responsible_id").equalTo(currentUser.getId());
 
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         // Retrieve the user data
                         User user = userSnapshot.getValue(User.class);
-
+                        users.add(user);
                         // Do something with the user data
                         // For example, print the user's name
                         System.out.println(user.getName());
                     }
+                    userAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
                 }
 
                 @Override
@@ -213,14 +203,64 @@ public class HomeFragment extends BaseFragment {
                     System.out.println("Error: " + databaseError.getMessage());
                 }
             });
+
         }
+    }
+
+    private void queryStudentsByTeacherId(String teacherId) {
+        DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+        Query query = studentsRef.orderByChild("responsible_id").equalTo(currentUser.getId());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                students.clear(); // Clear the list before adding new data
+                String currentDate = getCurrentDate(); // Replace with the method to get the current date
+
+                for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
+                    Student student = studentSnapshot.getValue(Student.class);
+                    String studentId = student.getId();
+
+                    DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference("attendance")
+                            .child(currentDate)
+                            .child(studentId);
+
+                    attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot attendanceSnapshot) {
+                            boolean isAttendanceMarkedToday = attendanceSnapshot.exists();
+                            student.setChecked(isAttendanceMarkedToday);
+                            students.add(student);
+
+                            // Notify the adapter when all students are processed
+                            if (students.size() == dataSnapshot.getChildrenCount()) {
+                                binding.progressBar3.setVisibility(View.GONE);
+                                adapter.setStudents(students);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle any errors
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
     private void setMainUserData() {
+        if (role == Role.ADMIN) {
+            binding.textView9.setText("جميع المحفظين");
+        }
         binding.userName.setText(currentUser.getName());
         binding.userRole.setText(role_name);
-        binding.identifier.setText(currentUser.getName() + "");
+        binding.identifier.setText(currentUser.getId() + "");
         Glide.with(context).load(currentUser.getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
     }

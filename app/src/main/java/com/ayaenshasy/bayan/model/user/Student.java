@@ -2,7 +2,10 @@ package com.ayaenshasy.bayan.model.user;
 
 import android.net.Uri;
 
+import com.ayaenshasy.bayan.model.Attendance;
 import com.ayaenshasy.bayan.model.Role;
+
+import java.util.Map;
 
 public class Student extends User {
     private  boolean isChecked;
@@ -16,7 +19,14 @@ public class Student extends User {
         this.parentIdNumber = parentIdNumber;
         this.isChecked = isChecked;
     }
+    private Map<String, Map<String, Attendance>> attendance;
 
+    // Constructor...
+    // Getters and setters...
+
+    public Map<String, Map<String, Attendance>> getAttendance() {
+        return attendance;
+    }
     public boolean isChecked() {
         return isChecked;
     }
