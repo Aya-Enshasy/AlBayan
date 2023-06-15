@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.ayaenshasy.bayan.model.Role;
+import com.ayaenshasy.bayan.model.user.Parent;
 import com.ayaenshasy.bayan.model.user.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +19,8 @@ public class AppPreferences {
     public static final String SELECTED_LANGUAGE = "language";
     public static final String USER_ROLE = "role";
     public static final String USER_DATA = "USER_DATA";
+    public static final String PARENT_DATA = "PARENT_DATA";
+    public static final String IS_PARENT = "IS_PARENT";
 //    public static final String is_Login = "is_Login";
 //    public static final String IS_FIRST_TIME = "IS_FIRST_TIME";
 
@@ -33,13 +36,21 @@ public class AppPreferences {
     }
 
     public void clearPreferences() {
-//        setBooleanPreference(IS_FIRST_TIME,true);
-//        setUserProfile(null);
+        prefs.edit().putString(USER_DATA, "{}").apply();
+    }
 
-        prefs.edit().putString(USER_DATA,"{}").apply();
+    public void setParentProfile(Parent parentProfile) {
+        setBooleanPreference(IS_PARENT,true);
+        prefs.edit().putString(PARENT_DATA, gson.toJson(parentProfile)).apply();
+    }
+
+    public Parent getParentProfile() {
+        String userProfileJson = prefs.getString(PARENT_DATA, "{}");
+        return gson.fromJson(userProfileJson, Parent.class);
     }
 
     public void setUserProfile(User userProfile) {
+        setBooleanPreference(IS_PARENT,false);
         prefs.edit().putString(USER_DATA, gson.toJson(userProfile)).apply();
     }
 
