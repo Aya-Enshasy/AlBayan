@@ -180,7 +180,7 @@
                 android:backgroundTint="#F3F3F3"
                 android:ems="10"
                 android:hint="90%"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:padding="10dp"
                 android:textDirection="rtl"
                 app:layout_constraintEnd_toEndOf="parent"

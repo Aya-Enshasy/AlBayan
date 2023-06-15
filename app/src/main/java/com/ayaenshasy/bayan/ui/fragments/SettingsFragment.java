@@ -106,9 +106,9 @@ public class SettingsFragment extends BaseFragment {
             startActivity(new Intent(getActivity(), DailyHistoryActivity.class));
         });
 
-        binding.month.setOnClickListener(View -> {
-            startActivity(new Intent(getActivity(), MonthlyHistoryActivity.class));
-        });
+//        binding.month.setOnClickListener(View -> {
+//            startActivity(new Intent(getActivity(), MonthlyHistoryActivity.class));
+//        });
 
         binding.changePassword.setOnClickListener(View -> {
             startActivity(new Intent(getActivity(), ChangePasswordActivity.class));

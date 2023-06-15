@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Quraney"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.UserDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".StudentDetailsActivity"
             android:exported="false" />
         <activity

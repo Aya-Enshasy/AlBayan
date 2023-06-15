@@ -52,7 +52,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     }
 
     public void setStudents(List<Student> students) {
-         this.list = students;
+        this.list = students;
         notifyDataSetChanged();
     }
 
@@ -73,27 +73,21 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         holder.binding.tvId.setText(list.get(position).getId());
 
         holder.binding.checkBox.setOnCheckedChangeListener(null); // Remove previous listener to avoid conflicts
-
-//        holder.binding.checkBox.setChecked(list.get(position).isChecked());
+        holder.binding.checkBox.setEnabled(list.get(position).isChecked());
+        holder.binding.checkBox.setChecked(list.get(position).isChecked());
         holder.binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    // Show the bottom sheet
-                    listener.sendData(list.get(position));
-                    holder.binding.checkBox.setEnabled(false);
-//                    showBottomSheet(list.get(position));
-                } else {
-                    // Handle unchecked state if needed
-                }
+                listener.sendData(list.get(position));
+                holder.binding.checkBox.setEnabled(false);
             }
         });
 
-        holder.itemView.setOnClickListener(View->{
+        holder.itemView.setOnClickListener(View -> {
             context.startActivity(new Intent(context, StudentDetailsActivity.class)
-                    .putExtra(USER_NAME,list.get(position).getName())
-                    .putExtra(USER_ID,list.get(position).getId())
-             );
+                    .putExtra(USER_NAME, list.get(position).getName())
+                    .putExtra(USER_ID, list.get(position).getId())
+            );
         });
 
     }

@@ -1,6 +1,7 @@
 package com.ayaenshasy.bayan.base;
 
 
+import static com.ayaenshasy.bayan.utils.AppPreferences.IS_PARENT;
 import static com.ayaenshasy.bayan.utils.AppPreferences.PREF_NAME;
 
 import android.app.Dialog;
@@ -38,6 +39,7 @@ public class BaseActivity extends AppCompatActivity {
     public Role role;
     public String role_name;
     public User user;
+    public boolean isParent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
 //        role = preferences.getUserRole();
 //        role_name = preferences.getUserRole().name();
         user = preferences.getUserProfile();
-
+        isParent = preferences.getBooleanPreference(IS_PARENT);
 
         loader_dialog = new Dialog(this);
 
