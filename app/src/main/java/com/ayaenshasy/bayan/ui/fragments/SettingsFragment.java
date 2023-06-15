@@ -80,6 +80,7 @@ public class SettingsFragment extends BaseFragment {
         Glide.with(context).load(currentUser.getImage()).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true).into(binding.userImage);
 
+
 //         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
 //            binding.changePassword.setVisibility(View.GONE);
 //            binding.addUser.setVisibility(View.GONE);

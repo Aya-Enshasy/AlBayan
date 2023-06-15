@@ -34,6 +34,8 @@ public class SplashActivity extends BaseActivity {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         runActivity();
+        Log.e("onNewToken", preferences.readString(AppPreferences.DEVICE_TOKEN));
+
 //        getPassword();
 //        getUserData();
     }

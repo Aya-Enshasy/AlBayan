@@ -130,8 +130,37 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 showBottomSheet();
             }
         });
-
+        getData();
         return view;
+    }
+
+    void getData() {
+        DatabaseReference examsRef = FirebaseDatabase.getInstance().getReference("exams");
+        examsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    DataSnapshot studentSnapshot = dataSnapshot.child(user_id); // Get the snapshot for student with ID "12"
+
+                    for (DataSnapshot examSnapshot : studentSnapshot.getChildren()) {
+                        String examId = examSnapshot.getKey();
+                        String degree = examSnapshot.child("degree").getValue(String.class);
+                        String image = examSnapshot.child("image").getValue(String.class);
+                        String mosque = examSnapshot.child("mosque").getValue(String.class);
+                        String name = examSnapshot.child("name").getValue(String.class);
+                        Exam exam = new Exam(examId, image, mosque, name);
+                        // Use the retrieved exam data as needed
+                        Toast.makeText(context, name + "", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors that occur
+            }
+        });
+
     }
 
     private void showBottomSheet() {

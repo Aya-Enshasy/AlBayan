@@ -24,10 +24,7 @@
         <activity
             android:name=".StudentDetailsActivity"
             android:exported="false" />
-        <activity
-            android:name=".addNewAttendanceActivity"
-            android:exported="false" />
-        <activity
+     <activity
             android:name=".ui.activities.ChangePasswordActivity"
             android:exported="false" />
         <activity
@@ -66,7 +63,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

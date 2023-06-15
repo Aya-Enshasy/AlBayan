@@ -44,10 +44,10 @@ import java.util.UUID;
 
 public class AddUserActivity extends BaseActivity {
     ActivityAddUserBinding binding;
-     FirebaseStorage firebaseStorage;
+    FirebaseStorage firebaseStorage;
     Uri imageUri;
     ActivityResultLauncher<String> al1;
-     FirebaseUser currentUser;
+    FirebaseUser currentUser;
     FirebaseAuth mAuth;
     Role user_role;
     private Calendar calendar;
@@ -65,7 +65,7 @@ public class AddUserActivity extends BaseActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void init(){
+    private void init() {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
@@ -81,15 +81,18 @@ public class AddUserActivity extends BaseActivity {
         if (user_role == Role.TEACHER) {
             binding.etParentId.setVisibility(View.VISIBLE);
             binding.tvParentId.setVisibility(View.VISIBLE);
+            binding.etParentName.setVisibility(View.VISIBLE);
+            binding.tvParentName.setVisibility(View.VISIBLE);
+            binding.tvId.setText("اضف هوية الطالب ");
         }
     }
 
-     private void clickListener() {
+    private void clickListener() {
         binding.imgUser.setOnClickListener(View -> {
             al1.launch("image/*");
         });
         binding.btnSave.setOnClickListener(View -> {
-                addUser();
+            addUser();
             closeKeyboard();
         });
         binding.lazyDatePicker.setOnClickListener(View -> {
@@ -99,12 +102,8 @@ public class AddUserActivity extends BaseActivity {
                 e.printStackTrace();
             }
         });
-
-
         binding.backArrow.setOnClickListener(View -> {
             finish();
-
-
         });
     }
 
@@ -136,7 +135,7 @@ public class AddUserActivity extends BaseActivity {
         String name = binding.etName.getText().toString();
         String phone = binding.etPhone.getText().toString();
         formatDate(binding.lazyDatePicker.getDate().toString());
-         String gender = binding.radioFemale.isChecked() ? binding.radioFemale.getText().toString() : binding.radioMale.getText().toString();
+        String gender = binding.radioFemale.isChecked() ? binding.radioFemale.getText().toString() : binding.radioMale.getText().toString();
 
         // Validate input fields before proceeding
         if (TextUtils.isEmpty(name)) {
@@ -174,20 +173,65 @@ public class AddUserActivity extends BaseActivity {
             }
 
             map.put("parentId", parentId);
+
+            // Check if the ID already exists in the database
+            usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // ID already exists, show an error message or handle the case accordingly
+                        showErrorMessage("رقم الهوية موجود بالفعل");
+                    } else {
+                        // ID is unique, proceed with adding the student to the database
+                        uploadUserImage(usersRef.child(id), map);
+
+                        // Create the parent
+                        createParent("parent", parentId);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle any errors
+                }
+            });
+        }
+    }
+
+    private void createParent(String db_name, String parentId) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(db_name);
+
+        // Retrieve parent details from the UI
+        String parentName = binding.etParentName.getText().toString();
+        String parentPhone = binding.etPhone.getText().toString();
+
+        // Validate parent details
+        if (TextUtils.isEmpty(parentName)) {
+            showErrorMessage("اضف اسم الاب");
+            return;
         }
 
-        // Check if the ID already exists in the database
-        usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+        if (TextUtils.isEmpty(parentPhone)) {
+            showErrorMessage("اضف رقم هاتف الاب");
+            return;
+        }
+
+        // Create a map to store parent data
+        Map<String, Object> parentMap = new HashMap<>();
+        parentMap.put("name", parentName);
+        parentMap.put("phone", parentPhone);
+
+        // Check if the parent ID already exists in the database
+        usersRef.child(parentId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // ID already exists, show an error message or handle the case accordingly
-                    showErrorMessage("رقم الهوية موجود بالفعل");
+                    showErrorMessage("رقم الهوية للأب موجود بالفعل");
                 } else {
-                    // ID is unique, proceed with adding the user to the database
-
-                    // Upload the image to Firebase Storage
-                    uploadUserImage(usersRef.child(id), map);
+                    // ID is unique, proceed with adding the parent to the database
+                    usersRef.child(parentId).setValue(parentMap);
+                    showSuccessMessage("تم إنشاء المستخدم والأب بنجاح");
                 }
             }
 
@@ -221,13 +265,13 @@ public class AddUserActivity extends BaseActivity {
                     // Add the user to the database with the complete user data
                     addUserWithUserData(userRef, userData);
                 }).addOnFailureListener(e -> {
-                     showErrorMessage("خطا بتحميل الصورة حاول مرة اخرى");
+                    showErrorMessage("خطا بتحميل الصورة حاول مرة اخرى");
                 });
             }).addOnFailureListener(e -> {
-                 showErrorMessage("خطا بتحميل الصورة حاول مرة اخرى");
+                showErrorMessage("خطا بتحميل الصورة حاول مرة اخرى");
             });
         } else {
-             addUserWithUserData(userRef, userData);
+            addUserWithUserData(userRef, userData);
         }
     }
 
@@ -235,10 +279,10 @@ public class AddUserActivity extends BaseActivity {
         userRef.setValue(userData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                         showSuccessMessage("تم الاضافة بنجاح");
+                        showSuccessMessage("تم الاضافة بنجاح");
                         finish();
                     } else {
-                         showErrorMessage("خطا بتسجيل المستخدم حاول لاحقا");
+                        showErrorMessage("خطا بتسجيل المستخدم حاول لاحقا");
                     }
                 });
     }
@@ -271,22 +315,15 @@ public class AddUserActivity extends BaseActivity {
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
     }
 
-     private void showDatePickerDialog() throws ParseException {
+    private void showDatePickerDialog() throws ParseException {
         LazyDatePicker lazyDatePicker = findViewById(R.id.lazyDatePicker);
         lazyDatePicker.setDateFormat(LazyDatePicker.DateFormat.MM_DD_YYYY);
-
-//        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
-
-//         Date date = ft.parse("1945-01-01");
-//
-//        lazyDatePicker.setMinDate(date);
-//        lazyDatePicker.setMaxDate(date);
 
         lazyDatePicker.setOnDatePickListener(new LazyDatePicker.OnDatePickListener() {
             @Override
             public void onDatePick(Date dateSelected) {
 
-             }
+            }
         });
 
         lazyDatePicker.setOnDateSelectedListener(new LazyDatePicker.OnDateSelectedListener() {
@@ -299,7 +336,7 @@ public class AddUserActivity extends BaseActivity {
 
     }
 
-    private void formatDate(String date){
+    private void formatDate(String date) {
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
         SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 

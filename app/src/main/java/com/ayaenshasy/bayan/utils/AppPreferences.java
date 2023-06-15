@@ -21,6 +21,7 @@ public class AppPreferences {
     public static final String USER_DATA = "USER_DATA";
     public static final String PARENT_DATA = "PARENT_DATA";
     public static final String IS_PARENT = "IS_PARENT";
+    public static final String DEVICE_TOKEN = "DEVICE_TOKEN";
 //    public static final String is_Login = "is_Login";
 //    public static final String IS_FIRST_TIME = "IS_FIRST_TIME";
 
@@ -96,6 +97,17 @@ public class AppPreferences {
 
     public boolean getBooleanPreference(String key) {
         return prefs.getBoolean(key, false);
+    }
+    public void writeString(String key, String value) {
+
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.putString(key, value);
+        prefEditor.apply();
+
+    }
+
+    public String readString(String key) {
+        return prefs.getString(key, "");
     }
 
     public boolean setLongPreference(String key, double value) {
