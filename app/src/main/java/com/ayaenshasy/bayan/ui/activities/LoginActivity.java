@@ -1,11 +1,13 @@
 package com.ayaenshasy.bayan.ui.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -35,6 +37,7 @@ public class LoginActivity extends BaseActivity {
     String password = "";
     boolean isParent = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +47,22 @@ public class LoginActivity extends BaseActivity {
         binding.matchParent.setOnClickListener(View -> {
             checkIfUserExists();
         });
+
+        binding.tvParent.setBackgroundResource(R.drawable.login_color);
+        binding.tvUser.setTextColor(getColor(R.color.orange));
+        binding.tvParent.setTextColor(getColor(R.color.black));
+
         changeUser();
+
         binding.tvParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isParent = true;
                 changeUser();
-                animateUnderline(view);
+                binding.tvParent.setBackgroundResource(R.drawable.login_color);
+                 binding.tvUser.setBackgroundResource(R.drawable.transparent);
+
+//                animateUnderline(view);
 
             }
         });
@@ -59,7 +71,10 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
                 isParent = false;
                 changeUser();
-                animateUnderline(view);
+                binding.tvUser.setBackgroundResource(R.drawable.login_color);
+                binding.tvParent.setBackgroundResource(R.drawable.transparent);
+
+//                animateUnderline(view);
             }
         });
     }
@@ -75,6 +90,7 @@ public class LoginActivity extends BaseActivity {
         animator.start();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("ResourceAsColor")
     void changeUser() {
         String text1 = "موظف ";
@@ -85,20 +101,20 @@ public class LoginActivity extends BaseActivity {
             SpannableString spannableString = new SpannableString(text1);
 
             // Apply the UnderlineSpan to the entire text
-            spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            // Use the spannableString as needed, e.g., set it to a TextView
             binding.tvUser.setText(spannableString);
             binding.tvParent.setText(text2);
-            binding.tvUser.setTextColor(R.color.orange);
-            binding.tvParent.setTextColor(R.color.black);
-        } else {         // Create a SpannableString with the desired text
+
+            binding.tvUser.setTextColor(getColor(R.color.black));
+            binding.tvParent.setTextColor(getColor(R.color.orange));
+        } else {
             SpannableString spannableString = new SpannableString(text2);
-            spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            spannableString.setSpan(new UnderlineSpan(), 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             binding.tvParent.setText(spannableString);
             binding.tvUser.setText(text1);
-            binding.tvUser.setTextColor(R.color.black);
-            binding.tvParent.setTextColor(R.color.orange);
+            binding.tvUser.setTextColor(getColor(R.color.orange));
+            binding.tvParent.setTextColor(getColor(R.color.black));
         }
     }
 

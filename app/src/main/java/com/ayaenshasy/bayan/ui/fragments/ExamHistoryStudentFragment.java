@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.adapter.ExamAdapter;
+import com.ayaenshasy.bayan.adapter.RemembranceAdapter;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
 import com.ayaenshasy.bayan.databinding.AddExamLayoutBinding;
 import com.ayaenshasy.bayan.databinding.AddNewAttendanceLayoutBinding;
@@ -58,6 +59,7 @@ import com.mikhaellopez.lazydatepicker.LazyDatePicker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +79,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
     private static final int REQUEST_PICK_IMAGE = 2;
     private static final int REQUEST_CAPTURE_IMAGE = 3;
     ExamAdapter adapter;
-    private List<Exam> list;
+    private List<Exam> list=new ArrayList<>();
     private ShapeableImageView imgUser; // Declare imgUser as a class member
     String date;
     String user_id;
@@ -130,9 +132,13 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 showBottomSheet();
             }
         });
+
+
         getData();
+
         return view;
     }
+
 
     void getData() {
         DatabaseReference examsRef = FirebaseDatabase.getInstance().getReference("exams");
@@ -148,10 +154,12 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                         String image = examSnapshot.child("image").getValue(String.class);
                         String mosque = examSnapshot.child("mosque").getValue(String.class);
                         String name = examSnapshot.child("name").getValue(String.class);
-                        Exam exam = new Exam(examId, image, mosque, name);
-                        // Use the retrieved exam data as needed
-                        Toast.makeText(context, name + "", Toast.LENGTH_SHORT).show();
+                        Exam exam = new Exam(degree, image, mosque, name);
+
+                        list.add(exam);
                     }
+
+                    RemembranceAdapter(); // Call the adapter setup method here
                 }
             }
 
@@ -160,8 +168,14 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 // Handle any errors that occur
             }
         });
-
     }
+
+    private void RemembranceAdapter() {
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        adapter = new ExamAdapter(list, getActivity());
+        binding.recyclerView.setAdapter(adapter);
+    }
+
 
     private void showBottomSheet() {
         // Check if the fragment is attached to the activity and the context is not null

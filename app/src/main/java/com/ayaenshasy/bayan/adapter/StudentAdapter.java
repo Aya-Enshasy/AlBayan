@@ -84,7 +84,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         });
 
         holder.itemView.setOnClickListener(View -> {
-            context.startActivity(new Intent(context, StudentDetailsActivity.class)
+            context.startActivity(new Intent(context, StudentDetailsActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(USER_NAME, list.get(position).getName())
                     .putExtra(USER_ID, list.get(position).getId())
             );

@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.TimeUpdater;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
 import com.ayaenshasy.bayan.adapter.UserAdapter;
 import com.ayaenshasy.bayan.databinding.AddNewAttendanceLayoutBinding;
@@ -56,6 +57,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -133,7 +135,17 @@ public class HomeFragment extends BaseFragment {
                 return false;
             }
         });
+        getDate();
+
+
         return view;
+    }
+    @SuppressLint("SetTextI18n")
+    private void getDate(){
+
+         TimeUpdater timeUpdater = new TimeUpdater(binding.time);
+        timeUpdater.startUpdatingTime();
+
     }
 
     private void setData() {

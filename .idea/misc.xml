@@ -3,16 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/btn_background.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_brightness_1_24.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.2545" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_calendar_cells_svgrepo_com.xml" value="0.2555" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/login_color.xml" value="0.2545" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/support_details.xml" value="0.218" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/font/roboto_bold.xml" value="0.28020833333333334" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.264" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.2" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_bottom_navigation_bar.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_change_password.xml" value="0.152" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_daily_history.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_monthly_history.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_remembrance_details.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_student_details.xml" value="0.25" />
@@ -23,7 +26,7 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_committed_students.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_exam_history_student.xml" value="0.264" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.536" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_monthly_history_student.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_not_committed_students.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_pray.xml" value="0.25" />

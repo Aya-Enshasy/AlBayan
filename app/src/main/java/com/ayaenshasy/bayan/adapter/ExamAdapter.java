@@ -2,6 +2,7 @@ package com.ayaenshasy.bayan.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.L;
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.databinding.ExamItemBinding;
 import com.ayaenshasy.bayan.databinding.SoraItemBinding;
@@ -48,7 +50,7 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder> {
         holder.binding.tvMosque.setText("اسم المسجد : "+list.get(position).getMosque());
         holder.binding.tvDegree.setText("الدرجة : "+list.get(position).getDegree());
 
-        Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
+         Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true)
                 .into(holder.binding.imgExam);
@@ -59,8 +61,9 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list != null ? list.size() : 0;
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ExamItemBinding binding;
