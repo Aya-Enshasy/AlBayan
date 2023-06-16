@@ -218,7 +218,6 @@ public class AddUserActivity extends BaseActivity {
 
         // Create a map to store parent data
         Map<String, Object> parentMap = new HashMap<>();
-        parentMap.put("id", parentId);
         parentMap.put("name", parentName);
         parentMap.put("phone", parentPhone);
 
@@ -280,6 +279,7 @@ public class AddUserActivity extends BaseActivity {
         userRef.setValue(userData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        showNotification("مرحبا", "مرحبا بك في تطبيق البيان");
 
                         showSuccessMessage("تم الاضافة بنجاح");
                         finish();

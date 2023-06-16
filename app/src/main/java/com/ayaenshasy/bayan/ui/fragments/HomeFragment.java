@@ -76,7 +76,8 @@ public class HomeFragment extends BaseFragment {
     FragmentHomeBinding binding;
     private StudentAdapter adapter;
     private DatabaseReference studentsRef;
-     private static final int REQUEST_VIBRATE_PERMISSION = 0;
+    private View progressView;
+    private static final int REQUEST_VIBRATE_PERMISSION = 0;
     private static final int REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = 1;
 
     private static final String ARG_PARAM1 = "param1";

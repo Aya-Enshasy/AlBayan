@@ -49,7 +49,7 @@ import java.util.Random;
 public class LoginActivity extends BaseActivity {
     ActivityLoginBinding binding;
     String password = "";
-    boolean isParent = true;
+    boolean isParent = false;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -74,7 +74,10 @@ public class LoginActivity extends BaseActivity {
                 isParent = true;
                 changeUser();
                 binding.tvParent.setBackgroundResource(R.drawable.login_color);
-                binding.tvUser.setBackgroundResource(R.drawable.transparent);
+                 binding.tvUser.setBackgroundResource(R.drawable.transparent);
+
+//                animateUnderline(view);
+
             }
         });
         binding.tvUser.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +87,8 @@ public class LoginActivity extends BaseActivity {
                 changeUser();
                 binding.tvUser.setBackgroundResource(R.drawable.login_color);
                 binding.tvParent.setBackgroundResource(R.drawable.transparent);
+
+//                animateUnderline(view);
             }
         });
     }
@@ -129,23 +134,18 @@ public class LoginActivity extends BaseActivity {
 
     private void checkIfUserExists() {
         loaderDialog();
-//        if (isParent) {
-//            lo();
-//        } else {
+        if (isParent) {
+            loginParent();
+        } else {
             loginUser();
-//        }
+        }
     }
 
     void loginUser() {
+        Toast.makeText(this, "user", Toast.LENGTH_SHORT).show();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef;
-        if (isParent){
-            usersRef = database.getReference("parent");
-            Toast.makeText(this, "parent", Toast.LENGTH_SHORT).show();
-        }
-        else
-             usersRef = database.getReference("users");
+        DatabaseReference usersRef = database.getReference("users");
 
         String desiredValue = binding.identifier.getText().toString();
 
@@ -162,6 +162,7 @@ public class LoginActivity extends BaseActivity {
                             preferences.setUserProfile(user);
                             startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
                             finish();
+
                             showNotification("مرحبا", "مرحبا بك في تطبيق البيان");
                         } else {
                             Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة ", Toast.LENGTH_SHORT).show();
@@ -212,7 +213,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         if (isParentFound) {
-                            Parent parent = new Parent();
+                            Parent parent=new Parent();
                             parent.setId(parentIdToSearch);
                             parent.setPhoneNumber(phoneNumberToMatch);
                             preferences.setParentProfile(parent);
