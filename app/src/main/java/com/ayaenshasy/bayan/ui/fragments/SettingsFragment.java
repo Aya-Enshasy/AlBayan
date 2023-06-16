@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,13 +82,12 @@ public class SettingsFragment extends BaseFragment {
                 .skipMemoryCache(true).into(binding.userImage);
 
 
-//         if (!AppPreferences.getInstance(getActivity()).getStringPreferences(Constant.USER_ID).equals("123456789")){
-//            binding.changePassword.setVisibility(View.GONE);
-//            binding.addUser.setVisibility(View.GONE);
-//        }else {
-//            binding.changePassword.setVisibility(View.VISIBLE);
-//            binding.addUser.setVisibility(View.VISIBLE);
-//        }
+        if (currentUser.getRole().name().equals("TEACHER")){
+            binding.day.setVisibility(View.VISIBLE);
+        }else {
+            binding.day.setVisibility(View.GONE);
+        }
+
     }
 
     private void openActivities() {

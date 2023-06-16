@@ -1,5 +1,8 @@
 package com.ayaenshasy.bayan.ui.fragments;
 
+import static com.ayaenshasy.bayan.utils.TimeUpdater.KEY_PRAY_DATE;
+import static com.ayaenshasy.bayan.utils.TimeUpdater.KEY_PRAY_TIME;
+
 import android.os.Bundle;
 
 import com.ayaenshasy.bayan.databinding.FragmentPrayBinding;
@@ -13,21 +16,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ayaenshasy.bayan.base.BaseFragment;
+import com.ayaenshasy.bayan.utils.AppPreferences;
+import com.ayaenshasy.bayan.utils.TimeUpdater;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PrayFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PrayFragment extends BaseFragment{
 
     FragmentPrayBinding binding;
     private PrayerTimingsClass prayerTimesHelper;
+     private static final String KEY_FAJR = "fajr";
+    private static final String KEY_DHUHR = "dhuhr";
+    private static final String KEY_ASR = "asr";
+    private static final String KEY_MAGHRIB = "maghrib";
+    private static final String KEY_ISHA = "isha";
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -66,11 +74,34 @@ public class PrayFragment extends BaseFragment{
 
 
         prayerTimesHelper = new PrayerTimingsClass();
-        fetchPrayerTimes();
+//        fetchPrayerTimes();
+
+        TimeUpdater timeUpdater = new TimeUpdater(binding.fajer,binding.dohor,binding.aser,binding.magrep,binding.aisha,binding.date,binding.prayTime,binding.prayDate,getActivity());
+        timeUpdater.startUpdatingTime();
+
         getDate();
+        getData();
 
         return view;
     }
+    private void getData(){
+        String fajr =  AppPreferences.getInstance(getActivity()).getStringPreference(KEY_FAJR);
+        String dhuhr =AppPreferences.getInstance(getActivity()).getStringPreference(KEY_DHUHR);
+        String asr = AppPreferences.getInstance(getActivity()).getStringPreference(KEY_ASR);
+        String maghrib = AppPreferences.getInstance(getActivity()).getStringPreference(KEY_MAGHRIB);
+        String isha =AppPreferences.getInstance(getActivity()).getStringPreference(KEY_ISHA);
+        String pray_date =AppPreferences.getInstance(getActivity()).getStringPreference(KEY_PRAY_DATE);
+        String pray_time =AppPreferences.getInstance(getActivity()).getStringPreference(KEY_PRAY_TIME);
+
+        binding.fajer.setText(fajr);
+        binding.dohor.setText(dhuhr);
+        binding.aser.setText(asr);
+        binding.magrep.setText(maghrib);
+        binding.aisha.setText(isha);
+        binding.prayDate.setText(pray_date);
+        binding.prayTime.setText(pray_time);
+    }
+
     private void getDate(){
 
         Date currentDate = new Date();
@@ -80,26 +111,16 @@ public class PrayFragment extends BaseFragment{
         System.out.println("Current Date: " + formattedDate);
     }
 
-    private void fetchPrayerTimes() {
-        prayerTimesHelper.getPrayerTimes("Palestine", new PrayerTimingsClass.PrayerTimesListener() {
-            @Override
-            public void onPrayerTimesReceived(PrayerTimingsClass.PrayerTimes prayerTimes) {
-                // Update the UI with the prayer times
-                binding.fajer.setText(prayerTimes.getFajr());
-                binding.dohor.setText(prayerTimes.getDhuhr());
-                binding.aser.setText(prayerTimes.getAsr());
-                binding.magrep.setText(prayerTimes.getMaghrib());
-                binding.aisha.setText(prayerTimes.getIsha());
-                 Log.e("prayerTimes.getFajr()",prayerTimes.getSunrise());
-             }
+    private boolean isPrayerTime(String prayerTime) {
+         Calendar currentTime = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String currentTimeString = sdf.format(currentTime.getTime());
 
-            @Override
-            public void onFailure(String errorMessage) {
-                // Handle error
-                // You can show an error message or log the error
-            }
-        });
+         return currentTimeString.equals(prayerTime);
     }
 
+    public void showPrayerNotification(String title, String message) {
+        showPrayerNotification(title, message);
+    }
 
-}
+ }

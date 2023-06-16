@@ -7,36 +7,21 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ayaenshasy.bayan.R;
-import com.ayaenshasy.bayan.StudentDetailsActivity;
+import com.ayaenshasy.bayan.ui.activities.StudentDetailsActivity;
 import com.ayaenshasy.bayan.databinding.ItemStudentMainBinding;
-import com.ayaenshasy.bayan.databinding.SoraItemBinding;
 import com.ayaenshasy.bayan.listeners.DataListener;
-import com.ayaenshasy.bayan.model.Attendance;
 import com.ayaenshasy.bayan.model.user.Student;
-import com.ayaenshasy.bayan.model.user.User;
-import com.ayaenshasy.bayan.ui.activities.DailyHistoryActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHolder> {
 
@@ -73,18 +58,20 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         holder.binding.tvId.setText(list.get(position).getId());
 
         holder.binding.checkBox.setOnCheckedChangeListener(null); // Remove previous listener to avoid conflicts
-        holder.binding.checkBox.setEnabled(list.get(position).isChecked());
+        holder.binding.checkBox.setEnabled(!list.get(position).isChecked());
         holder.binding.checkBox.setChecked(list.get(position).isChecked());
         holder.binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                listener.sendData(list.get(position));
-                holder.binding.checkBox.setEnabled(false);
+                if (checked)
+                    listener.sendData(list.get(position));
+//                holder.binding.checkBox.setEnabled(false);
             }
         });
 
         holder.itemView.setOnClickListener(View -> {
-            context.startActivity(new Intent(context, StudentDetailsActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(new Intent(context, StudentDetailsActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(USER_NAME, list.get(position).getName())
                     .putExtra(USER_ID, list.get(position).getId())
             );

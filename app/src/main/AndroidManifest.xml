@@ -7,6 +7,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+     <uses-permission android:name="android.permission.WRITE_SETTINGS"
+         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
 
     <application
         android:allowBackup="true"
@@ -22,7 +30,7 @@
             android:name=".ui.activities.UserDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".StudentDetailsActivity"
+            android:name=".ui.activities.StudentDetailsActivity"
             android:exported="false" />
      <activity
             android:name=".ui.activities.ChangePasswordActivity"
@@ -64,12 +72,22 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".fcm.MyFirebaseMessagingService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name=".broadcastReceiver.PrayerAlarmReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".PrayerService"
+            android:enabled="true"
+            android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

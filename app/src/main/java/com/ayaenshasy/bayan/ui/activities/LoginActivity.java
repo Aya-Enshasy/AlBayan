@@ -3,10 +3,18 @@ package com.ayaenshasy.bayan.ui.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -18,8 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.SplashActivity;
 import com.ayaenshasy.bayan.base.BaseActivity;
 import com.ayaenshasy.bayan.databinding.ActivityLoginBinding;
+import com.ayaenshasy.bayan.fcm.MyFirebaseMessagingService;
 import com.ayaenshasy.bayan.model.user.Parent;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
@@ -31,11 +41,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Random;
 
 public class LoginActivity extends BaseActivity {
     ActivityLoginBinding binding;
     String password = "";
-    boolean isParent = false;
+    boolean isParent = true;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -60,10 +74,7 @@ public class LoginActivity extends BaseActivity {
                 isParent = true;
                 changeUser();
                 binding.tvParent.setBackgroundResource(R.drawable.login_color);
-                 binding.tvUser.setBackgroundResource(R.drawable.transparent);
-
-//                animateUnderline(view);
-
+                binding.tvUser.setBackgroundResource(R.drawable.transparent);
             }
         });
         binding.tvUser.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +84,6 @@ public class LoginActivity extends BaseActivity {
                 changeUser();
                 binding.tvUser.setBackgroundResource(R.drawable.login_color);
                 binding.tvParent.setBackgroundResource(R.drawable.transparent);
-
-//                animateUnderline(view);
             }
         });
     }
@@ -120,18 +129,23 @@ public class LoginActivity extends BaseActivity {
 
     private void checkIfUserExists() {
         loaderDialog();
-        if (isParent) {
-            loginParent();
-        } else {
+//        if (isParent) {
+//            lo();
+//        } else {
             loginUser();
-        }
+//        }
     }
 
     void loginUser() {
-        Toast.makeText(this, "user", Toast.LENGTH_SHORT).show();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
+        DatabaseReference usersRef;
+        if (isParent){
+            usersRef = database.getReference("parent");
+            Toast.makeText(this, "parent", Toast.LENGTH_SHORT).show();
+        }
+        else
+             usersRef = database.getReference("users");
 
         String desiredValue = binding.identifier.getText().toString();
 
@@ -148,6 +162,7 @@ public class LoginActivity extends BaseActivity {
                             preferences.setUserProfile(user);
                             startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
                             finish();
+                            showNotification("مرحبا", "مرحبا بك في تطبيق البيان");
                         } else {
                             Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة ", Toast.LENGTH_SHORT).show();
                             loader_dialog.dismiss();
@@ -167,7 +182,8 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    void loginParent() {
+
+     void loginParent() {
         Toast.makeText(this, "parent", Toast.LENGTH_SHORT).show();
         // Assuming you have a reference to the Firebase database
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -196,7 +212,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         if (isParentFound) {
-                            Parent parent=new Parent();
+                            Parent parent = new Parent();
                             parent.setId(parentIdToSearch);
                             parent.setPhoneNumber(phoneNumberToMatch);
                             preferences.setParentProfile(parent);

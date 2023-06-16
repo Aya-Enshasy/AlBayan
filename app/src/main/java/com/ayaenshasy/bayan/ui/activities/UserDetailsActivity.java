@@ -1,6 +1,7 @@
 package com.ayaenshasy.bayan.ui.activities;
 
 import static com.ayaenshasy.bayan.utils.Constant.USER_ID;
+import static com.ayaenshasy.bayan.utils.Constant.USER_NAME;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
@@ -38,9 +40,13 @@ public class UserDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityUserDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Toast.makeText(context,getIntent().getStringExtra(USER_ID)+ "", Toast.LENGTH_SHORT).show();
 
+        binding.backArrow.setOnClickListener(View->{finish();});
         binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+
+        binding.tvName.setText("الاسم : "+ getIntent().getStringExtra(USER_NAME));
+        binding.tvId.setText("رقم الهوية : "+getIntent().getStringExtra(USER_ID));
 
         UserAdapter userAdapter = new UserAdapter(users, context);
         binding.rvUser.setAdapter(userAdapter);

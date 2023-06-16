@@ -1,4 +1,4 @@
-package com.ayaenshasy.bayan;
+package com.ayaenshasy.bayan.ui.activities;
 
 import static com.ayaenshasy.bayan.utils.Constant.USER_ID;
 import static com.ayaenshasy.bayan.utils.Constant.USER_NAME;

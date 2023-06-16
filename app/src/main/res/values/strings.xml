@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Quraney</string>
     <string name="login">تسجيل الدخول</string>
-    <string name="password">ادخل كلمة المرور</string>
+    <string name="password">ادخل رقم هاتفك </string>
     <string name="add">اضافة</string>
     <string name="add_user">اضافة مستخدم جديد</string>
     <string name="name">الاسم </string>

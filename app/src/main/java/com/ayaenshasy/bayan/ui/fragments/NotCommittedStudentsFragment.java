@@ -20,6 +20,7 @@ import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
+import com.ayaenshasy.bayan.utils.Constant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -92,6 +93,7 @@ public class NotCommittedStudentsFragment extends BaseFragment {
         setRvData();
         return view;
     }
+
     private void setRvData() {
         if (role == Role.TEACHER) {
             binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
@@ -99,7 +101,7 @@ public class NotCommittedStudentsFragment extends BaseFragment {
             adapter = new StudentAdapter(students, context, new DataListener<Student>() {
                 @Override
                 public void sendData(Student student) {
-//                    showBottomSheet(student);
+                    Constant.showBottomSheet(student, requireContext());
                 }
             });
             binding.rvUser.setAdapter(adapter);
@@ -173,17 +175,16 @@ public class NotCommittedStudentsFragment extends BaseFragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot attendanceSnapshot) {
                             boolean isAttendanceMarkedToday = attendanceSnapshot.exists();
-                            if (!isAttendanceMarkedToday){
-//                            }
+                            if (!isAttendanceMarkedToday) {
                                 student.setChecked(isAttendanceMarkedToday);
                                 students.add(student);
                             }
 
                             // Notify the adapter when all students are processed
-                            if (students.size() == dataSnapshot.getChildrenCount()) {
+//                            if (students.size() == dataSnapshot.getChildrenCount()) {
                                 binding.progressBar4.setVisibility(View.GONE);
                                 adapter.setStudents(students);
-                            }
+//                            }
                         }
 
                         @Override
@@ -200,8 +201,6 @@ public class NotCommittedStudentsFragment extends BaseFragment {
             }
         });
     }
-
-
 
 
     private String getCurrentDate() {

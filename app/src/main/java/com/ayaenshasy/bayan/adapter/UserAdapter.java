@@ -12,14 +12,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ayaenshasy.bayan.R;
-import com.ayaenshasy.bayan.StudentDetailsActivity;
+import com.ayaenshasy.bayan.ui.activities.StudentDetailsActivity;
 import com.ayaenshasy.bayan.databinding.ItemUserMainBinding;
-import com.ayaenshasy.bayan.databinding.SoraItemBinding;
 import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Role;
-import com.ayaenshasy.bayan.model.quran.Verse;
-import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.ui.activities.UserDetailsActivity;
 
@@ -52,6 +48,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.binding.tvName.setText(list.get(position).getName());
+        holder.binding.tvId.setText(list.get(position).getId()+"");
+
+
         holder.itemView.setOnClickListener(View -> {
             if (list.get(position).getRole()== Role.STUDENT){
                 context.startActivity(new Intent(context, StudentDetailsActivity.class)
