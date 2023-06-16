@@ -175,7 +175,7 @@ public class HomeFragment extends BaseFragment {
             adapter = new StudentAdapter(students, context, new DataListener<Student>() {
                 @Override
                 public void sendData(Student student) {
-                    Constant.showBottomSheet(student,context);
+                    showBottomSheet(student);
                 }
             });
             binding.rvUser.setAdapter(adapter);
@@ -241,7 +241,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 students.clear(); // Clear the list before adding new data
-                String currentDate = Constant.getCurrentDate(); // Replace with the method to get the current date
+                String currentDate = getCurrentDate(); // Replace with the method to get the current date
 
                 for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
                     Student student = studentSnapshot.getValue(Student.class);
@@ -294,7 +294,117 @@ public class HomeFragment extends BaseFragment {
                 .skipMemoryCache(true).into(binding.userImage);
     }
 
+    private void showBottomSheet(Student student) {
+        // Check if the fragment is attached to the activity and the context is not null
+        if (isAdded() && context != null) {
+            // Create and show the bottom sheet
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+            AddNewAttendanceLayoutBinding bottomSheetBinding = AddNewAttendanceLayoutBinding.inflate(LayoutInflater.from(context));
+            bottomSheetDialog.setContentView(bottomSheetBinding.getRoot());
 
+            // Get references to the views
+            EditText etPlanToday = bottomSheetBinding.etPlanToday;
+            EditText etTodayPercentage = bottomSheetBinding.etTodayPercentage;
+            EditText etRepeated = bottomSheetBinding.etRepeated;
+            EditText etPlanYesterday = bottomSheetBinding.etPlanYesterday;
+            EditText etYesterdayPercentage = bottomSheetBinding.etYesterdayPercentage;
+            EditText etRepeatedYesterday = bottomSheetBinding.etRepeatedYesterday;
+            EditText etPlanTomorrow = bottomSheetBinding.etPlanTomorrow;
+            Button btnSave = bottomSheetBinding.btnSave;
+            ProgressBar progressView = bottomSheetBinding.progressBar;
+
+            // Set click listener for the save button
+            btnSave.setOnClickListener(v -> {
+                // Get the values entered by the user
+                //today
+                String planToday = etPlanToday.getText().toString().trim();
+                String todayPercentage = etTodayPercentage.getText().toString().trim();
+                String repeated = etRepeated.getText().toString().trim();
+                //yesterday
+                String planYesterday = etPlanYesterday.getText().toString().trim();
+                String yesterdayPercentage = etYesterdayPercentage.getText().toString().trim();
+                String repeatedYesterday = etRepeatedYesterday.getText().toString().trim();
+                //Tomorrow
+                String planTomorrow = etPlanTomorrow.getText().toString().trim();
+
+                // Show the progress view
+                showProgress(true, progressView);
+
+                // Save the data to Firebase Realtime Database
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
+                String attendanceId = databaseReference.push().getKey();
+                String currentDate = getCurrentDate();
+//                List<String> islamicPrayers = Arrays.asList("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha");
+                Map<String, Boolean> islamicPrayers = new HashMap<>();
+                islamicPrayers.put("Fajr", false);
+                islamicPrayers.put("Dhuhr", false);
+                islamicPrayers.put("Asr", false);
+                islamicPrayers.put("Maghrib", false);
+                islamicPrayers.put("Isha", false);
+                // Create an attendance object
+                Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planYesterday,
+                        yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
+
+                // Save the attendance object to the database
+                databaseReference.child(currentDate).child(student.getId()).setValue(attendance)
+                        .addOnSuccessListener(aVoid -> {
+                            // Data saved successfully
+                            Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show();
+                            bottomSheetDialog.dismiss();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Failed to save data
+                            Toast.makeText(context, "Failed to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnCompleteListener(task -> {
+                            // Hide the progress view
+                            showProgress(false, progressView);
+                        });
+            });
+
+            bottomSheetDialog.show();
+
+            // Animate the bottom sheet dialog
+            animateBottomSheet(bottomSheetDialog);
+        }
+    }
+
+    private void showProgress(boolean show, ProgressBar progressView) {
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        progressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    }
+                });
+    }
+
+    private void animateBottomSheet(BottomSheetDialog bottomSheetDialog) {
+        View bottomSheetView = bottomSheetDialog.findViewById(R.id.bottom_sheet_layout);
+        bottomSheetView.setBackgroundResource(R.drawable.buttombar);
+
+        if (bottomSheetView != null && bottomSheetView.isAttachedToWindow()) {
+            int centerX = (bottomSheetView.getLeft() + bottomSheetView.getRight()) / 2;
+            int centerY = (bottomSheetView.getTop() + bottomSheetView.getBottom()) / 2;
+
+            int startRadius = 0;
+            int endRadius = Math.max(bottomSheetView.getWidth(), bottomSheetView.getHeight());
+
+            Animator circularReveal = ViewAnimationUtils.createCircularReveal(bottomSheetView, centerX, centerY, startRadius, endRadius);
+            circularReveal.setDuration(500);
+            bottomSheetView.setVisibility(View.VISIBLE);
+            circularReveal.start();
+        }
+    }
+
+    private String getCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date currentDate = new Date();
+        return dateFormat.format(currentDate);
+    }
 
     private void searchByName(String query) {
         if (role == Role.TEACHER) {
@@ -303,7 +413,7 @@ public class HomeFragment extends BaseFragment {
             adapter = new StudentAdapter(students, context, new DataListener<Student>() {
                 @Override
                 public void sendData(Student student) {
-                    Constant.showBottomSheet(student,context);
+                    showBottomSheet(student);
                 }
             });
             binding.rvUser.setAdapter(adapter);
