@@ -179,10 +179,10 @@ public class CommittedStudentsFragment extends BaseFragment {
                             }
 
                             // Notify the adapter when all students are processed
-                            if (students.size() == dataSnapshot.getChildrenCount()) {
+//                            if (students.size() == dataSnapshot.getChildrenCount()) {
                                 binding.progressBar4.setVisibility(View.GONE);
                                 adapter.setStudents(students);
-                            }
+//                            }
                         }
 
                         @Override

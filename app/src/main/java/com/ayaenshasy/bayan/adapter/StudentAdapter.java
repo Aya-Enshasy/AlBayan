@@ -73,13 +73,14 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         holder.binding.tvId.setText(list.get(position).getId());
 
         holder.binding.checkBox.setOnCheckedChangeListener(null); // Remove previous listener to avoid conflicts
-        holder.binding.checkBox.setEnabled(list.get(position).isChecked());
+        holder.binding.checkBox.setEnabled(!list.get(position).isChecked());
         holder.binding.checkBox.setChecked(list.get(position).isChecked());
         holder.binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                listener.sendData(list.get(position));
-                holder.binding.checkBox.setEnabled(false);
+                if (checked)
+                    listener.sendData(list.get(position));
+//                holder.binding.checkBox.setEnabled(false);
             }
         });
 

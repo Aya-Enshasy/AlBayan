@@ -35,7 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends BaseActivity {
     ActivityLoginBinding binding;
     String password = "";
-    boolean isParent = false;
+    boolean isParent = true;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -60,10 +60,7 @@ public class LoginActivity extends BaseActivity {
                 isParent = true;
                 changeUser();
                 binding.tvParent.setBackgroundResource(R.drawable.login_color);
-                 binding.tvUser.setBackgroundResource(R.drawable.transparent);
-
-//                animateUnderline(view);
-
+                binding.tvUser.setBackgroundResource(R.drawable.transparent);
             }
         });
         binding.tvUser.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +70,6 @@ public class LoginActivity extends BaseActivity {
                 changeUser();
                 binding.tvUser.setBackgroundResource(R.drawable.login_color);
                 binding.tvParent.setBackgroundResource(R.drawable.transparent);
-
-//                animateUnderline(view);
             }
         });
     }
@@ -120,18 +115,23 @@ public class LoginActivity extends BaseActivity {
 
     private void checkIfUserExists() {
         loaderDialog();
-        if (isParent) {
-            loginParent();
-        } else {
+//        if (isParent) {
+//            lo();
+//        } else {
             loginUser();
-        }
+//        }
     }
 
     void loginUser() {
-        Toast.makeText(this, "user", Toast.LENGTH_SHORT).show();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
+        DatabaseReference usersRef;
+        if (isParent){
+            usersRef = database.getReference("parent");
+            Toast.makeText(this, "parent", Toast.LENGTH_SHORT).show();
+        }
+        else
+             usersRef = database.getReference("users");
 
         String desiredValue = binding.identifier.getText().toString();
 
@@ -196,7 +196,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         if (isParentFound) {
-                            Parent parent=new Parent();
+                            Parent parent = new Parent();
                             parent.setId(parentIdToSearch);
                             parent.setPhoneNumber(phoneNumberToMatch);
                             preferences.setParentProfile(parent);

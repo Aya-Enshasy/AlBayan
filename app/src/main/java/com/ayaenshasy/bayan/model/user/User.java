@@ -12,6 +12,7 @@ public class User {
     private Role role;
     private String birthDate;
     private String gender;
+    private String fcm;
 
     public User() {
     }
@@ -24,6 +25,17 @@ public class User {
         this.role = role;
         this.birthDate = birthDate;
         this.gender = gender;
+    }
+
+    public User(String name, String id, String phone, String image, Role role, String birthDate, String gender, String fcm) {
+        this.name = name;
+        this.id = id;
+        this.phone = phone;
+        this.image = image;
+        this.role = role;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.fcm = fcm;
     }
 
     public String getName() {
