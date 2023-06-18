@@ -4,31 +4,23 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.ayaenshasy.bayan.R;
-import com.ayaenshasy.bayan.model.user.User;
+import com.ayaenshasy.bayan.dialogs.LogoutDialog;
 import com.ayaenshasy.bayan.ui.activities.ChangePasswordActivity;
 import com.ayaenshasy.bayan.ui.activities.DailyHistoryActivity;
 import com.ayaenshasy.bayan.ui.activities.EditUserProfileActivity;
-import com.ayaenshasy.bayan.ui.activities.MonthlyHistoryActivity;
 import com.ayaenshasy.bayan.ui.activities.SupportActivity;
 import com.ayaenshasy.bayan.databinding.FragmentSettingsBinding;
 import com.ayaenshasy.bayan.ui.activities.AddUserActivity;
 import com.ayaenshasy.bayan.ui.activities.LoginActivity;
-import com.ayaenshasy.bayan.utils.AppPreferences;
-import com.ayaenshasy.bayan.utils.Constant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 
-public class SettingsFragment extends BaseFragment {
+public class SettingsFragment extends BaseFragment implements LogoutDialog.LogoutDialogListener{
     FragmentSettingsBinding binding;
 
 
@@ -116,9 +108,8 @@ public class SettingsFragment extends BaseFragment {
         });
 
         binding.logOut.setOnClickListener(View -> {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-            getActivity().finish();
-            preferences.clearPreferences();
+            showLogoutDialog();
+
         });
     }
 
@@ -126,5 +117,22 @@ public class SettingsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         getData();
+    }
+
+    private void showLogoutDialog() {
+        LogoutDialog dialog = new LogoutDialog();
+        dialog.setListener(this);
+        dialog.show(getActivity().getSupportFragmentManager(), "logout_dialog");
+    }
+
+    @Override
+    public void onLogoutConfirmed() {
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        getActivity().finish();
+        preferences.clearPreferences();
+    }
+
+    @Override
+    public void onLogoutCancelled() {
     }
 }

@@ -35,6 +35,15 @@ import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,11 +54,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends BaseActivity {
     ActivityLoginBinding binding;
-    String password = "";
-    boolean isParent = false;
+     boolean isParent = false;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -58,15 +68,20 @@ public class LoginActivity extends BaseActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.matchParent.setOnClickListener(View -> {
-            checkIfUserExists();
-        });
-
-        binding.tvParent.setBackgroundResource(R.drawable.login_color);
-        binding.tvUser.setTextColor(getColor(R.color.orange));
+         btnActions();
+        binding.tvUser.setBackgroundResource(R.drawable.login_color);
+        binding.tvParent.setTextColor(getColor(R.color.orange));
         binding.tvParent.setTextColor(getColor(R.color.black));
 
         changeUser();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void btnActions() {
+        binding.matchParent.setOnClickListener(View -> {
+            checkIfUserExists();
+        });
 
         binding.tvParent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +89,7 @@ public class LoginActivity extends BaseActivity {
                 isParent = true;
                 changeUser();
                 binding.tvParent.setBackgroundResource(R.drawable.login_color);
-                 binding.tvUser.setBackgroundResource(R.drawable.transparent);
+                binding.tvUser.setBackgroundResource(R.drawable.transparent);
 
 //                animateUnderline(view);
 
@@ -93,19 +108,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void animateUnderline(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        float startX = location[0];
-        float endX = startX + view.getWidth();
-
-        ObjectAnimator animator = ObjectAnimator.ofFloat(binding.underline, "x", startX, endX);
-        animator.setDuration(200);
-        animator.start();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
-    @SuppressLint("ResourceAsColor")
     void changeUser() {
         String text1 = "موظف ";
         String text2 = "ولي أمر ";
@@ -142,7 +145,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     void loginUser() {
-        Toast.makeText(this, "user", Toast.LENGTH_SHORT).show();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference("users");
@@ -183,9 +185,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-
-     void loginParent() {
-        Toast.makeText(this, "parent", Toast.LENGTH_SHORT).show();
+    void loginParent() {
         // Assuming you have a reference to the Firebase database
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -213,7 +213,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         if (isParentFound) {
-                            Parent parent=new Parent();
+                            Parent parent = new Parent();
                             parent.setId(parentIdToSearch);
                             parent.setPhoneNumber(phoneNumberToMatch);
                             preferences.setParentProfile(parent);

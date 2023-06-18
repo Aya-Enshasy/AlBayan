@@ -178,6 +178,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
 
     private void showBottomSheet() {
+        Toast.makeText(context, "ffffff", Toast.LENGTH_SHORT).show();
         // Check if the fragment is attached to the activity and the context is not null
         if (isAdded() && getContext() != null) {
             // Create and show the bottom sheet
@@ -209,7 +210,6 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 String name = etName.getText().toString().trim();
                 String degree = etDegree.getText().toString().trim();
                 String mosque = etMosque.getText().toString().trim();
-                formatDate(etDate.getDate().toString());
 
                 // Validate fields
                 if (TextUtils.isEmpty(name)) {
@@ -226,56 +226,62 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                     etMosque.setError("الرجاء إدخال اسم المسجد");
                     return;
                 }
+                if (etDate.getDate().toString().equals("")) {
+                    Toast.makeText(context, "تاكد من ادخال التاريخ", Toast.LENGTH_LONG).show();
+                     return;
+                }
 
-//                if (TextUtils.isEmpty(date)) {
-//                    Toast.makeText(getContext(), "الرجاء اختيار تاريخ", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                formatDate(etDate.getDate().toString());
 
                 // Show the progress view
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Upload image to Firebase Storage
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference imageRef = storageRef.child("images/" + UUID.randomUUID().toString() + ".jpg");
-                imageRef.putFile(selectedImageUri)
-                        .addOnSuccessListener(taskSnapshot -> {
-                            // Image upload success
-                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                // Get the download URL of the uploaded image
-                                String imageUrl = uri.toString();
+                if (!name.equals("")||!degree.equals("")||!mosque.equals("")){
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                    StorageReference imageRef = storageRef.child("images/" + UUID.randomUUID().toString() + ".jpg");
+                    imageRef.putFile(selectedImageUri)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                // Image upload success
+                                imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    // Get the download URL of the uploaded image
+                                    String imageUrl = uri.toString();
 
-                                // Perform your desired operations with the entered data and image URL here
-                                // ...
+                                    // Perform your desired operations with the entered data and image URL here
+                                    // ...
 
-                                // Save the data to Firebase Realtime Database
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference reference = database.getReference("exams");
+                                    // Save the data to Firebase Realtime Database
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference reference = database.getReference("exams");
 
-                                DatabaseReference userRef = reference.child(user_id); // Reference to the user node
+                                    DatabaseReference userRef = reference.child(user_id); // Reference to the user node
 
-                                DatabaseReference newEntryRef = userRef.push(); // Generate a new unique key
+                                    DatabaseReference newEntryRef = userRef.push(); // Generate a new unique key
 
-                                newEntryRef.child("name").setValue(name);
-                                newEntryRef.child("degree").setValue(degree);
-                                newEntryRef.child("mosque").setValue(mosque);
-                                newEntryRef.child("date").setValue(date);
-                                newEntryRef.child("image").setValue(imageUrl);
+                                    newEntryRef.child("name").setValue(name);
+                                    newEntryRef.child("degree").setValue(degree);
+                                    newEntryRef.child("mosque").setValue(mosque);
+                                    newEntryRef.child("date").setValue(date);
+                                    newEntryRef.child("image").setValue(imageUrl);
 
 
-                                // Data saved successfully
-                                Toast.makeText(getContext(), "تم حفظ البيانات بنجاح", Toast.LENGTH_SHORT).show();
-                                bottomSheetDialog.dismiss();
+                                    // Data saved successfully
+                                    Toast.makeText(getContext(), "تم حفظ البيانات بنجاح", Toast.LENGTH_SHORT).show();
+                                    bottomSheetDialog.dismiss();
+                                }).addOnFailureListener(e -> {
+                                    // Failed to get download URL of the uploaded image
+                                    Toast.makeText(getContext(), "فشل في الحصول على رابط الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
+                                });
                             }).addOnFailureListener(e -> {
-                                // Failed to get download URL of the uploaded image
-                                Toast.makeText(getContext(), "فشل في الحصول على رابط الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                // Failed to upload image
+                                Toast.makeText(getContext(), "فشل في تحميل الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                             });
-                        }).addOnFailureListener(e -> {
-                            // Failed to upload image
-                            Toast.makeText(getContext(), "فشل في تحميل الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        });
+                }else {
+                    Toast.makeText(context, "تاكد من ادخال البيانات", Toast.LENGTH_SHORT).show();
+                }
+
             });
 
             bottomSheetDialog.show();

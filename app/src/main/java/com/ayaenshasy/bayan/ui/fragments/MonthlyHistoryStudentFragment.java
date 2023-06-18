@@ -1,5 +1,7 @@
 package com.ayaenshasy.bayan.ui.fragments;
 
+import static com.ayaenshasy.bayan.utils.Constant.USER_ID;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -102,41 +104,42 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
         System.out.println("Next date after one month: " + nextDateString);
     }
 
-    private void getData(){
+    private void getData() {
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
 
-        // Add one month to the current date
         calendar.add(Calendar.MONTH, 1);
         Date nextDate = calendar.getTime();
 
-        // Format the dates using SimpleDateFormat
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String startDateString = dateFormat.format(currentDate);
         String endDateString = dateFormat.format(nextDate);
 
-        // Get the reference to the Firebase Realtime Database
-        databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
 
-        // Query the data between the start and end dates
-        databaseReference.orderByChild(startDateString).startAt(startDateString).endAt(endDateString).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Retrieve the Attendance object
-                    Attendance attendance = snapshot.getValue(Attendance.class);
+        databaseReference.child(getActivity().getIntent().getStringExtra(USER_ID))
+                .orderByChild("date")
+                .startAt(startDateString)
+                .endAt(endDateString)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            // Retrieve the Attendance object
+                            Attendance attendance = snapshot.getValue(Attendance.class);
 
-                    // Process the attendance data here
-                    // Example: Log the date and islamicPrayers
-                    Log.d("Attendance", "Date: " + attendance.getDate());
-                    Log.d("Attendance", "Islamic Prayers: " + attendance.getIslamicPrayers());
-                }
-            }
+                            Log.d("Attendance", attendance.getDate());
+                            // Retrieve other necessary fields as needed
+                            // ...
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors here
-            }
-        });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Handle any errors here
+                    }
+                });
     }
-    }
+
+}

@@ -44,7 +44,7 @@ public class Constant {
     public static void showBottomSheet(Student student, Context context) {
         // Check if the fragment is attached to the activity and the context is not null
         if (context != null) {
-            // Create and show the bottom sheet
+             // Create and show the bottom sheet
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
             AddNewAttendanceLayoutBinding bottomSheetBinding = AddNewAttendanceLayoutBinding.inflate(LayoutInflater.from(context));
             bottomSheetDialog.setContentView(bottomSheetBinding.getRoot());
