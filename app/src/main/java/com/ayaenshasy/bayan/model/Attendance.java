@@ -127,6 +127,23 @@ public class Attendance {
     public void setPlanTomorrow(String planTomorrow) {
         this.planTomorrow = planTomorrow;
     }
-}
+
+
+    // Override toString() method for debugging or displaying purposes
+    @Override
+    public String toString() {
+        return "Attendance{" +
+                "id='" + id + '\'' +
+                ", date='" + date + '\'' +
+                ", planToday='" + planToday + '\'' +
+                ", todayPercentage='" + todayPercentage + '\'' +
+                ", repeated='" + repeated + '\'' +
+                ", planYesterday='" + planYesterday + '\'' +
+                ", yesterdayPercentage='" + yesterdayPercentage + '\'' +
+                ", repeatedYesterday='" + repeatedYesterday + '\'' +
+                ", islamicPrayers=" + islamicPrayers +
+                ", planTomorrow='" + planTomorrow + '\'' +
+                '}';
+    }}
 
 

@@ -6,25 +6,39 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
+import com.ayaenshasy.bayan.adapter.MonthHistoryAdapter;
+import com.ayaenshasy.bayan.adapter.StudentAdapter;
 import com.ayaenshasy.bayan.databinding.FragmentHomeBinding;
 import com.ayaenshasy.bayan.databinding.FragmentMonthlyHistoryStudentBinding;
+import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Attendance;
+import com.ayaenshasy.bayan.model.user.Student;
+import com.ayaenshasy.bayan.utils.Constant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +48,7 @@ import java.util.Date;
 public class MonthlyHistoryStudentFragment extends BaseFragment {
     private DatabaseReference databaseReference;
     FragmentMonthlyHistoryStudentBinding binding;
+    String startDateString, endDateString;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -86,60 +101,86 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
         return view;
     }
 
-    private void getMonth(){
+    private void getMonth() {
         Calendar calendar = Calendar.getInstance();
-        Date currentDate = calendar.getTime();
+        calendar.add(Calendar.MONTH, -1); // Move one month back
+        Date lastMonth = calendar.getTime();
 
-        // Add one month to the current date
-        calendar.add(Calendar.MONTH, 1);
-        Date nextDate = calendar.getTime();
+        calendar.set(Calendar.DAY_OF_MONTH, 1); // Set the day to the first day of the last month
+        Date startOfLastMonth = calendar.getTime();
 
-        // Format the dates using SimpleDateFormat
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateString = dateFormat.format(currentDate);
-        String nextDateString = dateFormat.format(nextDate);
-
-        // Print the current date and the next date
-        System.out.println("Current date: " + currentDateString);
-        System.out.println("Next date after one month: " + nextDateString);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH)); // Set the day to the last day of the last month
+        Date endOfLastMonth = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        startDateString = dateFormat.format(startOfLastMonth);
+        endDateString = dateFormat.format(endOfLastMonth);
     }
 
     private void getData() {
+        ArrayList<Attendance> attendances = new ArrayList<>();
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+        MonthHistoryAdapter adapter = new MonthHistoryAdapter(attendances, context);
+        binding.recyclerView.setAdapter(adapter);
+// Get the current date
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
 
-        calendar.add(Calendar.MONTH, 1);
-        Date nextDate = calendar.getTime();
+// Calculate the date 30 days ago
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        Date thirtyDaysAgo = calendar.getTime();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateString = dateFormat.format(currentDate);
-        String endDateString = dateFormat.format(nextDate);
+// Convert the dates to the desired format (e.g., "yyyy-MM-dd")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String currentDateStr = dateFormat.format(currentDate);
+        String thirtyDaysAgoStr = dateFormat.format(thirtyDaysAgo);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
+// Create a Firebase query to retrieve data within the date range and for users with ID "123"
+        Query query = FirebaseDatabase.getInstance().getReference("attendance")
+                .orderByKey()
+                .startAt(thirtyDaysAgoStr)
+                .endAt(currentDateStr);
 
-        databaseReference.child(getActivity().getIntent().getStringExtra(USER_ID))
-                .orderByChild("date")
-                .startAt(startDateString)
-                .endAt(endDateString)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            // Retrieve the Attendance object
-                            Attendance attendance = snapshot.getValue(Attendance.class);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Attendance> attendanceList = new ArrayList<>();
 
-                            Log.d("Attendance", attendance.getDate());
-                            // Retrieve other necessary fields as needed
-                            // ...
+                for (DataSnapshot dateSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot entrySnapshot : dateSnapshot.getChildren()) {
+                        String id = entrySnapshot.getKey();
 
+                        // Check if the ID matches "123"
+                        if (id.equals("123")) {
+                            String date = entrySnapshot.child("date").getValue(String.class);
+                            String planToday = entrySnapshot.child("planToday").getValue(String.class);
+                            String todayPercentage = entrySnapshot.child("todayPercentage").getValue(String.class);
+                            String repeated = entrySnapshot.child("repeated").getValue(String.class);
+                            String planYesterday = entrySnapshot.child("planYesterday").getValue(String.class);
+                            String yesterdayPercentage = entrySnapshot.child("yesterdayPercentage").getValue(String.class);
+                            String repeatedYesterday = entrySnapshot.child("repeatedYesterday").getValue(String.class);
+                            String planTomorrow = entrySnapshot.child("planTomorrow").getValue(String.class);
+                            Map<String, Boolean> islamicPrayers = entrySnapshot.child("islamicPrayers").getValue(new GenericTypeIndicator<Map<String, Boolean>>() {
+                            });
+
+                            Attendance attendance = new Attendance(id, date, planToday, todayPercentage, repeated, planYesterday, yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
+                            attendanceList.add(attendance);
                         }
                     }
+                }
+                adapter.setExam(attendanceList);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Handle any errors here
-                    }
-                });
+                // Use the attendanceList for users with ID "123" as needed
+                for (Attendance attendance : attendanceList) {
+                    System.out.println(attendance.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error
+            }
+        });
     }
 
 }
