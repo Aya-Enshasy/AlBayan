@@ -22,7 +22,7 @@
         android:text="@string/id_number"
         android:textColor="@color/black"
         android:textSize="@dimen/_10sdp"
-        app:layout_constraintEnd_toStartOf="@+id/img_user"
+        app:layout_constraintRight_toLeftOf="@+id/img_user"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:textSize="@dimen/_12sdp"
         android:textColor="@color/black"
         android:fontFamily="@font/cairo_bold"
-        app:layout_constraintEnd_toStartOf="@+id/img_user"
+        app:layout_constraintRight_toLeftOf="@+id/img_user"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -48,7 +48,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_user_circle_svgrepo_com"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:shapeAppearanceOverlay="@style/roundedImageVRounded" />
@@ -59,8 +59,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/side"
-        app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />

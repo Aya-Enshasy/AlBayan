@@ -33,7 +33,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/imageView22"
+            app:layout_constraintRight_toLeftOf="@+id/imageView22"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -46,7 +46,7 @@
             android:text="+9725698711400"
             android:textColor="#B823253A"
             android:textSize="@dimen/_9ssp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView22"
+            app:layout_constraintRight_toLeftOf="@+id/imageView22"
             app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -59,7 +59,7 @@
             android:text="يمكنك التواصل مع الدعم الفني عن طريق الايميل او رقم الجوال سيتم الرد في اقرب وقت ممكن ..."
             android:textColor="#B823253A"
             android:textSize="@dimen/_9ssp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView23"
+            app:layout_constraintRight_toLeftOf="@+id/imageView23"
             app:layout_constraintTop_toBottomOf="@+id/textView49" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -72,7 +72,7 @@
             android:text="Support@otlob.com"
             android:textColor="#B823253A"
             android:textSize="@dimen/_9ssp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView25"
+            app:layout_constraintRight_toLeftOf="@+id/imageView25"
             app:layout_constraintTop_toBottomOf="@+id/textView53" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -85,7 +85,7 @@
             android:text="يسعدنا الرد على أسئلتك وخدمة عملائنا بالبريد."
             android:textColor="#000000"
             android:textSize="@dimen/_9ssp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView25"
+            app:layout_constraintRight_toLeftOf="@+id/imageView25"
             app:layout_constraintTop_toBottomOf="@+id/textView54" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -99,7 +99,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/imageView23"
+            app:layout_constraintRight_toLeftOf="@+id/imageView23"
             app:layout_constraintTop_toBottomOf="@+id/textView52" />
 
         <ImageView
@@ -109,7 +109,7 @@
             android:layout_marginTop="28dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_baseline_call_24"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_brightness_1_24"
             tools:ignore="VectorDrawableCompat" />
@@ -121,7 +121,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_baseline_brightness_1_24"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView52" />
 
         <ImageView
@@ -131,7 +131,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_baseline_brightness_1_24"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView53" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,7 +157,7 @@
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginLeft="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_25sdp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_24"
         app:tint="#23253A"

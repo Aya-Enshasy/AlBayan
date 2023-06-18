@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,15 +23,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
+
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
     ActivitySplashBinding binding;
-    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale arabicLocale = new Locale("ar");
+        Configuration config = getResources().getConfiguration();
+        config.setLocale(arabicLocale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         runActivity();

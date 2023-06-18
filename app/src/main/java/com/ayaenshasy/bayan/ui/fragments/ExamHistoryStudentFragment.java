@@ -178,8 +178,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
 
     private void showBottomSheet() {
-        Toast.makeText(context, "ffffff", Toast.LENGTH_SHORT).show();
-        // Check if the fragment is attached to the activity and the context is not null
+         // Check if the fragment is attached to the activity and the context is not null
         if (isAdded() && getContext() != null) {
             // Create and show the bottom sheet
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());

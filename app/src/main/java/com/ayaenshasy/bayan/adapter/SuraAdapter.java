@@ -46,15 +46,15 @@ public class SuraAdapter extends RecyclerView.Adapter<SuraAdapter.ViewHolder> {
 
         }
 
-        holder.binding.mark.setOnClickListener(View->{
-            if(!mark){
-                mark=true;
-                holder.binding.mark.setImageResource(R.drawable.ic_baseline_bookmark_24);
-            }else {
-                mark=false;
-                holder.binding.mark.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
-            }
-        });
+//        holder.binding.mark.setOnClickListener(View->{
+//            if(!mark){
+//                mark=true;
+//                holder.binding.mark.setImageResource(R.drawable.ic_baseline_bookmark_24);
+//            }else {
+//                mark=false;
+//                holder.binding.mark.setImageResource(R.drawable.ic_baseline_bookmark_border_24);
+//            }
+//        });
 
 
 

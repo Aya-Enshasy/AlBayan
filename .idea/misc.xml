@@ -13,14 +13,16 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/side.xml" value="0.2545" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/support_details.xml" value="0.218" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/font/roboto_bold.xml" value="0.28020833333333334" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.2" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_bottom_navigation_bar.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_change_password.xml" value="0.152" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_change_password.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_daily_history.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.264" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_monthly_history.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_remembrance_details.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_sora.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_student_details.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_support.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_user_details.xml" value="0.264" />
@@ -28,25 +30,25 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/exam_item.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_committed_students.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.4" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_exam_history_student.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.264" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_monthly_history_student.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_monthly_history_student.xml" value="0.2" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_not_committed_students.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_pray.xml" value="0.264" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_pray.xml" value="0.2" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_remembrance.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_quran_chapter.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_user_main.xml" value="0.6" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_user_main.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/loader_dialog.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/monthely_item.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/notification_layout.xml" value="0.24895833333333334" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/notification_layout_expanded.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/remembrance_details_item.xml" value="0.264" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/remembrance_details_item.xml" value="0.2" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/remembrance_item.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/sora_item.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/sora_item.xml" value="0.264" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/btn_background.xml" value="0.2545" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/buttombar.xml" value="0.2545" />
         <entry key="..\:/Users/ucas/Desktop/Quraney/app/src/main/res/drawable/ic_star_1259_svgrepo_com.xml" value="0.2555" />
@@ -81,20 +83,17 @@
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/activity_student_details.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/add_exam_layout.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.176" />
-        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/exam_item.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_add_new_teacher.xml" value="0.2359375" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_committed_students.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_exam_history_student.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_monthly_history_student.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_not_committed_students.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.16799999999999998" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/fragment_teacher.xml" value="0.25" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.4" />
         <entry key="..\:/aya/AlBayan/app/src/main/res/layout/item_user_main.xml" value="0.25" />
-        <entry key="..\:/aya/AlBayan/app/src/main/res/layout/monthely_item.xml" value="0.25" />
       </map>
     </option>
   </component>

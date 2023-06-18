@@ -27,7 +27,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="مراجعة اليوم"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -56,7 +56,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="نسبة المراجعة"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_plan_yesterday" />
 
             <EditText
@@ -86,7 +86,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="عدد التكرار"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_yesterday_percentage" />
 
             <EditText
@@ -137,7 +137,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="حفظ اليوم"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -166,7 +166,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="نسبة الحفظ"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_plan_today" />
 
             <EditText
@@ -196,7 +196,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="عدد التكرار"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_today_percentage" />
 
             <EditText
@@ -239,7 +239,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="خطة الغد"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
 
             <EditText

@@ -292,6 +292,7 @@
                 android:id="@+id/cell_title_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#1BD29322"
                 android:background="@drawable/btn_background">
 
 
@@ -324,9 +325,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
                         android:fontFamily="@font/cairo_bold"
                         android:text="صلاوات اليوم"
-                        android:textColor="@color/white"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:textColor="@color/black"
                         android:textDirection="rtl"
                         android:textSize="@dimen/_14ssp"
                         android:textStyle="bold"
@@ -351,9 +355,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:buttonTint="@color/white"
-                            android:fontFamily="@font/cairo_semibold"
-
+                             android:fontFamily="@font/cairo_semibold"
+                            android:buttonTint="@color/orange"
+                            android:enabled="false"
+                            android:textColor="@color/black"
                             android:layoutDirection="rtl"
                             android:text="الفجر" />
 
@@ -362,7 +367,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:buttonTint="@color/white"
+                            android:buttonTint="@color/orange"
+                            android:enabled="false"
+                            android:textColor="@color/black"
                             android:fontFamily="@font/cairo_semibold"
 
                             android:layoutDirection="rtl"
@@ -373,8 +380,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:buttonTint="@color/white"
-                            android:fontFamily="@font/cairo_semibold"
+                            android:buttonTint="@color/orange"
+                            android:enabled="false"
+                            android:textColor="@color/black"                            android:fontFamily="@font/cairo_semibold"
                             android:layoutDirection="rtl"
 
                             android:text="العصر" />
@@ -400,8 +408,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:buttonTint="@color/white"
-                            android:fontFamily="@font/cairo_semibold"
+                            android:buttonTint="@color/orange"
+                            android:enabled="false"
+                            android:textColor="@color/black"                            android:fontFamily="@font/cairo_semibold"
                             android:layoutDirection="rtl"
 
                             android:text="المغرب" />
@@ -411,8 +420,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:buttonTint="@color/white"
-                            android:fontFamily="@font/cairo_semibold"
+                            android:buttonTint="@color/orange"
+                            android:enabled="false"
+                            android:textColor="@color/black"                            android:fontFamily="@font/cairo_semibold"
                             android:layoutDirection="rtl"
 
                             android:text="العشاء" />
@@ -427,7 +437,11 @@
                         android:layout_marginEnd="12dp"
                         android:fontFamily="@font/cairo_bold"
                         android:text="التقيم التربوي"
-                        android:textColor="#FFFFFF"
+                        android:layout_marginStart="16dp"
+
+                        android:textColor="@color/black"
+                        android:layout_gravity="right"
+                        android:gravity="right"
                         android:textSize="@dimen/_14ssp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -442,6 +456,10 @@
                         android:layout_marginTop="-36dp"
                         android:layout_marginEnd="16dp"
                         app:bar_color="#86000000"
+                        android:defaultFocusHighlightEnabled="false"
+                        android:hapticFeedbackEnabled="false"
+                        android:nestedScrollingEnabled="false"
+                        android:saveEnabled="false"
                         app:bar_text_color="@color/white"
                         app:bubble_text_color="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"

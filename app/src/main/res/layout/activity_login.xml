@@ -30,6 +30,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
+            android:visibility="gone"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +80,7 @@
             android:text="ادخل رقم الهوية"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <EditText
@@ -91,7 +92,8 @@
             android:fontFamily="@font/cairo_semibold"
             android:layout_marginEnd="24dp"
             android:background="@drawable/input_background"
-            android:elevation="4dp"
+            android:backgroundTint="#08000000"
+
             android:ems="10"
             android:hint="123 456 678 90"
             android:inputType="number"
@@ -110,7 +112,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/input_background"
-            android:elevation="4dp"
+            android:backgroundTint="#08000000"
+
             android:ems="10"
             android:fontFamily="@font/cairo_semibold"
             android:hint="0 5 * * * * * * * "
@@ -129,10 +132,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/cairo_bold"
-            android:text="@string/password"
+            android:text="ادخل رقم هاتفك"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/identifier" />
 
         <TextView
