@@ -152,7 +152,7 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
 
                         // Check if the ID matches "123"
                         if (id.equals("123")) {
-                            String date = entrySnapshot.child("date").getValue(String.class);
+                            String date = dateSnapshot.getKey();  // Get the date of the data
                             String planToday = entrySnapshot.child("planToday").getValue(String.class);
                             String todayPercentage = entrySnapshot.child("todayPercentage").getValue(String.class);
                             String repeated = entrySnapshot.child("repeated").getValue(String.class);
