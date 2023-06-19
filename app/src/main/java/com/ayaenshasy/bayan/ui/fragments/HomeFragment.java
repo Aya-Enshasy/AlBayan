@@ -236,8 +236,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void queryStudentsByTeacherId(String teacherId) {
-        Toast.makeText(context, teacherId+"", Toast.LENGTH_SHORT).show();
-        CollectionReference studentsRef = FirebaseFirestore.getInstance().collection("students");
+         CollectionReference studentsRef = FirebaseFirestore.getInstance().collection("students");
         Query query = studentsRef.whereEqualTo("responsible_id", currentUser.getId());
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -300,10 +299,10 @@ public class HomeFragment extends BaseFragment {
 
     private void showBottomSheet(Student student) {
         // Check if the fragment is attached to the activity and the context is not null
-        if (isAdded() && context != null) {
+        if (isAdded() && getContext() != null) {
             // Create and show the bottom sheet
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-            AddNewAttendanceLayoutBinding bottomSheetBinding = AddNewAttendanceLayoutBinding.inflate(LayoutInflater.from(context));
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+            AddNewAttendanceLayoutBinding bottomSheetBinding = AddNewAttendanceLayoutBinding.inflate(LayoutInflater.from(getContext()));
             bottomSheetDialog.setContentView(bottomSheetBinding.getRoot());
 
             // Get references to the views
@@ -320,51 +319,53 @@ public class HomeFragment extends BaseFragment {
             // Set click listener for the save button
             btnSave.setOnClickListener(v -> {
                 // Get the values entered by the user
-                //today
+                // today
                 String planToday = etPlanToday.getText().toString().trim();
                 String todayPercentage = etTodayPercentage.getText().toString().trim();
                 String repeated = etRepeated.getText().toString().trim();
-                //yesterday
+                // yesterday
                 String planYesterday = etPlanYesterday.getText().toString().trim();
                 String yesterdayPercentage = etYesterdayPercentage.getText().toString().trim();
                 String repeatedYesterday = etRepeatedYesterday.getText().toString().trim();
-                //Tomorrow
+                // Tomorrow
                 String planTomorrow = etPlanTomorrow.getText().toString().trim();
 
-                // Validate the input
-                if (validateInput(planToday, todayPercentage, repeated, planYesterday, yesterdayPercentage, repeatedYesterday, planTomorrow,bottomSheetBinding)) {
-                    // Show the progress view
-                    showProgress(true, progressView);
+                // Show the progress view
+                showProgress(true, progressView);
 
-                    // Save the data to Firestore
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    String attendanceId = UUID.randomUUID().toString();
-                    String currentDate = getCurrentDate();
+                // Save the data to Firestore
+                 String currentDate = getCurrentDate();
+                CollectionReference attendanceCollection = FirebaseFirestore.getInstance().collection("attendance");
+                DocumentReference attendanceRef = attendanceCollection.document(currentDate)
+                        .collection(student.getId()).document(student.getId());
 
-                    // Create an attendance object
-                    Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planYesterday,
-                            yesterdayPercentage, repeatedYesterday, planTomorrow);
 
-                    // Save the attendance object to Firestore
-                    CollectionReference attendanceRef = db.collection("attendance");
-                    attendanceRef.document(currentDate)
-                            .collection(student.getId())
-                            .document(attendanceId)
-                            .set(attendance)
-                            .addOnSuccessListener(aVoid -> {
-                                // Data saved successfully
-                                Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show();
-                                bottomSheetDialog.dismiss();
-                            })
-                            .addOnFailureListener(e -> {
-                                // Failed to save data
-                                Toast.makeText(context, "Failed to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnCompleteListener(task -> {
-                                // Hide the progress view
-                                showProgress(false, progressView);
-                            });
-                }
+                Map<String, Object> attendanceData = new HashMap<>();
+                attendanceData.put("attendanceId", currentUser.getId());
+                attendanceData.put("currentDate", currentDate);
+                attendanceData.put("planToday", planToday);
+                attendanceData.put("todayPercentage", todayPercentage);
+                attendanceData.put("repeated", repeated);
+                attendanceData.put("planYesterday", planYesterday);
+                attendanceData.put("yesterdayPercentage", yesterdayPercentage);
+                attendanceData.put("repeatedYesterday", repeatedYesterday);
+                attendanceData.put("islamicPrayers", getIslamicPrayersMap());
+                attendanceData.put("planTomorrow", planTomorrow);
+
+                attendanceRef.set(attendanceData)
+                        .addOnSuccessListener(aVoid -> {
+                            // Data saved successfully
+                            Toast.makeText(getContext(), "Data saved successfully", Toast.LENGTH_SHORT).show();
+                            bottomSheetDialog.dismiss();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Failed to save data
+                            Toast.makeText(getContext(), "Failed to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnCompleteListener(task -> {
+                            // Hide the progress view
+                            showProgress(false, progressView);
+                        });
             });
 
             bottomSheetDialog.show();
@@ -374,6 +375,15 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+    private Map<String, Boolean> getIslamicPrayersMap() {
+        Map<String, Boolean> islamicPrayers = new HashMap<>();
+        islamicPrayers.put("Fajr", false);
+        islamicPrayers.put("Dhuhr", false);
+        islamicPrayers.put("Asr", false);
+        islamicPrayers.put("Maghrib", false);
+        islamicPrayers.put("Isha", false);
+        return islamicPrayers;
+    }
     private boolean validateInput(String planToday, String todayPercentage, String repeated,
                                   String planYesterday, String yesterdayPercentage, String repeatedYesterday,
                                   String planTomorrow, AddNewAttendanceLayoutBinding bottomSheetBinding) {

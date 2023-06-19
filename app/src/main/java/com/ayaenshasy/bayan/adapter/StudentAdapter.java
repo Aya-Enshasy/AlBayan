@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
@@ -68,6 +69,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 //                holder.binding.checkBox.setEnabled(false);
             }
         });
+
 
         holder.itemView.setOnClickListener(View -> {
             context.startActivity(new Intent(context, StudentDetailsActivity.class)

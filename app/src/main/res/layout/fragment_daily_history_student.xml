@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_background"
                 android:backgroundTint="#48D29322"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/container1"
@@ -488,22 +488,28 @@
             app:layout_constraintTop_toBottomOf="@+id/radioGroup1" />
 
 
-        <com.ramotion.fluidslider.FluidSlider
+        <TextView
             android:id="@+id/fluidSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            app:bar_color="#86000000"
-            app:bar_text_color="@color/white"
-            app:bubble_text_color="@color/black"
+             android:fontFamily="@font/cairo_semibold"
+            android:hint="90%"
+            android:inputType="number"
+            android:outlineSpotShadowColor="#9A9A9A"
+
+            android:padding="10dp"
+            android:background="@drawable/input_background"
+            android:elevation="4dp"
+            android:textDirection="rtl"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup1"
-            app:size="small"
-            tools:targetApi="lollipop" />
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/add_btn"

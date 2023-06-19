@@ -18,13 +18,19 @@ import android.widget.Toast;
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.databinding.FragmentDailyHistoryStudentBinding;
 import com.ayaenshasy.bayan.databinding.FragmentSettingsBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -96,8 +102,7 @@ public class DailyHistoryStudentFragment extends Fragment {
         binding.tvUserId.setText(getActivity().getIntent().getStringExtra(USER_ID));
         foldingCell();
         lottieImage();
-        fluidSlider();
-        checkBoxes();
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         currentDate = dateFormat.format(new Date());
@@ -111,187 +116,94 @@ public class DailyHistoryStudentFragment extends Fragment {
     }
 
     private void foldingCell() {
-        binding.foldingCell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.foldingCell.toggle(false);
-                binding.cellTitleView.setVisibility(View.VISIBLE);
-            }
-        });
+//        binding.foldingCell.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                binding.foldingCell.toggle(false);
+//                binding.cellTitleView.setVisibility(View.VISIBLE);
+//            }
+//        });
     }
 
     private void lottieImage() {
         binding.lottieImg.setAnimation(R.raw.user_profile);
-        binding.lottieImg.loop(true);
+        binding.lottieImg.loop(false);
         binding.lottieImg.playAnimation();
     }
 
-    private void fluidSlider() {
-        binding.fluidSlider.setPositionListener(new Function1<Float, Unit>() {
-            @Override
-            public Unit invoke(Float pos) {
-                String value = String.valueOf((int) (min + (total * pos)));
-                binding.fluidSlider.setBubbleText(value);
-                return Unit.INSTANCE;
-            }
-        });
-        binding.fluidSlider.setPosition(0.5f);
-        binding.fluidSlider.setStartText(String.valueOf(min));
-        binding.fluidSlider.setEndText(String.valueOf(max));
 
-        binding.fluidSlider.setBeginTrackingListener(new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                return Unit.INSTANCE;
-            }
-        });
-
-        binding.fluidSlider.setEndTrackingListener(new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                Log.e("setEndTrackingListener", binding.fluidSlider.getBubbleText() + "");
-
-                return Unit.INSTANCE;
-            }
-        });
-    }
-
-    private void checkBoxes() {
-        binding.fajer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_fajer = true;
-                } else {
-                    bool_fajer = false;
-                }
-            }
-        });
-        binding.dohor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_dohor = true;
-                } else {
-                    bool_dohor = false;
-                }
-            }
-        });
-        binding.aser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_aser = true;
-                } else {
-                    bool_aser = false;
-                }
-            }
-        });
-        binding.magreb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_magreb = true;
-                } else {
-                    bool_magreb = false;
-                }
-            }
-        });
-        binding.eshaa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_esha = true;
-                } else {
-                    bool_esha = false;
-                }
-            }
-        });
-    }
 
     private void getUserAttendance(String userId, String currentDate) {
         binding.progressBar.setVisibility(View.VISIBLE);
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference attendanceRef = databaseRef.child("attendance").child(currentDate).child(userId);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference attendanceRef = db.collection("attendance")
+                .document(currentDate)
+                .collection(userId)
+                .document(userId);
 
-        attendanceRef.addValueEventListener(new ValueEventListener() {
+        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 binding.progressBar.setVisibility(View.GONE);
-                if (dataSnapshot.exists()) {
-                    Map<String, Object> attendanceData = (Map<String, Object>) dataSnapshot.getValue();
-                    Map<String, Boolean> prayerData = (Map<String, Boolean>) attendanceData.get("islamicPrayers");
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String planToday = document.getString("planToday");
+                        String planTomorrow = document.getString("planTomorrow");
+                        String planYesterday = document.getString("planYesterday");
+                        String repeated = document.getString("repeated");
+                        String repeatedYesterday = document.getString("repeatedYesterday");
+                        String todayPercentage = document.getString("todayPercentage");
+                        String yesterdayPercentage = document.getString("yesterdayPercentage");
 
-                    boolean asr = prayerData.get("Asr");
-                    boolean isha = prayerData.get("Isha");
-                    boolean fajr = prayerData.get("Fajr");
-                    boolean dhuhr = prayerData.get("Dhuhr");
-                    boolean maghrib = prayerData.get("Maghrib");
-                    String planToday = dataSnapshot.child("planToday").getValue(String.class);
-                    String planTomorrow = dataSnapshot.child("planTomorrow").getValue(String.class);
-                    String planYesterday = dataSnapshot.child("planYesterday").getValue(String.class);
-                    String repeated = dataSnapshot.child("repeated").getValue(String.class);
-                    String repeatedYesterday = dataSnapshot.child("repeatedYesterday").getValue(String.class);
-                    String todayPercentage = dataSnapshot.child("todayPercentage").getValue(String.class);
-                    String yesterdayPercentage = dataSnapshot.child("yesterdayPercentage").getValue(String.class);
-                    if ( dataSnapshot.child("notes")!=null){
-                        String notes = dataSnapshot.child("notes").getValue(String.class);
-                        binding.notes.setText(notes);
+                        if (document.contains("notes")) {
+                            String notes = document.getString("notes");
+                            binding.notes.setText(notes);
+                        }
+
+                        if (document.contains("rate")) {
+                            String rate = document.getString("rate");
+                            binding.fluidSlider.setText(rate);
+                        }
+
+                        binding.etPlanTomorrow.setText(planTomorrow);
+                        binding.etPlanYesterday.setText(planYesterday);
+                        binding.etPlanToday.setText(planToday);
+                        binding.etRepeated.setText(repeated);
+                        binding.etRepeatedYesterday.setText(repeatedYesterday);
+                        binding.etTodayPercentage.setText(todayPercentage + " %");
+                        binding.etYesterdayPercentage.setText(yesterdayPercentage + " %");
+
+                        Log.e("TAG", "Successfully retrieved user attendance: " + planTomorrow);
+                    } else {
+                        Log.e("TAG", "User attendance document does not exist");
                     }
-                    if ( dataSnapshot.child("rate2")!=null){
-                        Float rate = dataSnapshot.child("rate2").getValue(Float.class);
-                        if ( rate!=null)
-                          binding.fluidSlider.setPosition(rate);
-                     }
-
-                    binding.etPlanTomorrow.setText(planTomorrow);
-                    binding.etPlanYesterday.setText(planYesterday);
-                    binding.etPlanToday.setText(planToday);
-                    binding.etRepeated.setText(repeated);
-                    binding.etRepeatedYesterday.setText(repeatedYesterday);
-                    binding.etTodayPercentage.setText(todayPercentage + " %");
-                    binding.etYesterdayPercentage.setText(yesterdayPercentage + " %");
-                    binding.fajer.setChecked(fajr);
-                    binding.dohor.setChecked(dhuhr);
-                    binding.aser.setChecked(asr);
-                    binding.magreb.setChecked(maghrib);
-                    binding.eshaa.setChecked(isha);
-
-
-
+                } else {
+                    Log.e("TAG", "Failed to retrieve user attendance: " + task.getException().getMessage());
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                binding.progressBar.setVisibility(View.GONE);
-                Log.e("TAG", "Failed to retrieve user attendance: " + databaseError.getMessage());
             }
         });
     }
 
     private void editAttendanceData(String userId, String currentDate) {
         binding.progressBar.setVisibility(View.VISIBLE);
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference attendanceRef = databaseRef.child("attendance").child(currentDate).child(userId);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        
+        CollectionReference examsCollection = db.collection("attendance");
+        DocumentReference userEntryRef = examsCollection.document(currentDate).collection(userId).document(userId);
+
         Map<String, Object> updatedData = new HashMap<>();
-
-        updatedData.put("islamicPrayers/Fajr", bool_fajer);
-        updatedData.put("islamicPrayers/Dhuhr", bool_dohor);
-        updatedData.put("islamicPrayers/Asr", bool_aser);
-        updatedData.put("islamicPrayers/Maghrib", bool_magreb);
-        updatedData.put("islamicPrayers/Isha", bool_esha);
+        updatedData.put("planToday", binding.etPlanToday.getText().toString());
+        updatedData.put("planTomorrow", binding.etPlanTomorrow.getText().toString());
+        updatedData.put("planYesterday", binding.etPlanYesterday.getText().toString());
+        updatedData.put("repeated", binding.etRepeated.getText().toString());
+        updatedData.put("repeatedYesterday", binding.etRepeatedYesterday.getText().toString());
+        updatedData.put("todayPercentage", binding.etTodayPercentage.getText().toString());
+        updatedData.put("yesterdayPercentage", binding.etYesterdayPercentage.getText().toString());
         updatedData.put("notes", binding.notes.getText().toString());
-        updatedData.put("rate", binding.fluidSlider.getBubbleText());
-        updatedData.put("rate2", binding.fluidSlider.getPosition());
+        updatedData.put("rate", binding.fluidSlider.getText().toString());
 
-        // Update the data in the database
-        attendanceRef.updateChildren(updatedData)
+        userEntryRef.set(updatedData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -308,6 +220,7 @@ public class DailyHistoryStudentFragment extends Fragment {
                     }
                 });
     }
+
 
 
 }

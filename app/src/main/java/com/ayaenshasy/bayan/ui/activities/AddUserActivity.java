@@ -237,7 +237,7 @@ public class AddUserActivity extends BaseActivity {
                     // ID is unique, proceed with adding the parent to the database
                     db.collection(collectionName).document(parentId).set(parentMap)
                             .addOnSuccessListener(aVoid -> {
-                                showSuccessMessage("تم إنشاء المستخدم والأب بنجاح");
+                                showSuccessMessage("تم إنشاء المستخدم بنجاح");
                             })
                             .addOnFailureListener(e -> {
                                 // Handle failure

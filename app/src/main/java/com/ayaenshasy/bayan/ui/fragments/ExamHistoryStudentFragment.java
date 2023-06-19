@@ -45,6 +45,8 @@ import com.ayaenshasy.bayan.model.Exam;
 import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.DataSnapshot;
@@ -53,6 +55,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.lazydatepicker.LazyDatePicker;
@@ -141,34 +149,33 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
 
     void getData() {
-        DatabaseReference examsRef = FirebaseDatabase.getInstance().getReference("exams");
-        examsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    DataSnapshot studentSnapshot = dataSnapshot.child(user_id); // Get the snapshot for student with ID "12"
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference examsRef = db.collection("exams").document(user_id);
 
-                    for (DataSnapshot examSnapshot : studentSnapshot.getChildren()) {
-                        String examId = examSnapshot.getKey();
-                        String degree = examSnapshot.child("degree").getValue(String.class);
-                        String image = examSnapshot.child("image").getValue(String.class);
-                        String mosque = examSnapshot.child("mosque").getValue(String.class);
-                        String name = examSnapshot.child("name").getValue(String.class);
-                        Exam exam = new Exam(degree, image, mosque, name);
+        examsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot examSnapshot = task.getResult();
 
-                        list.add(exam);
-                    }
+                if (examSnapshot.exists()) {
+                    String degree = examSnapshot.getString("degree");
+                    String image = examSnapshot.getString("image");
+                    String mosque = examSnapshot.getString("mosque");
+                    String name = examSnapshot.getString("name");
+                    Exam exam = new Exam(degree, image, mosque, name);
 
+                    list.add(exam);
                     RemembranceAdapter(); // Call the adapter setup method here
+                } else {
+                    // Handle the case when the document does not exist
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            } else {
                 // Handle any errors that occur
             }
         });
     }
+
+
+
 
     private void RemembranceAdapter() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
@@ -225,9 +232,10 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                     etMosque.setError("الرجاء إدخال اسم المسجد");
                     return;
                 }
+
                 if (etDate.getDate().toString().equals("")) {
                     Toast.makeText(context, "تاكد من ادخال التاريخ", Toast.LENGTH_LONG).show();
-                     return;
+                    return;
                 }
 
                 formatDate(etDate.getDate().toString());
@@ -236,52 +244,56 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Upload image to Firebase Storage
-                if (!name.equals("")||!degree.equals("")||!mosque.equals("")){
+                if (!name.equals("") || !degree.equals("") || !mosque.equals("")) {
                     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
                     StorageReference imageRef = storageRef.child("images/" + UUID.randomUUID().toString() + ".jpg");
                     imageRef.putFile(selectedImageUri)
                             .addOnSuccessListener(taskSnapshot -> {
                                 // Image upload success
                                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                    // Get the download URL of the uploaded image
-                                    String imageUrl = uri.toString();
-
-                                    // Perform your desired operations with the entered data and image URL here
-                                    // ...
-
-                                    // Save the data to Firebase Realtime Database
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                    DatabaseReference reference = database.getReference("exams");
-
-                                    DatabaseReference userRef = reference.child(user_id); // Reference to the user node
-
-                                    DatabaseReference newEntryRef = userRef.push(); // Generate a new unique key
-
-                                    newEntryRef.child("name").setValue(name);
-                                    newEntryRef.child("degree").setValue(degree);
-                                    newEntryRef.child("mosque").setValue(mosque);
-                                    newEntryRef.child("date").setValue(date);
-                                    newEntryRef.child("image").setValue(imageUrl);
+                                            // Get the download URL of the uploaded image
+                                            String imageUrl = uri.toString();
 
 
-                                    // Data saved successfully
-                                    Toast.makeText(getContext(), "تم حفظ البيانات بنجاح", Toast.LENGTH_SHORT).show();
-                                    bottomSheetDialog.dismiss();
-                                }).addOnFailureListener(e -> {
-                                    // Failed to get download URL of the uploaded image
-                                    Toast.makeText(getContext(), "فشل في الحصول على رابط الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    progressBar.setVisibility(View.GONE);
-                                });
-                            }).addOnFailureListener(e -> {
+                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                            CollectionReference examsCollection = db.collection("exams");
+                                            DocumentReference newEntryRef = examsCollection.document(user_id);
+
+                                            Map<String, Object> examData = new HashMap<>();
+                                            examData.put("name", name);
+                                            examData.put("degree", degree);
+                                            examData.put("mosque", mosque);
+                                            examData.put("date", date);
+                                            examData.put("image", imageUrl);
+
+                                            newEntryRef.set(examData)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        // Data saved successfully
+                                                        Toast.makeText(getContext(), "تم حفظ البيانات بنجاح", Toast.LENGTH_SHORT).show();
+                                                        bottomSheetDialog.dismiss();
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        // Failed to save data
+                                                        Toast.makeText(getContext(), "فشل في حفظ البيانات: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        progressBar.setVisibility(View.GONE);
+                                                    });
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Failed to get download URL of the uploaded image
+                                            Toast.makeText(getContext(), "فشل في الحصول على رابط الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+                                        });
+                            })
+                            .addOnFailureListener(e -> {
                                 // Failed to upload image
                                 Toast.makeText(getContext(), "فشل في تحميل الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                             });
-                }else {
+                } else {
                     Toast.makeText(context, "تاكد من ادخال البيانات", Toast.LENGTH_SHORT).show();
                 }
-
             });
+
 
             bottomSheetDialog.show();
 
