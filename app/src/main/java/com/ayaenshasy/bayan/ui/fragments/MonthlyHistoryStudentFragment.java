@@ -161,8 +161,7 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
                     String yesterdayPercentage = document.getString("yesterdayPercentage");
                     String repeatedYesterday = document.getString("repeatedYesterday");
                     String planTomorrow = document.getString("planTomorrow");
-                    Map<String, Boolean> islamicPrayers = document.get("islamicPrayers",
-                            new TypeToken<Map<String, Boolean>>() {}.getType());
+                    Map<String, Boolean> islamicPrayers = document.toObject(Attendance.class).getIslamicPrayers();
 
                     Attendance attendance = new Attendance(id, date, planToday, todayPercentage, repeated, planYesterday, yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
                     attendanceList.add(attendance);
@@ -175,7 +174,6 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
                     Log.d("Firestore", attendance.toString());
                 }
             }
-        });
-    }
+        });    }
 
 }
