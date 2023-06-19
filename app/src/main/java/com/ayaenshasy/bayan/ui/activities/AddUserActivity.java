@@ -21,13 +21,9 @@ import com.ayaenshasy.bayan.databinding.ActivityAddUserBinding;
 import com.ayaenshasy.bayan.model.Role;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,11 +43,13 @@ public class AddUserActivity extends BaseActivity {
     FirebaseStorage firebaseStorage;
     Uri imageUri;
     ActivityResultLauncher<String> al1;
-    FirebaseUser currentUser;
-    FirebaseAuth mAuth;
+    //    FirebaseUser currentUser;
+//    FirebaseAuth mAuth;
     Role user_role;
     private Calendar calendar;
     String birthDate;
+    String parentId="0";
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -60,14 +58,15 @@ public class AddUserActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void init() {
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+//        mAuth = FirebaseAuth.getInstance();
+//        currentUser = mAuth.getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
         user_role = preferences.getUserRole();
         calendar = Calendar.getInstance();
@@ -109,6 +108,7 @@ public class AddUserActivity extends BaseActivity {
 
     private void addUser() {
         loaderDialog();
+        Toast.makeText(this, user_role+"aa", Toast.LENGTH_SHORT).show();
 
         switch (user_role) {
             case TEACHER:
@@ -126,15 +126,15 @@ public class AddUserActivity extends BaseActivity {
         }
     }
 
-    private void addNewUser(String db_name, Role role) {
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(db_name);
+    private void addNewUser(String collectionName, Role role) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         String id = binding.etId.getText().toString();
         String responsibleId = user.getId(); // Assuming the teacher ID is retrieved from the "user" object
 
         String name = binding.etName.getText().toString();
         String phone = binding.etPhone.getText().toString();
-        formatDate(binding.lazyDatePicker.getDate().toString());
+        formatDate(binding.lazyDatePicker.getDate().toString()+"");
         String gender = binding.radioFemale.isChecked() ? binding.radioFemale.getText().toString() : binding.radioMale.getText().toString();
 
         // Validate input fields before proceeding
@@ -162,44 +162,49 @@ public class AddUserActivity extends BaseActivity {
         map.put("responsible_id", responsibleId);
         map.put("gender", gender);
         map.put("role", role.toString());
-
         if (role == Role.STUDENT) {
-            String parentId = binding.etParentId.getText().toString();
+             parentId = binding.etParentId.getText().toString();
 
             // Validate the parent ID field for students
             if (TextUtils.isEmpty(parentId)) {
                 showErrorMessage("اضف رقم هوية الاب");
                 return;
             }
-
             map.put("parentId", parentId);
-
-            // Check if the ID already exists in the database
-            usersRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        // ID already exists, show an error message or handle the case accordingly
-                        showErrorMessage("رقم الهوية موجود بالفعل");
-                    } else {
-                        // ID is unique, proceed with adding the student to the database
-                        uploadUserImage(usersRef.child(id), map);
-
-                        // Create the parent
-                        createParent("parent", parentId);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle any errors
-                }
-            });
         }
+        // Check if the ID already exists in the database
+        db.collection(collectionName).document(id).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // ID already exists, show an error message or handle the case accordingly
+                    showErrorMessage("رقم الهوية موجود بالفعل");
+                } else {
+                    // ID is unique, proceed with adding the student to the database
+                    db.collection(collectionName).document(id).set(map)
+                            .addOnSuccessListener(aVoid -> {
+                                // Create the parent
+                                if (role == Role.STUDENT)
+                                    createParent("parent", parentId);
+                                else
+                                    loader_dialog.dismiss();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle failure
+                            });
+                }
+            } else {
+                Toast.makeText(this, "failure", Toast.LENGTH_SHORT).show();
+
+                // Handle failure
+            }
+        });
+
     }
 
-    private void createParent(String db_name, String parentId) {
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(db_name);
+    private void createParent(String collectionName, String parentId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Retrieve parent details from the UI
         String parentName = binding.etParentName.getText().toString();
@@ -222,22 +227,24 @@ public class AddUserActivity extends BaseActivity {
         parentMap.put("phone", parentPhone);
 
         // Check if the parent ID already exists in the database
-        usersRef.child(parentId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+        db.collection(collectionName).document(parentId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
                     // ID already exists, show an error message or handle the case accordingly
                     showErrorMessage("رقم الهوية للأب موجود بالفعل");
                 } else {
                     // ID is unique, proceed with adding the parent to the database
-                    usersRef.child(parentId).setValue(parentMap);
-                    showSuccessMessage("تم إنشاء المستخدم والأب بنجاح");
+                    db.collection(collectionName).document(parentId).set(parentMap)
+                            .addOnSuccessListener(aVoid -> {
+                                showSuccessMessage("تم إنشاء المستخدم والأب بنجاح");
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle failure
+                            });
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors
+            } else {
+                // Handle failure
             }
         });
     }

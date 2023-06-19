@@ -2,6 +2,8 @@ package com.ayaenshasy.bayan.ui.fragments;
 
 import static android.Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -33,11 +35,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+
 import com.ayaenshasy.bayan.PrayerService;
 import com.ayaenshasy.bayan.R;
-import com.ayaenshasy.bayan.model.PrayerTimingsClass;
-import com.ayaenshasy.bayan.utils.AppPreferences;
-import com.ayaenshasy.bayan.utils.TimeUpdater;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
 import com.ayaenshasy.bayan.adapter.UserAdapter;
 import com.ayaenshasy.bayan.databinding.AddNewAttendanceLayoutBinding;
@@ -47,15 +47,21 @@ import com.ayaenshasy.bayan.model.Attendance;
 import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
+import com.ayaenshasy.bayan.utils.TimeUpdater;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,6 +70,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -151,7 +158,6 @@ public class HomeFragment extends BaseFragment {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            context.startForegroundService(serviceIntent1);
 //        }
-
         return view;
     }
 
@@ -181,24 +187,23 @@ public class HomeFragment extends BaseFragment {
             });
             binding.rvUser.setAdapter(adapter);
 
-            // Retrieve teacher ID from Firebase
-            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
-            teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            // Retrieve teacher ID from Firestore
+            CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
+            usersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
-                        if (teacherId != null) {
-                            queryStudentsByTeacherId(teacherId);
-                            Log.e("m,f teacherId", teacherId);
-                            break; // Break after finding the teacher ID
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String teacherId = document.getId(); // Assuming teacher ID is the document ID
+                            if (teacherId != null) {
+                                queryStudentsByTeacherId(teacherId);
+                                Log.e("m,f teacherId", teacherId);
+                                break; // Break after finding the teacher ID
+                            }
                         }
+                    } else {
+                        // Handle any errors
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle any errors
                 }
             });
         } else {
@@ -207,76 +212,74 @@ public class HomeFragment extends BaseFragment {
             UserAdapter userAdapter = new UserAdapter(users, context);
             binding.rvUser.setAdapter(userAdapter);
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference usersRef = database.getReference("users");
+            CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
 
-            Query query = usersRef.orderByChild("responsible_id").equalTo(currentUser.getId());
+            Query query = usersRef.whereEqualTo("responsible_id", currentUser.getId());
 
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        User user = userSnapshot.getValue(User.class);
-                        users.add(user);
-
-                        System.out.println(user.getName());
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User user = document.toObject(User.class);
+                            users.add(user);
+                            System.out.println(user.getName());
+                        }
+                        userAdapter.notifyDataSetChanged();
+                    } else {
+                        // Handle any errors
+                        System.out.println("Error: " + task.getException().getMessage());
                     }
-                    userAdapter.notifyDataSetChanged();
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors that occur
-                    System.out.println("Error: " + databaseError.getMessage());
                 }
             });
-
         }
     }
 
     private void queryStudentsByTeacherId(String teacherId) {
-        DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
-        Query query = studentsRef.orderByChild("responsible_id").equalTo(currentUser.getId());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        Toast.makeText(context, teacherId+"", Toast.LENGTH_SHORT).show();
+        CollectionReference studentsRef = FirebaseFirestore.getInstance().collection("students");
+        Query query = studentsRef.whereEqualTo("responsible_id", currentUser.getId());
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                students.clear(); // Clear the list before adding new data
-                String currentDate = getCurrentDate(); // Replace with the method to get the current date
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    students.clear(); // Clear the list before adding new data
+                    String currentDate = getCurrentDate(); // Replace with the method to get the current date
 
-                for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                    Student student = studentSnapshot.getValue(Student.class);
-                    String studentId = student.getId();
+                    QuerySnapshot querySnapshot = task.getResult(); // Get the QuerySnapshot
+                    int numStudents = querySnapshot.size(); // Get the number of documents returned
 
-                    DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference("attendance")
-                            .child(currentDate)
-                            .child(studentId);
+                    for (QueryDocumentSnapshot document : querySnapshot) {
+                        Student student = document.toObject(Student.class);
+                        String studentId = student.getId();
 
-                    attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot attendanceSnapshot) {
-                            boolean isAttendanceMarkedToday = attendanceSnapshot.exists();
-                            student.setChecked(isAttendanceMarkedToday);
-                            students.add(student);
+                        DocumentReference attendanceRef = FirebaseFirestore.getInstance().collection("attendance")
+                                .document(currentDate)
+                                .collection(studentId)
+                                .document("data");
 
-                            // Notify the adapter when all students are processed
-                            if (students.size() == dataSnapshot.getChildrenCount()) {
-                                binding.progressBar3.setVisibility(View.GONE);
-                                adapter.setStudents(students);
+                        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    boolean isAttendanceMarkedToday = task.getResult().exists();
+                                    student.setChecked(isAttendanceMarkedToday);
+                                    students.add(student);
+
+                                    // Notify the adapter when all students are processed
+                                    if (students.size() == numStudents) {
+                                        binding.progressBar3.setVisibility(View.GONE);
+                                        adapter.setStudents(students);
+                                    }
+                                } else {
+                                    // Handle any errors
+                                }
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle any errors
-                        }
-                    });
+                        });
+                    }
+                } else {
+                    // Handle any errors
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors
             }
         });
     }
@@ -328,39 +331,40 @@ public class HomeFragment extends BaseFragment {
                 //Tomorrow
                 String planTomorrow = etPlanTomorrow.getText().toString().trim();
 
-                // Show the progress view
-                showProgress(true, progressView);
+                // Validate the input
+                if (validateInput(planToday, todayPercentage, repeated, planYesterday, yesterdayPercentage, repeatedYesterday, planTomorrow,bottomSheetBinding)) {
+                    // Show the progress view
+                    showProgress(true, progressView);
 
-                // Save the data to Firebase Realtime Database
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("attendance");
-                String attendanceId = databaseReference.push().getKey();
-                String currentDate = getCurrentDate();
-//                List<String> islamicPrayers = Arrays.asList("Fajr", "Dhuhr", "Asr", "Maghrib", "Isha");
-                Map<String, Boolean> islamicPrayers = new HashMap<>();
-                islamicPrayers.put("Fajr", false);
-                islamicPrayers.put("Dhuhr", false);
-                islamicPrayers.put("Asr", false);
-                islamicPrayers.put("Maghrib", false);
-                islamicPrayers.put("Isha", false);
-                // Create an attendance object
-                Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planYesterday,
-                        yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
+                    // Save the data to Firestore
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    String attendanceId = UUID.randomUUID().toString();
+                    String currentDate = getCurrentDate();
 
-                // Save the attendance object to the database
-                databaseReference.child(currentDate).child(student.getId()).setValue(attendance)
-                        .addOnSuccessListener(aVoid -> {
-                            // Data saved successfully
-                            Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show();
-                            bottomSheetDialog.dismiss();
-                        })
-                        .addOnFailureListener(e -> {
-                            // Failed to save data
-                            Toast.makeText(context, "Failed to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        })
-                        .addOnCompleteListener(task -> {
-                            // Hide the progress view
-                            showProgress(false, progressView);
-                        });
+                    // Create an attendance object
+                    Attendance attendance = new Attendance(attendanceId, currentDate, planToday, todayPercentage, repeated, planYesterday,
+                            yesterdayPercentage, repeatedYesterday, planTomorrow);
+
+                    // Save the attendance object to Firestore
+                    CollectionReference attendanceRef = db.collection("attendance");
+                    attendanceRef.document(currentDate)
+                            .collection(student.getId())
+                            .document(attendanceId)
+                            .set(attendance)
+                            .addOnSuccessListener(aVoid -> {
+                                // Data saved successfully
+                                Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Failed to save data
+                                Toast.makeText(context, "Failed to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnCompleteListener(task -> {
+                                // Hide the progress view
+                                showProgress(false, progressView);
+                            });
+                }
             });
 
             bottomSheetDialog.show();
@@ -369,6 +373,84 @@ public class HomeFragment extends BaseFragment {
             animateBottomSheet(bottomSheetDialog);
         }
     }
+
+    private boolean validateInput(String planToday, String todayPercentage, String repeated,
+                                  String planYesterday, String yesterdayPercentage, String repeatedYesterday,
+                                  String planTomorrow, AddNewAttendanceLayoutBinding bottomSheetBinding) {
+        // Perform your validation logic here
+        if (planToday.isEmpty()) {
+            bottomSheetBinding.etPlanToday.setError("أدخل الخطة لليوم");
+            bottomSheetBinding.etPlanToday.requestFocus();
+            return false;
+        }
+
+        if (todayPercentage.isEmpty()) {
+            bottomSheetBinding.etTodayPercentage.setError("أدخل النسبة المئوية لليوم");
+            bottomSheetBinding.  etTodayPercentage.requestFocus();
+            return false;
+        } else {
+            try {
+                double percentage = Double.parseDouble(todayPercentage);
+                if (percentage < 0 || percentage > 100) {
+                    bottomSheetBinding.  etTodayPercentage.setError("الرجاء إدخال نسبة صحيحة بين 0 و 100");
+                    bottomSheetBinding.   etTodayPercentage.requestFocus();
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                bottomSheetBinding. etTodayPercentage.setError("الرجاء إدخال رقم صحيح للنسبة");
+                bottomSheetBinding.  etTodayPercentage.requestFocus();
+                return false;
+            }
+        }
+
+        if (repeated.isEmpty()) {
+            bottomSheetBinding. etRepeated.setError("أدخل عدد المرات المتكررة");
+            bottomSheetBinding. etRepeated.requestFocus();
+            return false;
+        }
+
+        if (planYesterday.isEmpty()) {
+            bottomSheetBinding.  etPlanYesterday.setError("أدخل الخطة لليوم السابق");
+            bottomSheetBinding. etPlanYesterday.requestFocus();
+            return false;
+        }
+
+        if (yesterdayPercentage.isEmpty()) {
+            bottomSheetBinding.  etYesterdayPercentage.setError("أدخل النسبة المئوية لليوم السابق");
+            bottomSheetBinding.  etYesterdayPercentage.requestFocus();
+            return false;
+        } else {
+            try {
+                double percentage = Double.parseDouble(yesterdayPercentage);
+                if (percentage < 0 || percentage > 100) {
+                    bottomSheetBinding.  etYesterdayPercentage.setError("الرجاء إدخال نسبة صحيحة بين 0 و 100");
+                    bottomSheetBinding.  etYesterdayPercentage.requestFocus();
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                bottomSheetBinding. etYesterdayPercentage.setError("الرجاء إدخال رقم صحيح للنسبة");
+                bottomSheetBinding. etYesterdayPercentage.requestFocus();
+                return false;
+            }
+        }
+
+        if (repeatedYesterday.isEmpty()) {
+            bottomSheetBinding.  etRepeatedYesterday.setError("أدخل عدد المرات المتكررة لليوم السابق");
+            bottomSheetBinding.   etRepeatedYesterday.requestFocus();
+            return false;
+        }
+
+        if (planTomorrow.isEmpty()) {
+            bottomSheetBinding. etPlanTomorrow.setError("أدخل الخطة لليوم القادم");
+            bottomSheetBinding.   etPlanTomorrow.requestFocus();
+            return false;
+        }
+
+        // Add more validation rules for all fields
+
+        return true;
+    }
+
 
     private void showProgress(boolean show, ProgressBar progressView) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -419,46 +501,43 @@ public class HomeFragment extends BaseFragment {
             });
             binding.rvUser.setAdapter(adapter);
 
-            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
-            teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("users");
+            Query teacherQuery = usersCollection.whereEqualTo("role", "teacher");
+            teacherQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    students.clear();
-                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        String teacherId = childSnapshot.getKey();
-                        if (teacherId != null) {
-                            DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
-                            Query studentsQuery = studentsRef.orderByChild("responsible_id").equalTo(teacherId);
-                            studentsQuery.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                                        Student student = studentSnapshot.getValue(Student.class);
-                                        if (student != null && student.getName().contains(query)) {
-                                            students.add(student);
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        students.clear();
+                        for (QueryDocumentSnapshot teacherDocument : task.getResult()) {
+                            String teacherId = teacherDocument.getId();
+                            if (teacherId != null) {
+                                CollectionReference studentsCollection = FirebaseFirestore.getInstance().collection("students");
+                                Query studentsQuery = studentsCollection.whereEqualTo("responsible_id", teacherId)
+                                        .whereGreaterThanOrEqualTo("name", query)
+                                        .whereLessThanOrEqualTo("name", query + "\uf8ff");
+                                studentsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot studentDocument : task.getResult()) {
+                                                Student student = studentDocument.toObject(Student.class);
+                                                students.add(student);
+                                            }
+                                            adapter.notifyDataSetChanged();
+                                        } else {
+                                            Log.d("TAG", "Error getting students: ", task.getException());
                                         }
+                                        binding.progressBar3.setVisibility(View.GONE);
                                     }
-                                    adapter.notifyDataSetChanged();
-                                    binding.progressBar3.setVisibility(View.GONE);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
+                                });
+                            }
                         }
+                    } else {
+                        Log.d(TAG, "Error getting teachers: ", task.getException());
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }
-
-
     }
 
     // Handle permission request results
@@ -470,13 +549,5 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    // Handle activity result for battery optimization permission request
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) {
-//            // Handle IGNORE_BATTERY_OPTIMIZATIONS permission request result
-//        }
-//    }
 }
 

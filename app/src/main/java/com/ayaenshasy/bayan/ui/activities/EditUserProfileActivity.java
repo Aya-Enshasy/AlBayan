@@ -5,13 +5,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,6 +23,11 @@ import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +35,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,13 +57,10 @@ public class EditUserProfileActivity extends BaseActivity {
     ActivityEditUserProfileBinding binding;
     FirebaseStorage firebaseStorage;
     Uri imageUri;
-    //    ActivityResultLauncher<String> al1;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
     Role user_role;
     private Calendar calendar;
-    String birthDate;
-    Boolean isImageChange;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -76,8 +83,19 @@ public class EditUserProfileActivity extends BaseActivity {
         binding.etName.setText(user.getName());
         binding.etId.setText(user.getId());
         binding.etPhone.setText(user.getPhone());
-        binding.lazyDatePicker.setDate(new Date(user.getBirthDate()));
-        Log.e("user.getGender()", user.getGender());    //todo
+
+        try {
+            String birthDateStr = user.getBirthDate();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date birthDate = dateFormat.parse(birthDateStr);
+
+            if (birthDate != null) {
+                binding.lazyDatePicker.setDate(birthDate);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         if (!user.getGender().equals("انثى") || !user.getGender().equals("female")) {
             binding.radioMale.setChecked(true);
             binding.radioFemale.setChecked(false);
@@ -112,7 +130,7 @@ public class EditUserProfileActivity extends BaseActivity {
                 public void onActivityResult(Uri result) {
                     // Handle the selected image URI here
                     imageUri = result;
-                    // Perform any necessary actions with the selected image
+                    Glide.with(getBaseContext()).load(imageUri).into(binding.imgUser);
                 }
             }
     );
@@ -138,10 +156,10 @@ public class EditUserProfileActivity extends BaseActivity {
         updateUserData("users", user_role);
     }
 
-    private void updateUserData(String dbName, Role role) {
+    private void updateUserData(String collectionName, Role role) {
         String id = binding.etId.getText().toString();
         String name = binding.etName.getText().toString();
-        String birthDate = formatDate(binding.lazyDatePicker.getDate().toString());
+        Date birthDate = binding.lazyDatePicker.getDate();
 
         // Validate input fields before proceeding
         if (TextUtils.isEmpty(name)) {
@@ -149,84 +167,99 @@ public class EditUserProfileActivity extends BaseActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(birthDate)) {
-            showErrorMessage("اضف تاريخ الميلاد");
-            return;
-        }
+//        if (birthDate == 0) {
+//            showErrorMessage("اضف تاريخ الميلاد");
+//            return;
+//        }
 
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(dbName);
-        DatabaseReference userRef = usersRef.child(id);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection(collectionName);
+        DocumentReference userRef = usersRef.document(id);
 
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Map<String, Object> updatedData = new HashMap<>();
-                    updatedData.put("name", name);
-                    updatedData.put("birthDate", birthDate);
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> updatedData = new HashMap<>();
+                        updatedData.put("name", name);
+                        updatedData.put("birthDate", birthDate);
 
-                    if (role == Role.STUDENT) {
-                        String parentId = binding.etParentId.getText().toString();
-                        if (TextUtils.isEmpty(parentId)) {
-                            showErrorMessage("اضف رقم هوية الاب");
-                            return;
+                        if (role == Role.STUDENT) {
+                            String parentId = binding.etParentId.getText().toString();
+                            if (TextUtils.isEmpty(parentId)) {
+                                showErrorMessage("اضف رقم هوية الاب");
+                                return;
+                            }
+                            updatedData.put("parentId", parentId);
                         }
-                        updatedData.put("parentId", parentId);
+
+                        if (imageUri != null) {
+                            deletePreviousImage(userRef, updatedData);
+                        } else {
+                            updateUserWithNewData(userRef, updatedData);
+                        }
+                    } else {
+                        showErrorMessage("User with ID " + id + " does not exist");
                     }
-
-                    deletePreviousImage(userRef, updatedData);
                 } else {
-                    showErrorMessage("User with ID " + id + " does not exist");
+                    showErrorMessage("Failed to fetch user data");
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors
             }
         });
     }
 
-    private void deletePreviousImage(DatabaseReference userRef, Map<String, Object> updatedData) {
-        userRef.child("image").addListenerForSingleValueEvent(new ValueEventListener() {
+    private void deletePreviousImage(DocumentReference userRef, Map<String, Object> updatedData) {
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String imageUrl = dataSnapshot.getValue(String.class);
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.contains("image")) {
+                    String imageUrl = documentSnapshot.getString("image");
                     deleteImageAndUploadNew(userRef, updatedData, imageUrl);
                 } else {
-                    updateUserWithNewData(userRef, updatedData);
+                    uploadNewUserImage(userRef, updatedData);
                 }
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors
+            public void onFailure(@NonNull Exception e) {
+                showErrorMessage("Failed to delete previous image");
             }
         });
     }
 
-    private void deleteImageAndUploadNew(DatabaseReference userRef, Map<String, Object> updatedData, String imageUrl) {
+    private void deleteImageAndUploadNew(DocumentReference userRef, Map<String, Object> updatedData, String imageUrl) {
         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-        storageReference.delete().addOnSuccessListener(aVoid -> {
-            uploadNewUserImage(userRef, updatedData);
-        }).addOnFailureListener(e -> {
-            showErrorMessage("Failed to delete previous image");
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                uploadNewUserImage(userRef, updatedData);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showErrorMessage("Failed to delete previous image");
+            }
         });
     }
 
-    private void uploadNewUserImage(DatabaseReference userRef, Map<String, Object> updatedData) {
-        if (imageUri != null) {
-            String filename = UUID.randomUUID().toString();
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + filename);
-            UploadTask uploadTask = storageReference.putFile(imageUri);
+    private void uploadNewUserImage(DocumentReference userRef, Map<String, Object> updatedData) {
+        String filename = UUID.randomUUID().toString();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + filename);
+        UploadTask uploadTask = storageReference.putFile(imageUri);
 
-            uploadTask.continueWithTask(task -> {
+        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }
                 return storageReference.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
                     String newImageUrl = downloadUri.toString();
@@ -234,32 +267,45 @@ public class EditUserProfileActivity extends BaseActivity {
                 }
 
                 updateUserWithNewData(userRef, updatedData);
-            }).addOnFailureListener(e -> {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
                 showErrorMessage("Failed to upload the new image. Please try again.");
-            });
-        } else {
-            updateUserWithNewData(userRef, updatedData);
-        }
-    }
-
-    private void updateUserWithNewData(DatabaseReference userRef, Map<String, Object> updatedData) {
-        userRef.updateChildren(updatedData).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                showSuccessMessage("تم تحديث بيانات المستخدم بنجاح");
-                updateSharedPreferences(updatedData);
-                finish();
-            } else {
-                showErrorMessage("فشل في تحديث بيانات المستخدم. يرجى المحاولة لاحقًا.");
             }
         });
+    }
+
+    private void updateUserWithNewData(DocumentReference userRef, Map<String, Object> updatedData) {
+        userRef.update(updatedData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showSuccessMessage("تم تحديث بيانات المستخدم بنجاح");
+                        updateSharedPreferences(updatedData);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showErrorMessage("فشل في تحديث بيانات المستخدم. يرجى المحاولة لاحقًا.");
+                    }
+                });
     }
 
     private void updateSharedPreferences(Map<String, Object> updatedData) {
         User user = preferences.getUserProfile();
         String name = (String) updatedData.get("name");
-        String birthDate = (String) updatedData.get("birthDate");
+        long birthDate = (long) updatedData.get("birthDate");
+//        Uri downloadUr.i = imageUri.getResult();
+        if (imageUri!=null){
+            String imageUrl = imageUri.toString();
+            user.setImage(imageUrl);
+        }
+
         user.setName(name);
-        user.setBirthDate(birthDate);
+        user.setBirthDate(birthDate+"");
         preferences.setUserProfile(user);
     }
 
@@ -276,7 +322,7 @@ public class EditUserProfileActivity extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestStoragePermission() {
         requestPermissions(new String[]{
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
     }
 
     private void showDatePickerDialog() {
@@ -290,28 +336,7 @@ public class EditUserProfileActivity extends BaseActivity {
             }
         });
 
-        lazyDatePicker.setOnDateSelectedListener(new LazyDatePicker.OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(Boolean dateSelected) {
-
-                //...
-            }
-        });
-
-    }
-
-    private String formatDate(String date) {
-        SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-        try {
-            Date inputDate = inputDateFormat.parse(date);
-            String formattedDate = outputDateFormat.format(inputDate);
-            birthDate = formattedDate;
-            System.out.println("Formatted Date: " + formattedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return birthDate;
+        // Show the dialog
+//        lazyDatePicker.showDialog();
     }
 }

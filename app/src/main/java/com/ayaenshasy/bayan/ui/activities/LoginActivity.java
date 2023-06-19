@@ -36,29 +36,18 @@ import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.AppPreferences;
 import com.ayaenshasy.bayan.utils.Constant;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends BaseActivity {
     ActivityLoginBinding binding;
-     boolean isParent = false;
+    boolean isParent = false;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -68,7 +57,7 @@ public class LoginActivity extends BaseActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-         btnActions();
+        btnActions();
         binding.tvUser.setBackgroundResource(R.drawable.login_color);
         binding.tvParent.setTextColor(getColor(R.color.orange));
         binding.tvParent.setTextColor(getColor(R.color.black));
@@ -137,98 +126,110 @@ public class LoginActivity extends BaseActivity {
 
     private void checkIfUserExists() {
         loaderDialog();
-        if (isParent) {
-            loginParent();
-        } else {
+//        if (isParent) {
+//            loginParent();
+//        } else {
             loginUser();
-        }
+//        }
     }
 
-    void loginUser() {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("users");
+    void loginUser() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         String desiredValue = binding.identifier.getText().toString();
-
-        Query query = usersRef.orderByChild("id").equalTo(desiredValue);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query;
+        if (isParent)
+            query = db.collection("parent").whereEqualTo("id", desiredValue);
+        else
+            query = db.collection("users").whereEqualTo("id", desiredValue);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-                        if (user != null && user.getPhone().equals(binding.etPhoneNumber.getText().toString())) {
-                            Toast.makeText(LoginActivity.this, "تم تسجيل الدخول بنجاح", Toast.LENGTH_SHORT).show();
-//                            preferences.setBooleanPreference(AppPreferences.IS_FIRST_TIME, false);
-                            preferences.setUserProfile(user);
-                            startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
-                            finish();
-
-                            showNotification("مرحبا", "مرحبا بك في تطبيق البيان");
-                        } else {
-                            Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة ", Toast.LENGTH_SHORT).show();
-                            loader_dialog.dismiss();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                            User user = documentSnapshot.toObject(User.class);
+                            if (user != null && user.getPhone().equals(binding.etPhoneNumber.getText().toString())) {
+                                // Update the document with FCM token
+                                String fcmToken = preferences.getStringPreference(AppPreferences.DEVICE_TOKEN); // Replace with the actual FCM token
+                                documentSnapshot.getReference().update("fcmToken", fcmToken)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(LoginActivity.this, "تم تسجيل الدخول بنجاح", Toast.LENGTH_SHORT).show();
+                                                preferences.setUserProfile(user);
+                                                startActivity(new Intent(getBaseContext(), BottomNavigationBarActivity.class));
+                                                finish();
+                                                showNotification("مرحبا", "مرحبا بك في تطبيق البيان");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(LoginActivity.this, "فشل في تحديث البيانات", Toast.LENGTH_SHORT).show();
+                                                loader_dialog.dismiss();
+                                            }
+                                        });
+                            } else {
+                                Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة", Toast.LENGTH_SHORT).show();
+                                loader_dialog.dismiss();
+                            }
                         }
+                    } else {
+                        loader_dialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     loader_dialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "تأكد من البيانات المدخلة ", Toast.LENGTH_SHORT).show();
+                    // Handle any errors or cancellations
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                loader_dialog.dismiss();
-                // Handle any errors or cancellations
             }
         });
     }
 
     void loginParent() {
-        // Assuming you have a reference to the Firebase database
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Specify the parent ID and phone number to search
-        String parentIdToSearch = binding.identifier.toString();
-        String phoneNumberToMatch = binding.etPhoneNumber.toString();
-        ;
+        String parentIdToSearch = binding.identifier.getText().toString();
+        String phoneNumberToMatch = binding.etPhoneNumber.getText().toString();
 
-        // Query the "students" table to find a student with the given parent ID
-        databaseReference.child("students").orderByChild("parentId").equalTo(parentIdToSearch)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        db.collection("students")
+                .whereEqualTo("parentId", parentIdToSearch)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean isParentFound = false;
-
-                        for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                            // Get the student record
-                            Student student = studentSnapshot.getValue(Student.class);
-
-                            // Check if the phone number matches
-                            if (student.getPhone().equals(phoneNumberToMatch)) {
-                                isParentFound = true;
-                                break;
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            boolean isParentFound = false;
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                                    Student student = documentSnapshot.toObject(Student.class);
+                                    if (student != null && student.getPhone().equals(phoneNumberToMatch)) {
+                                        isParentFound = true;
+                                        break;
+                                    }
+                                }
                             }
-                        }
 
-                        if (isParentFound) {
-                            Parent parent = new Parent();
-                            parent.setId(parentIdToSearch);
-                            parent.setPhoneNumber(phoneNumberToMatch);
-                            preferences.setParentProfile(parent);
-                            // Parent ID and phone number match a student record
-                            // Perform your desired action here
+                            if (isParentFound) {
+                                Parent parent = new Parent();
+                                parent.setId(parentIdToSearch);
+                                parent.setPhoneNumber(phoneNumberToMatch);
+                                preferences.setParentProfile(parent);
+                                // Parent ID and phone number match a student record
+                                // Perform your desired action here
+                            } else {
+                                // Parent ID or phone number did not match any student record
+                                // Handle the case accordingly
+                            }
                         } else {
-                            // Parent ID or phone number did not match any student record
-                            // Handle the case accordingly
+                            // Handle any errors or cancellations
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle any database errors
                     }
                 });
     }
+
 }

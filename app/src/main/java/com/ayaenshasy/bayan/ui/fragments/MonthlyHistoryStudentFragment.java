@@ -5,6 +5,7 @@ import static com.ayaenshasy.bayan.utils.Constant.USER_ID;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,17 +21,14 @@ import com.ayaenshasy.bayan.adapter.MonthHistoryAdapter;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
 import com.ayaenshasy.bayan.databinding.FragmentHomeBinding;
 import com.ayaenshasy.bayan.databinding.FragmentMonthlyHistoryStudentBinding;
-import com.ayaenshasy.bayan.listeners.DataListener;
 import com.ayaenshasy.bayan.model.Attendance;
-import com.ayaenshasy.bayan.model.user.Student;
-import com.ayaenshasy.bayan.utils.Constant;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.EventListener;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +44,6 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class MonthlyHistoryStudentFragment extends BaseFragment {
-    private DatabaseReference databaseReference;
     FragmentMonthlyHistoryStudentBinding binding;
     String startDateString, endDateString;
     // TODO: Rename parameter arguments, choose names that match
@@ -100,7 +97,6 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
 
         return view;
     }
-
     private void getMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1); // Move one month back
@@ -111,6 +107,7 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH)); // Set the day to the last day of the last month
         Date endOfLastMonth = calendar.getTime();
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         startDateString = dateFormat.format(startOfLastMonth);
         endDateString = dateFormat.format(endOfLastMonth);
@@ -122,63 +119,61 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
 
         MonthHistoryAdapter adapter = new MonthHistoryAdapter(attendances, context);
         binding.recyclerView.setAdapter(adapter);
-// Get the current date
+
+        // Get the current date
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
 
-// Calculate the date 30 days ago
+        // Calculate the date 30 days ago
         calendar.add(Calendar.DAY_OF_YEAR, -30);
         Date thirtyDaysAgo = calendar.getTime();
 
-// Convert the dates to the desired format (e.g., "yyyy-MM-dd")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String currentDateStr = dateFormat.format(currentDate);
         String thirtyDaysAgoStr = dateFormat.format(thirtyDaysAgo);
 
-// Create a Firebase query to retrieve data within the date range and for users with ID "123"
-        Query query = FirebaseDatabase.getInstance().getReference("attendance")
-                .orderByKey()
-                .startAt(thirtyDaysAgoStr)
-                .endAt(currentDateStr);
+        // Create a Firestore query to retrieve data within the date range and for users with ID "123"
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Query query = db.collection("attendance")
+                .whereGreaterThanOrEqualTo("date", thirtyDaysAgoStr)
+                .whereLessThanOrEqualTo("date", currentDateStr)
+                .whereEqualTo("userId", requireActivity().getIntent().getStringExtra(USER_ID));
 
-        query.addValueEventListener(new ValueEventListener() {
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onEvent(@Nullable QuerySnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    // Handle the error
+                    Log.e("Firestore", "Error getting data", error);
+                    Toast.makeText(getActivity(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ArrayList<Attendance> attendanceList = new ArrayList<>();
 
-                for (DataSnapshot dateSnapshot : dataSnapshot.getChildren()) {
-                    for (DataSnapshot entrySnapshot : dateSnapshot.getChildren()) {
-                        String id = entrySnapshot.getKey();
+                for (QueryDocumentSnapshot document : snapshot) {
+                    String id = document.getId();
+                    String date = document.getString("date");
+                    String planToday = document.getString("planToday");
+                    String todayPercentage = document.getString("todayPercentage");
+                    String repeated = document.getString("repeated");
+                    String planYesterday = document.getString("planYesterday");
+                    String yesterdayPercentage = document.getString("yesterdayPercentage");
+                    String repeatedYesterday = document.getString("repeatedYesterday");
+                    String planTomorrow = document.getString("planTomorrow");
+                    Map<String, Boolean> islamicPrayers = document.get("islamicPrayers",
+                            new TypeToken<Map<String, Boolean>>() {}.getType());
 
-                        // Check if the ID matches "123"
-                        if (id.equals("123")) {
-                            String date = dateSnapshot.getKey();  // Get the date of the data
-                            String planToday = entrySnapshot.child("planToday").getValue(String.class);
-                            String todayPercentage = entrySnapshot.child("todayPercentage").getValue(String.class);
-                            String repeated = entrySnapshot.child("repeated").getValue(String.class);
-                            String planYesterday = entrySnapshot.child("planYesterday").getValue(String.class);
-                            String yesterdayPercentage = entrySnapshot.child("yesterdayPercentage").getValue(String.class);
-                            String repeatedYesterday = entrySnapshot.child("repeatedYesterday").getValue(String.class);
-                            String planTomorrow = entrySnapshot.child("planTomorrow").getValue(String.class);
-                            Map<String, Boolean> islamicPrayers = entrySnapshot.child("islamicPrayers").getValue(new GenericTypeIndicator<Map<String, Boolean>>() {
-                            });
-
-                            Attendance attendance = new Attendance(id, date, planToday, todayPercentage, repeated, planYesterday, yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
-                            attendanceList.add(attendance);
-                        }
-                    }
+                    Attendance attendance = new Attendance(id, date, planToday, todayPercentage, repeated, planYesterday, yesterdayPercentage, repeatedYesterday, islamicPrayers, planTomorrow);
+                    attendanceList.add(attendance);
                 }
+
                 adapter.setExam(attendanceList);
 
-                // Use the attendanceList for users with ID "123" as needed
+                // Use the attendanceList for the current user as needed
                 for (Attendance attendance : attendanceList) {
-                    System.out.println(attendance.toString());
+                    Log.d("Firestore", attendance.toString());
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the error
             }
         });
     }
