@@ -37,7 +37,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
         binding.viewPager.setAdapter(pagerAdapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
-
+binding.back.setOnClickListener(View->{finish();});
 
 
     }

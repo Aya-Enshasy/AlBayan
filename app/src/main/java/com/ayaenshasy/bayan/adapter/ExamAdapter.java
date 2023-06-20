@@ -50,10 +50,11 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder> {
         holder.binding.tvMosque.setText("اسم المسجد : "+list.get(position).getMosque());
         holder.binding.tvDegree.setText("الدرجة : "+list.get(position).getDegree());
 
-         Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(true)
-                .into(holder.binding.imgExam);
+        holder.binding.imgExam.setVisibility(View.GONE);
+//         Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .skipMemoryCache(true)
+//                .into(holder.binding.imgExam);
 
 
 

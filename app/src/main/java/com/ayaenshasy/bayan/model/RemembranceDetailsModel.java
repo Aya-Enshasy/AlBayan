@@ -12,7 +12,10 @@ public class RemembranceDetailsModel implements Parcelable {
     public RemembranceDetailsModel() {
     }
 
-
+    public RemembranceDetailsModel(int repeat, String text) {
+        this.repeat = repeat;
+        this.text = text;
+    }
 
     protected RemembranceDetailsModel(Parcel in) {
          text = in.readString();

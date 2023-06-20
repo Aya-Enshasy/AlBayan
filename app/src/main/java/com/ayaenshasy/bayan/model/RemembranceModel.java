@@ -14,6 +14,11 @@ public class RemembranceModel implements Parcelable {
     public RemembranceModel() {
     }
 
+    public RemembranceModel(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     protected RemembranceModel(Parcel in) {
         name = in.readString();
         list = in.createTypedArrayList(RemembranceDetailsModel.CREATOR);

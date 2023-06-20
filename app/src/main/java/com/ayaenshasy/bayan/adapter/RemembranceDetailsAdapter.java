@@ -3,6 +3,7 @@ package com.ayaenshasy.bayan.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -16,15 +17,16 @@ import com.ayaenshasy.bayan.listeners.RemembranceListener;
 import com.ayaenshasy.bayan.model.RemembranceDetailsModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class RemembranceDetailsAdapter extends RecyclerView.Adapter<RemembranceDetailsAdapter.ViewHolder> {
-    private ArrayList<RemembranceDetailsModel> list  ;
+    private List<RemembranceDetailsModel> list  ;
     Context context;
     RemembranceListener listener;
 
-     public RemembranceDetailsAdapter(Context context, ArrayList<RemembranceDetailsModel> list , RemembranceListener listener ){
+     public RemembranceDetailsAdapter(Context context, List<RemembranceDetailsModel> list , RemembranceListener listener ){
         this.context= context;
          this.list = list;
          this.listener = listener;
@@ -50,7 +52,12 @@ public class RemembranceDetailsAdapter extends RecyclerView.Adapter<RemembranceD
          holder.binding.repeat.setText(String.valueOf(data.getRepeat()));
 
          holder.binding.share.setOnClickListener(v -> {
-             listener.onClick(data.getText());
+             Intent txtIntent = new Intent(android.content.Intent.ACTION_SEND);
+             txtIntent.setType("text/plain");
+             txtIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "الاذكار");
+             txtIntent.putExtra(android.content.Intent.EXTRA_TEXT, list.get(position).getText());
+             txtIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(Intent.createChooser(txtIntent, "مشاركة"));
          });
 
          AtomicInteger count = new AtomicInteger(data.getRepeat());

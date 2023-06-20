@@ -134,7 +134,6 @@ public class MonthlyHistoryStudentFragment extends BaseFragment {
 
         // Create a Firestore query to retrieve data within the date range and for users with ID "123"
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         Query query = db.collection("attendance")
                 .whereGreaterThanOrEqualTo("date", thirtyDaysAgoStr)
                 .whereLessThanOrEqualTo("date", currentDateStr)

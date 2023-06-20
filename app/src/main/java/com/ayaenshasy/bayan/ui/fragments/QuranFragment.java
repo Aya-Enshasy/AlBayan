@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.databinding.FragmentQuranBinding;
-import com.ayaenshasy.bayan.ui.activities.QuranLoader;
+import com.ayaenshasy.bayan.jsons.QuranLoader;
 import com.ayaenshasy.bayan.adapter.QuranChapterAdapter;
 import com.ayaenshasy.bayan.model.QuranChapter;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * Use the {@link QuranFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QuranFragment extends Fragment {
+public class QuranFragment extends BaseFragment {
     private QuranChapterAdapter adapter;
     FragmentQuranBinding binding;
 

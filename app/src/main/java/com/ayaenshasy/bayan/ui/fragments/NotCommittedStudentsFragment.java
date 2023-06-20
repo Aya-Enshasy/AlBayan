@@ -1,5 +1,6 @@
 package com.ayaenshasy.bayan.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.ayaenshasy.bayan.R;
 import com.ayaenshasy.bayan.adapter.StudentAdapter;
+import com.ayaenshasy.bayan.adapter.UserAdapter;
 import com.ayaenshasy.bayan.databinding.FragmentCommittedStudentsBinding;
 import com.ayaenshasy.bayan.databinding.FragmentNotCommittedStudentsBinding;
 import com.ayaenshasy.bayan.listeners.DataListener;
@@ -21,12 +24,21 @@ import com.ayaenshasy.bayan.model.Role;
 import com.ayaenshasy.bayan.model.user.Student;
 import com.ayaenshasy.bayan.model.user.User;
 import com.ayaenshasy.bayan.utils.Constant;
+import com.ayaenshasy.bayan.utils.TimeUpdater;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+ import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,7 +56,7 @@ public class NotCommittedStudentsFragment extends BaseFragment {
     FragmentNotCommittedStudentsBinding binding;
     private StudentAdapter adapter;
     List<Student> students = new ArrayList<>();
-
+    List<User> users = new ArrayList<>();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,8 +102,69 @@ public class NotCommittedStudentsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         binding = FragmentNotCommittedStudentsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        setRvData();
+//        setRvData();
+        getData();
         return view;
+    }
+
+    private void getData() {
+        if (role == Role.TEACHER) {
+            binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+            adapter = new StudentAdapter(students, context, new DataListener<Student>() {
+                @Override
+                public void sendData(Student student) {
+//                    showBottomSheet(student);
+                }
+            });
+            binding.rvUser.setAdapter(adapter);
+
+            // Retrieve teacher ID from Firestore
+            CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
+            usersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String teacherId = document.getId(); // Assuming teacher ID is the document ID
+                            if (teacherId != null) {
+                                queryStudentsByTeacherId(teacherId);
+                                Log.e("m,f teacherId", teacherId);
+                                break; // Break after finding the teacher ID
+                            }
+                        }
+                    } else {
+                        // Handle any errors
+                    }
+                }
+            });
+        } else {
+            binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+            UserAdapter userAdapter = new UserAdapter(users, context);
+            binding.rvUser.setAdapter(userAdapter);
+
+            CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
+
+            Query query = usersRef.whereEqualTo("responsible_id", currentUser.getId());
+
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User user = document.toObject(User.class);
+                            users.add(user);
+                            System.out.println(user.getName());
+                        }
+                        userAdapter.notifyDataSetChanged();
+                    } else {
+                        // Handle any errors
+                        System.out.println("Error: " + task.getException().getMessage());
+                    }
+                }
+            });
+        }
     }
 
     private void setRvData() {
@@ -106,48 +179,48 @@ public class NotCommittedStudentsFragment extends BaseFragment {
             });
             binding.rvUser.setAdapter(adapter);
 
-            // Retrieve teacher ID from Firebase
-            DatabaseReference teacherRef = FirebaseDatabase.getInstance().getReference("users");
-            teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        String teacherId = childSnapshot.getKey();  // Assuming teacher ID is the key of each child node
-                        if (teacherId != null) {
-                            queryStudentsByTeacherId(teacherId);
-                            break; // Break after finding the teacher ID
-                        }
-                    }
-                }
+            // Retrieve teacher ID from Firestore
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference usersCollection = db.collection("users");
 
+            usersCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle any errors
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String teacherId = document.getId(); // Assuming teacher ID is the document ID
+                            if (teacherId != null) {
+                                queryStudentsByTeacherId(teacherId);
+                                break; // Break after finding the teacher ID
+                            }
+                        }
+                    } else {
+                        // Handle any errors
+                    }
                 }
             });
         } else {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference usersRef = database.getReference("users");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference usersCollection = db.collection("users");
 
-            Query query = usersRef.orderByChild("responsible_id").equalTo(currentUser.getId());
+            Query query = usersCollection.whereEqualTo("responsible_id", currentUser.getId());
 
-            query.addValueEventListener(new ValueEventListener() {
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        // Retrieve the user data
-                        User user = userSnapshot.getValue(User.class);
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Retrieve the user data
+                            User user = document.toObject(User.class);
 
-                        // Do something with the user data
-                        // For example, print the user's name
-                        System.out.println(user.getName());
+                            // Do something with the user data
+                            // For example, print the user's name
+                            System.out.println(user.getName());
+                        }
+                    } else {
+                        // Handle any errors that occur
+                        System.out.println("Error: " + task.getException().getMessage());
                     }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors that occur
-                    System.out.println("Error: " + databaseError.getMessage());
                 }
             });
 
@@ -155,52 +228,56 @@ public class NotCommittedStudentsFragment extends BaseFragment {
     }
 
     private void queryStudentsByTeacherId(String teacherId) {
-        DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
-        Query query = studentsRef.orderByChild("responsible_id").equalTo(currentUser.getId());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference studentsCollection = db.collection("students");
+
+        Query query = studentsCollection.whereEqualTo("responsible_id", currentUser.getId());
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                students.clear(); // Clear the list before adding new data
-                String currentDate = getCurrentDate(); // Replace with the method to get the current date
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    students.clear(); // Clear the list before adding new data
+                    String currentDate = getCurrentDate(); // Replace with the method to get the current date
 
-                for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                    Student student = studentSnapshot.getValue(Student.class);
-                    String studentId = student.getId();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Student student = document.toObject(Student.class);
+                        String studentId = student.getId();
 
-                    DatabaseReference attendanceRef = FirebaseDatabase.getInstance().getReference("attendance")
-                            .child(currentDate)
-                            .child(studentId);
+                        DocumentReference attendanceRef = db.collection("attendance")
+                                .document(currentDate)
+                                .collection(studentId)
+                                .document(studentId);
 
-                    attendanceRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot attendanceSnapshot) {
-                            boolean isAttendanceMarkedToday = attendanceSnapshot.exists();
-                            if (!isAttendanceMarkedToday) {
-                                student.setChecked(isAttendanceMarkedToday);
-                                students.add(student);
+                        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> attendanceTask) {
+                                if (attendanceTask.isSuccessful()) {
+                                    DocumentSnapshot attendanceSnapshot = attendanceTask.getResult();
+                                    boolean isAttendanceMarkedToday = attendanceSnapshot.exists();
+                                    if (!isAttendanceMarkedToday) {
+                                        student.setChecked(isAttendanceMarkedToday);
+                                        students.add(student);
+                                    }
+
+                                    // Notify the adapter when all students are processed
+                                    if (students.size() == task.getResult().size()) {
+                                        binding.progressBar4.setVisibility(View.GONE);
+                                        adapter.setStudents(students);
+                                    }
+                                } else {
+                                    // Handle any errors
+                                }
                             }
-
-                            // Notify the adapter when all students are processed
-//                            if (students.size() == dataSnapshot.getChildrenCount()) {
-                                binding.progressBar4.setVisibility(View.GONE);
-                                adapter.setStudents(students);
-//                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle any errors
-                        }
-                    });
+                        });
+                    }
+                } else {
+                    // Handle any errors
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors
             }
         });
     }
+
 
 
     private String getCurrentDate() {

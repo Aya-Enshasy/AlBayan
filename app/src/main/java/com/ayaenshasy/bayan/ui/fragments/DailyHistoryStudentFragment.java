@@ -151,9 +151,7 @@ public class DailyHistoryStudentFragment extends Fragment {
                         String planToday = document.getString("planToday");
                         String planTomorrow = document.getString("planTomorrow");
                         String planYesterday = document.getString("planYesterday");
-                        String repeated = document.getString("repeated");
-                        String repeatedYesterday = document.getString("repeatedYesterday");
-                        String todayPercentage = document.getString("todayPercentage");
+                         String todayPercentage = document.getString("todayPercentage");
                         String yesterdayPercentage = document.getString("yesterdayPercentage");
 
                         if (document.contains("notes")) {
@@ -169,13 +167,13 @@ public class DailyHistoryStudentFragment extends Fragment {
                         binding.etPlanTomorrow.setText(planTomorrow);
                         binding.etPlanYesterday.setText(planYesterday);
                         binding.etPlanToday.setText(planToday);
-                        binding.etRepeated.setText(repeated);
-                        binding.etRepeatedYesterday.setText(repeatedYesterday);
                         binding.etTodayPercentage.setText(todayPercentage + " %");
                         binding.etYesterdayPercentage.setText(yesterdayPercentage + " %");
 
                         Log.e("TAG", "Successfully retrieved user attendance: " + planTomorrow);
+                        binding.container1.setVisibility(View.VISIBLE);
                     } else {
+                        binding.container1.setVisibility(View.GONE);
                         Log.e("TAG", "User attendance document does not exist");
                     }
                 } else {
@@ -188,7 +186,7 @@ public class DailyHistoryStudentFragment extends Fragment {
     private void editAttendanceData(String userId, String currentDate) {
         binding.progressBar.setVisibility(View.VISIBLE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        
+
         CollectionReference examsCollection = db.collection("attendance");
         DocumentReference userEntryRef = examsCollection.document(currentDate).collection(userId).document(userId);
 
@@ -196,8 +194,6 @@ public class DailyHistoryStudentFragment extends Fragment {
         updatedData.put("planToday", binding.etPlanToday.getText().toString());
         updatedData.put("planTomorrow", binding.etPlanTomorrow.getText().toString());
         updatedData.put("planYesterday", binding.etPlanYesterday.getText().toString());
-        updatedData.put("repeated", binding.etRepeated.getText().toString());
-        updatedData.put("repeatedYesterday", binding.etRepeatedYesterday.getText().toString());
         updatedData.put("todayPercentage", binding.etTodayPercentage.getText().toString());
         updatedData.put("yesterdayPercentage", binding.etYesterdayPercentage.getText().toString());
         updatedData.put("notes", binding.notes.getText().toString());

@@ -75,7 +75,7 @@ public class SettingsFragment extends BaseFragment implements LogoutDialog.Logou
 
 
         if (currentUser.getRole().name().equals("TEACHER")){
-            binding.day.setVisibility(View.VISIBLE);
+            binding.day.setVisibility(View.GONE);
         }else {
             binding.day.setVisibility(View.GONE);
         }

@@ -21,13 +21,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class RemembranceAdapter extends RecyclerView.Adapter<RemembranceAdapter.ViewHolder> {
-    private ArrayList<RemembranceModel> list;
+    private List<RemembranceModel> list;
     Context context;
 
-    public RemembranceAdapter(Context context, ArrayList<RemembranceModel> list) {
+    public RemembranceAdapter(Context context, List<RemembranceModel> list) {
         this.context = context;
         this.list = list;
 
@@ -50,31 +51,75 @@ public class RemembranceAdapter extends RecyclerView.Adapter<RemembranceAdapter.
             Glide.with(context).load(R.drawable.sun).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
             holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.orange);
         } else if (position == 1) {
-            Glide.with(context).load(R.drawable.moon).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
-            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.parbel);
-        } else if (position == 2) {
-            Glide.with(context).load(R.drawable.sleep).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
-            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.blue);
-        } else if (position == 3) {
-            Glide.with(context).load(R.drawable.clock).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
-            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.green);
-        } else if (position == 4) {
-            Glide.with(context).load(R.drawable.mosque).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
-            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.teel);
-        } else if (position == 5) {
-            Glide.with(context).load(R.drawable.pray).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
+             holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.parbel);
+        }
+        else if (position == 2) {
+            Glide.with(context).load(R.drawable.pngimg_com___mosque_png25).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
             holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.red);
         }
+        else if (position == 3) {
+            Glide.with(context).load(R.drawable.mosque).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
+            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.teel);
+        }
+        else if (position == 4) {
+            Glide.with(context).load(R.drawable.sleep).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
+            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.blue);
+        }
+        else if (position == 5) {
+           Glide.with(context).load(R.drawable.clock).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(true).into(holder.binding.imageView);
+            holder.binding.ConstraintLayout.setBackgroundResource(R.drawable.green);
+        }
+
 
         holder.itemView.setOnClickListener(View -> {
-            context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
-                     .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
-                     .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
-                     .putExtra(Constant.Remembrance_Id, list.get(position).getId() + "")
-            );
+            if (position == 0) {
+                context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
+                        .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
+                        .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
+                        .putExtra(Constant.Remembrance_Id, 1 + "")
+                );
 
-//            AppPreferences.getInstance(context).setIntegerPreferences(Constant.Remembrance_Id, list.get(position).getId());
-        });
+            }
+            else if (position == 1) {
+                context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
+                        .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
+                        .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
+                        .putExtra(Constant.Remembrance_Id, 2+ "")
+                );
+
+            }
+            else if (position == 2) {
+                context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
+                        .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
+                        .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
+                        .putExtra(Constant.Remembrance_Id, 3+ "")
+                );
+            }
+            else if (position == 3) {
+                context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
+                        .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
+                        .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
+                        .putExtra(Constant.Remembrance_Id, 4+ "")
+                );
+            }
+            else if (position == 4) {
+                context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
+                        .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
+                        .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
+                        .putExtra(Constant.Remembrance_Id, 5+ "")
+                );
+            }
+            else if (position == 5) {
+                context.startActivity(new Intent(context, RemembranceDetailsActivity.class)
+                        .putParcelableArrayListExtra(Constant.Remembrance_List, list.get(position).getList())
+                        .putExtra(Constant.Remembrance_Name, list.get(position).getName() + "")
+                        .putExtra(Constant.Remembrance_Id, 6+ "")
+                );
+            }
+
+
+
+         });
 
     }
 

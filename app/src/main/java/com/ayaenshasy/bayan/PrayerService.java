@@ -104,17 +104,17 @@ public class PrayerService extends Service {
                         prayerTimesHelper.getPrayerTimes("Palestine", new PrayerTimingsClass.PrayerTimesListener() {
                             @Override
                             public void onPrayerTimesReceived(PrayerTimingsClass.PrayerTimes prayerTimes) {
-                                if (isPrayerTime(prayerTimes.getFajr())) {
-                                    getAdanSound(prayerTimes.getDhuhr());
-                                } else if (isPrayerTime(prayerTimes.getDhuhr())) {
-                                    getAdanSound(prayerTimes.getAsr());
-                                } else if (isPrayerTime(prayerTimes.getAsr())) {
-                                    getAdanSound(prayerTimes.getMaghrib());
-                                } else if (isPrayerTime(prayerTimes.getMaghrib())) {
-                                    getAdanSound(prayerTimes.getIsha());
-                                } else if (isPrayerTime(prayerTimes.getIsha())) {
-                                    getAdanSound(prayerTimes.getFajr());
-                                }
+//                                if (isPrayerTime(prayerTimes.getFajr())) {
+//                                    getAdanSound(prayerTimes.getDhuhr());
+//                                } else if (isPrayerTime(prayerTimes.getDhuhr())) {
+//                                    getAdanSound(prayerTimes.getAsr());
+//                                } else if (isPrayerTime(prayerTimes.getAsr())) {
+//                                    getAdanSound(prayerTimes.getMaghrib());
+//                                } else if (isPrayerTime(prayerTimes.getMaghrib())) {
+//                                    getAdanSound(prayerTimes.getIsha());
+//                                } else if (isPrayerTime(prayerTimes.getIsha())) {
+//                                    getAdanSound(prayerTimes.getFajr());
+//                                }
                             }
 
                             @Override

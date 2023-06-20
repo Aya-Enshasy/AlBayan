@@ -6,6 +6,7 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/btn_background.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_brightness_1_24.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.2545" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.232" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_calendar_cells_svgrepo_com.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/login_color.xml" value="0.2545" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/pray_time.xml" value="0.2555" />
@@ -15,12 +16,12 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/font/roboto_bold.xml" value="0.28020833333333334" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_bottom_navigation_bar.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_change_password.xml" value="0.4" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_change_password.xml" value="0.176" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_daily_history.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_monthly_history.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_remembrance_details.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_remembrance_details.xml" value="0.264" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_sora.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_student_details.xml" value="0.25" />

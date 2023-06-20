@@ -1,14 +1,12 @@
-package com.ayaenshasy.bayan.ui.activities;
+package com.ayaenshasy.bayan.jsons;
 
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.ayaenshasy.bayan.database.AppDatabase;
 import com.ayaenshasy.bayan.database.DatabaseClient;
-import com.ayaenshasy.bayan.database.QuranChapterDao;
 import com.ayaenshasy.bayan.ui.fragments.QuranFragment;
 import com.ayaenshasy.bayan.model.QuranChapter;
 

@@ -87,7 +87,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
     private static final int REQUEST_PICK_IMAGE = 2;
     private static final int REQUEST_CAPTURE_IMAGE = 3;
     ExamAdapter adapter;
-    private List<Exam> list=new ArrayList<>();
+    private List<Exam> list = new ArrayList<>();
     private ShapeableImageView imgUser; // Declare imgUser as a class member
     String date;
     String user_id;
@@ -175,8 +175,6 @@ public class ExamHistoryStudentFragment extends BaseFragment {
     }
 
 
-
-
     private void RemembranceAdapter() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         adapter = new ExamAdapter(list, getActivity());
@@ -185,7 +183,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
 
     private void showBottomSheet() {
-         // Check if the fragment is attached to the activity and the context is not null
+        // Check if the fragment is attached to the activity and the context is not null
         if (isAdded() && getContext() != null) {
             // Create and show the bottom sheet
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
@@ -193,9 +191,8 @@ public class ExamHistoryStudentFragment extends BaseFragment {
             bottomSheetDialog.setContentView(bottomSheetView);
 
             // Get references to the views
-            imgUser = bottomSheetView.findViewById(R.id.img_user);
-            TextView tvName = bottomSheetView.findViewById(R.id.tv_name);
-            AppCompatEditText etName = bottomSheetView.findViewById(R.id.et_name);
+            bottomSheetView.findViewById(R.id.img_user).setVisibility(View.GONE);
+             AppCompatEditText etName = bottomSheetView.findViewById(R.id.et_name);
             TextView tvDegree = bottomSheetView.findViewById(R.id.tv_degree);
             AppCompatEditText etDegree = bottomSheetView.findViewById(R.id.et_degree);
             TextView tvMosque = bottomSheetView.findViewById(R.id.tv_mosque);
@@ -204,12 +201,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
             LazyDatePicker etDate = bottomSheetView.findViewById(R.id.et_date);
             ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
             AppCompatButton btnSave = bottomSheetView.findViewById(R.id.btn_save);
-            imgUser.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showImageOptions();
-                }
-            });
+
             // Set click listener for the save button
             btnSave.setOnClickListener(v -> {
                 // Get the values entered by the user
@@ -245,50 +237,32 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
                 // Upload image to Firebase Storage
                 if (!name.equals("") || !degree.equals("") || !mosque.equals("")) {
-                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                    StorageReference imageRef = storageRef.child("images/" + UUID.randomUUID().toString() + ".jpg");
-                    imageRef.putFile(selectedImageUri)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                // Image upload success
-                                imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                            // Get the download URL of the uploaded image
-                                            String imageUrl = uri.toString();
 
 
-                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            CollectionReference examsCollection = db.collection("exams");
-                                            DocumentReference newEntryRef = examsCollection.document(user_id);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference examsCollection = db.collection("exams");
+                    DocumentReference newEntryRef = examsCollection.document(user_id);
 
-                                            Map<String, Object> examData = new HashMap<>();
-                                            examData.put("name", name);
-                                            examData.put("degree", degree);
-                                            examData.put("mosque", mosque);
-                                            examData.put("date", date);
-                                            examData.put("image", imageUrl);
+                    Map<String, Object> examData = new HashMap<>();
+                    examData.put("name", name);
+                    examData.put("degree", degree);
+                    examData.put("mosque", mosque);
+                    examData.put("date", date);
 
-                                            newEntryRef.set(examData)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        // Data saved successfully
-                                                        Toast.makeText(getContext(), "تم حفظ البيانات بنجاح", Toast.LENGTH_SHORT).show();
-                                                        bottomSheetDialog.dismiss();
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        // Failed to save data
-                                                        Toast.makeText(getContext(), "فشل في حفظ البيانات: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        progressBar.setVisibility(View.GONE);
-                                                    });
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            // Failed to get download URL of the uploaded image
-                                            Toast.makeText(getContext(), "فشل في الحصول على رابط الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            progressBar.setVisibility(View.GONE);
-                                        });
+
+                    newEntryRef.set(examData)
+                            .addOnSuccessListener(aVoid -> {
+                                // Data saved successfully
+                                Toast.makeText(getContext(), "تم حفظ البيانات بنجاح", Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
+                                getData();
                             })
                             .addOnFailureListener(e -> {
-                                // Failed to upload image
-                                Toast.makeText(getContext(), "فشل في تحميل الصورة: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                // Failed to save data
+                                Toast.makeText(getContext(), "فشل في حفظ البيانات: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                             });
+
                 } else {
                     Toast.makeText(context, "تاكد من ادخال البيانات", Toast.LENGTH_SHORT).show();
                 }
@@ -299,90 +273,6 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
             // Animate the bottom sheet dialog
             animateBottomSheet(bottomSheetDialog);
-        }
-    }
-
-    @SuppressLint("QueryPermissionsNeeded")
-    private void showImageOptions() {
-        // Create an intent to pick an image from the gallery or capture an image using the camera
-        @SuppressLint("IntentReset") Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-        intent.setType("image/*");
-
-        // Check if the device has a camera
-        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            // Create a chooser dialog to select between gallery and camera
-            Intent chooser = Intent.createChooser(intent, "اختر صورة");
-            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{getCameraIntent()});
-
-            // Start the activity to pick an image
-            startActivityForResult(chooser, REQUEST_PICK_IMAGE);
-        } else {
-            // No camera available, so only gallery option is available
-            startActivityForResult(intent, REQUEST_PICK_IMAGE);
-        }
-    }
-
-    @SuppressLint("QueryPermissionsNeeded")
-    private Intent getCameraIntent() {
-        // Create an intent to capture an image using the camera
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            // Create a unique filename for the captured image
-            String fileName = UUID.randomUUID().toString() + ".jpg";
-            Uri photoUri = getOutputUri(fileName);
-
-            // Set the output file for the captured image
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            selectedImageUri = photoUri;
-
-            // Return the camera intent
-            return cameraIntent;
-        } else {
-            Toast.makeText(context, "الكاميرا غير متوفرة", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-    }
-
-    private Uri getOutputUri(String fileName) {
-        // TODO: Implement your logic to create a file URI for storing the captured image
-        // Example: return Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName));
-        return null;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_PICK_IMAGE) {
-                // Image picked from gallery
-                if (data != null && data.getData() != null) {
-                    selectedImageUri = data.getData();
-                    // Set the selected image to the image view
-                    imgUser.setImageURI(selectedImageUri);
-                }
-            } else if (requestCode == REQUEST_CAPTURE_IMAGE) {
-                // Image captured using camera
-                if (selectedImageUri != null) {
-                    // Set the captured image to the image view
-                    imgUser.setImageURI(selectedImageUri);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Camera permission granted, show the image options
-                showImageOptions();
-            } else {
-                Toast.makeText(context, "تم رفض إذن الكاميرا", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
