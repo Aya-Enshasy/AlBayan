@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_logo.xml" value="0.2285" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/Halqati/app/src/main/res/drawable/btn_background.xml" value="0.2125" />
         <entry key="..\:/Android Studio Projects/Halqati/app/src/main/res/drawable/ic_baseline_explore_24.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/Halqati/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.204" />
