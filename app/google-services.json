@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:565539587812:android:b86cf2329588ea078c8ef1",
         "android_client_info": {
-          "package_name": "com.ayaenshasy.bayan"
+          "package_name": "com.ayaenshasy.AlBayan"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "565539587812-hmp34r5apoqseuc1r0jsi6acehldo3ds.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.ayaenshasy.bayan",
+            "package_name": "com.ayaenshasy.AlBayan",
             "certificate_hash": "7757b8603d68f202aa5c54f6ca7a6d898ba41c45"
           }
         },

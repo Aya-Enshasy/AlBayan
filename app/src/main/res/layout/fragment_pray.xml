@@ -6,265 +6,265 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.PrayFragment">
 
- <androidx.constraintlayout.widget.ConstraintLayout
-     android:layout_width="match_parent"
-     android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-     <androidx.constraintlayout.widget.ConstraintLayout
-         android:id="@+id/constraintLayout"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent">
-
-
-         <TextView
-             android:id="@+id/textView10"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="24dp"
-             android:fontFamily="@font/cairo_bold"
-             android:gravity="center"
-             android:text="مواقيت الصلاة"
-             android:textColor="@color/black"
-             android:textSize="20sp"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintHorizontal_bias="0.498"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toTopOf="parent" />
-
-         <TextView
-             android:id="@+id/pray_date"
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_marginStart="8dp"
-             android:layout_marginTop="60dp"
-             android:layout_marginEnd="16dp"
-             android:fontFamily="@font/cairo_bold"
-             android:gravity="center"
-             android:text="الصلاة القادمة"
-             android:visibility="gone"
-             android:textColor="@color/black"
-             android:textSize="16sp"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintHorizontal_bias="0.0"
-             app:layout_constraintStart_toEndOf="@+id/imageView7"
-             app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-         <TextView
-             android:id="@+id/pray_time"
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_marginStart="8dp"
-             android:layout_marginTop="16dp"
-             android:layout_marginEnd="16dp"
-             android:fontFamily="@font/cairo_bold"
-             android:gravity="center"
-             android:text="00:00:00"
-             android:visibility="gone"
-             android:textColor="@color/orange"
-             android:textSize="16sp"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintHorizontal_bias="0.0"
-             app:layout_constraintStart_toEndOf="@+id/imageView7"
-             app:layout_constraintTop_toBottomOf="@+id/pray_date" />
-
-         <ImageView
-             android:id="@+id/imageView7"
-             android:layout_width="@dimen/_110sdp"
-             android:layout_height="@dimen/_100sdp"
-             android:layout_marginStart="16dp"
-             android:layout_marginTop="24dp"
-             android:scaleType="fitXY"
-             android:src="@drawable/ic_mosque_svgrepo_com"
-             app:layout_constraintLeft_toLeftOf="parent"
-             app:layout_constraintTop_toBottomOf="@+id/textView10" />
-     </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
-     <TextView
-         android:id="@+id/date"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-         android:background="@drawable/input_background"
-         android:backgroundTint="#3CD29322"
-         android:fontFamily="@font/cairo_bold"
-         android:gravity="center"
-         android:padding="10dp"
-         android:text="TextView"
-         android:textColor="@color/black"
-         android:textSize="20sp"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.0"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/cairo_bold"
+                android:gravity="center"
+                android:text="مواقيت الصلاة"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-     <TableLayout
-         android:layout_width="match_parent"
-         android:layout_height="0dp"
-         android:layout_marginTop="30dp"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/date">
+            <TextView
+                android:id="@+id/pray_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/cairo_bold"
+                android:gravity="center"
+                android:text="الصلاة القادمة"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-         <TableRow android:background="@drawable/pray_time"
-             android:layout_marginStart="20dp"
-             android:layout_marginEnd="20dp"
-             >
-             <TextView
-                 android:layout_weight="1"
-                 android:text="الفجر"
-                 android:layout_gravity="left"
-                 android:gravity="right"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:padding="10dp"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/pray_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/cairo_bold"
+                android:gravity="center"
+                android:text="00:00:00"
+                android:visibility="gone"
+                android:textColor="@color/orange"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintTop_toBottomOf="@+id/pray_date" />
 
-             <TextView
-                 android:id="@+id/fajer"
-                  android:layout_weight="1"
-                 android:padding="10dp"
-                  android:gravity="center"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
-
-
-         </TableRow>
-         <View  android:layout_width="match_parent"
-             android:layout_height="5dp"/>
-         <TableRow android:background="@drawable/pray_time"
-             android:layout_marginStart="20dp"
-             android:layout_marginEnd="20dp"
-             >
-             <TextView
-                 android:layout_weight="1"
-                 android:text="الظهر"
-                 android:layout_gravity="left"
-                 android:gravity="right"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:padding="10dp"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
-
-             <TextView
-                 android:id="@+id/dohor"
-                  android:layout_weight="1"
-                 android:padding="10dp"
-                 android:gravity="center"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="@dimen/_110sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_mosque_svgrepo_com"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-         </TableRow>
-         <View  android:layout_width="match_parent"
-             android:layout_height="5dp"/>
-         <TableRow android:background="@drawable/pray_time"
-             android:layout_marginStart="20dp"
-             android:layout_marginEnd="20dp"
-             >
-             <TextView
-                 android:layout_weight="1"
-                 android:text="العصر"
-                 android:layout_gravity="left"
-                 android:gravity="right"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:padding="10dp"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/input_background"
+            android:backgroundTint="#3CD29322"
+            android:fontFamily="@font/cairo_bold"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-             <TextView
-                 android:id="@+id/aser"
-                  android:layout_weight="1"
-                 android:padding="10dp"
-                 android:gravity="center"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date">
 
+            <TableRow android:background="@drawable/pray_time"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:text="الفجر"
+                    android:layout_gravity="left"
+                    android:gravity="right"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-         </TableRow>
-         <View  android:layout_width="match_parent"
-             android:layout_height="5dp"/>
-         <TableRow android:background="@drawable/pray_time"
-             android:layout_marginStart="20dp"
-             android:layout_marginEnd="20dp"
-             >
-             <TextView
-                 android:layout_weight="1"
-                 android:text="المغرب"
-                 android:layout_gravity="left"
-                 android:gravity="right"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:padding="10dp"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
-
-             <TextView
-                 android:id="@+id/magrep"
-                  android:layout_weight="1"
-                 android:padding="10dp"
-                 android:gravity="center"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/fajer"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
-         </TableRow>
-         <View  android:layout_width="match_parent"
-             android:layout_height="5dp"/>
-         <TableRow android:background="@drawable/pray_time"
-             android:layout_marginStart="20dp"
-             android:layout_marginEnd="20dp"
-             >
-             <TextView
-                 android:layout_weight="1"
-                 android:text="العشاء"
-                 android:layout_gravity="left"
-                 android:gravity="right"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:padding="10dp"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+            </TableRow>
+            <View  android:layout_width="match_parent"
+                android:layout_height="5dp"/>
+            <TableRow android:background="@drawable/pray_time"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:text="الظهر"
+                    android:layout_gravity="left"
+                    android:gravity="right"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-             <TextView
-                 android:id="@+id/aisha"
-                  android:layout_weight="1"
-                 android:padding="10dp"
-                 android:gravity="center"
-                 android:textSize="16sp"
-                 android:textColor="@color/black"
-                 android:fontFamily="@font/cairo_bold"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
-
-
-         </TableRow>
-
-     </TableLayout>
+                <TextView
+                    android:id="@+id/dohor"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
- </androidx.constraintlayout.widget.ConstraintLayout>
+            </TableRow>
+            <View  android:layout_width="match_parent"
+                android:layout_height="5dp"/>
+            <TableRow android:background="@drawable/pray_time"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:text="العصر"
+                    android:layout_gravity="left"
+                    android:gravity="right"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/aser"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </TableRow>
+            <View  android:layout_width="match_parent"
+                android:layout_height="5dp"/>
+            <TableRow android:background="@drawable/pray_time"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:text="المغرب"
+                    android:layout_gravity="left"
+                    android:gravity="right"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/magrep"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </TableRow>
+            <View  android:layout_width="match_parent"
+                android:layout_height="5dp"/>
+            <TableRow android:background="@drawable/pray_time"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:text="العشاء"
+                    android:layout_gravity="left"
+                    android:gravity="right"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/aisha"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/cairo_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </TableRow>
+
+        </TableLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

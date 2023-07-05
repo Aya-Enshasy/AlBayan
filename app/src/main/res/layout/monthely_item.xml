@@ -25,8 +25,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <FrameLayout
@@ -42,8 +42,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_44sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
@@ -55,7 +55,7 @@
                         android:fontFamily="@font/cairo_bold"
                         android:text="مراجعة اليوم"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -70,9 +70,9 @@
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_plan_yesterday" />
 
                     <TextView
@@ -84,7 +84,7 @@
                         android:fontFamily="@font/cairo_bold"
                         android:text="نسبة المراجعة"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/et_plan_yesterday" />
 
                     <TextView
@@ -102,8 +102,8 @@
                         android:textColor="@color/black"
                         android:textDirection="rtl"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_yesterday_percentage"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_yesterday_percentage"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/tv_yesterday_percentage"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_yesterday_percentage" />
 
                     <TextView
@@ -115,7 +115,7 @@
                         android:fontFamily="@font/cairo_bold"
                         android:text="عدد التكرار"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/et_yesterday_percentage" />
 
                     <TextView
@@ -132,8 +132,8 @@
                         android:textColor="@color/black"
                         android:textDirection="rtl"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_repeated_yesterday"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_repeated_yesterday"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/tv_repeated_yesterday"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_repeated_yesterday" />
 
                     <View
@@ -144,8 +144,8 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="16dp"
                         android:background="#4FD29322"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/et_repeated_yesterday" />
 
 
@@ -158,7 +158,7 @@
                         android:fontFamily="@font/cairo_bold"
                         android:text="حفظ اليوم"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
                     <TextView
@@ -173,9 +173,9 @@
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_plan_today" />
 
                     <TextView
@@ -205,8 +205,8 @@
                         android:textColor="@color/black"
                         android:textDirection="rtl"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_today_percentage"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_today_percentage"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/tv_today_percentage"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_today_percentage" />
 
                     <TextView
@@ -236,7 +236,7 @@
                         android:textColor="@color/black"
                         android:textDirection="rtl"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_repeated"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_repeated"
+                        app:layout_constraintRight_toLeftOf="@+id/tv_repeated"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_repeated" />
 
@@ -318,156 +318,59 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
 
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/textView1"
+                    <TextView
+                        android:id="@+id/tv_remmeber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginStart="16dp"
                         android:fontFamily="@font/cairo_bold"
-                        android:text="صلاوات اليوم"
-                        android:layout_gravity="right"
-                        android:gravity="right"
+                        android:text="اسم المسجد : "
                         android:textColor="@color/black"
-                        android:textDirection="rtl"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-                    <RadioGroup
-                        android:id="@+id/radioGroup"
+                        app:layout_constraintTop_toBottomOf="@+id/img_exam" />
+                    <TextView
+                        android:id="@+id/tv_prayers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView1">
-
-
-                        <CheckBox
-                            android:id="@+id/fajer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                             android:fontFamily="@font/cairo_semibold"
-                            android:buttonTint="@color/orange"
-                            android:enabled="false"
-                            android:textColor="@color/black"
-                            android:layoutDirection="rtl"
-                            android:text="الفجر" />
-
-                        <CheckBox
-                            android:id="@+id/dohor"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/orange"
-                            android:enabled="false"
-                            android:textColor="@color/black"
-                            android:fontFamily="@font/cairo_semibold"
-
-                            android:layoutDirection="rtl"
-                            android:text="الظهر" />
-
-                        <CheckBox
-                            android:id="@+id/aser"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/orange"
-                            android:enabled="false"
-                            android:textColor="@color/black"                            android:fontFamily="@font/cairo_semibold"
-                            android:layoutDirection="rtl"
-
-                            android:text="العصر" />
-
-
-                    </RadioGroup>
-
-                    <RadioGroup
-                        android:id="@+id/radioGroup1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView1">
-
-
-                        <CheckBox
-                            android:id="@+id/magreb"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/orange"
-                            android:enabled="false"
-                            android:textColor="@color/black"                            android:fontFamily="@font/cairo_semibold"
-                            android:layoutDirection="rtl"
-
-                            android:text="المغرب" />
-
-                        <CheckBox
-                            android:id="@+id/eshaa"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/orange"
-                            android:enabled="false"
-                            android:textColor="@color/black"                            android:fontFamily="@font/cairo_semibold"
-                            android:layoutDirection="rtl"
-
-                            android:text="العشاء" />
-
-                    </RadioGroup>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="12dp"
+                        android:visibility="gone"
                         android:fontFamily="@font/cairo_bold"
-                        android:text="التقيم التربوي"
-                        android:layout_marginStart="16dp"
-
+                        android:text="اسم المسجد : "
                         android:textColor="@color/black"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
-
-
-                    <com.ramotion.fluidslider.FluidSlider
-                        android:id="@+id/fluidSlider"
+                        app:layout_constraintTop_toBottomOf="@+id/img_exam" />
+                    <TextView
+                        android:id="@+id/tv_teacher_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="-36dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
-                        app:bar_color="#86000000"
-                        android:defaultFocusHighlightEnabled="false"
-                        android:hapticFeedbackEnabled="false"
-                        android:nestedScrollingEnabled="false"
-                        android:saveEnabled="false"
-                        app:bar_text_color="@color/white"
-                        app:bubble_text_color="@color/black"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="تقيم المحقظ التربوي  : "
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-                        app:size="small"
-                        tools:targetApi="lollipop" />
+                        app:layout_constraintTop_toBottomOf="@+id/img_exam" />
+                    <TextView
+                        android:id="@+id/tv_parent_rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="تقسسم للاب التربوي  : "
+                        android:visibility="gone"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/img_exam" />
+
+
+
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 

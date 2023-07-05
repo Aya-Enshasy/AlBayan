@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="@dimen/_20sdp"
+    android:background="@drawable/istockphoto_1334554610_612x612"
 
     tools:context=".ui.activities.EditUserProfileActivity">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_30sdp">
+        android:layout_marginBottom="@dimen/_30sdp"
+        android:layout_height="match_parent">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView51"
@@ -20,24 +20,38 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/cairo_bold"
             android:text="تعديل بيانات المستخدم"
-            android:textColor="@color/black"
+            android:textColor="@color/orange"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView51"
+            app:shapeAppearanceOverlay="@style/roundedImageVRounded" />
+
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_user"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="32dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_user_circle_svgrepo_com"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView51"
+            app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
+            app:layout_constraintRight_toRightOf="@+id/shapeableImageView"
+            app:layout_constraintLeft_toLeftOf="@+id/shapeableImageView"
+            app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
             app:shapeAppearanceOverlay="@style/roundedImageVRounded" />
 
 
@@ -48,7 +62,7 @@
             android:layout_marginTop="28dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo_bold"
-            android:text="ادخل رقم الهوية"
+            android:text="رقم الهوية"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintRight_toRightOf="parent"
@@ -62,18 +76,16 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/input_background"
-            android:backgroundTint="#08000000"
+            android:elevation="4dp"
+            android:textDirection="rtl"
+            android:textColor="#595959"
             android:ems="10"
-
+            android:textSize="@dimen/_12ssp"
             android:fontFamily="@font/cairo_semibold"
-            android:hint="123 456 678 90"
+
             android:outlineSpotShadowColor="#9A9A9A"
             android:padding="12dp"
-            android:textColor="#595959"
-
-            android:textDirection="rtl"
-            android:textSize="@dimen/_12ssp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_id" />
@@ -99,17 +111,16 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/input_background"
-            android:backgroundTint="#08000000"
+            android:backgroundTint="#0F000000"
+            android:textDirection="rtl"
             android:ems="10"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/black"
             android:fontFamily="@font/cairo_semibold"
             android:hint="الاسم"
             android:inputType="text"
-            android:outlineSpotShadowColor="#9A9A9A"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textDirection="rtl"
-            android:textSize="@dimen/_12ssp"
-            app:layout_constraintEnd_toEndOf="parent"
+             android:padding="12dp"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -134,17 +145,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/input_background"
-            android:backgroundTint="#08000000"
-            android:ems="10"
             android:fontFamily="@font/cairo_semibold"
+            android:background="@drawable/input_background"
+            android:elevation="4dp"
+            android:textDirection="rtl"
+            android:textColor="#595959"
+            android:ems="10"
             android:hint="059 123 345 44"
             android:inputType="phone"
             android:outlineSpotShadowColor="#9A9A9A"
             android:padding="12dp"
-            android:textColor="#595959"
-            android:textDirection="rtl"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_phone" />
@@ -155,8 +166,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="24dp"
-            android:fontFamily="@font/cairo_bold"
             android:text="ادخل هويه الاب "
+            android:fontFamily="@font/cairo_bold"
             android:textColor="#000000"
             android:textSize="14sp"
             android:visibility="gone"
@@ -171,17 +182,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/input_background"
-            android:backgroundTint="#08000000"
-
+            android:backgroundTint="#0F000000"
             android:ems="10"
-            android:fontFamily="@font/cairo_semibold"
             android:hint="123 456 678 90"
             android:inputType="number"
-            android:outlineSpotShadowColor="#9A9A9A"
-            android:padding="12dp"
-            android:textDirection="rtl"
+             android:padding="12dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textDirection="rtl"
+            android:fontFamily="@font/cairo_semibold"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_parent_id" />
@@ -199,8 +208,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_parent_id" />
 
-
-        <com.mikhaellopez.lazydatepicker.LazyDatePicker
+<!--com.mikhaellopez.lazydatepicker.LazyDatePicker-->
+        <TextView
             android:id="@+id/lazyDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -208,17 +217,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/input_background"
-            android:backgroundTint="#08000000"
-            android:outlineSpotShadowColor="#9A9A9A"
-            android:padding="12dp"
+            android:backgroundTint="#0F000000"
             android:textDirection="rtl"
-            app:layout_constraintEnd_toEndOf="parent"
+             android:padding="12dp"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_birthdate"
-            app:ldp_date_format="dd-mm-yyyy"
-            app:ldp_hint_color="#989898"
-            app:ldp_text_color="@color/orange" />
+            android:textColor="#000000"
+            />
 
         <!--        <TextView-->
         <!--            android:id="@+id/et_brithDate"-->
@@ -270,26 +277,24 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_gender">
-
             <RadioButton
                 android:id="@+id/radio_male"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:buttonTint="@color/orange"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
                 android:layoutDirection="rtl"
 
                 android:text="انثى" />
-
             <RadioButton
                 android:id="@+id/radio_female"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:buttonTint="@color/orange"
-                android:fontFamily="@font/cairo_bold"
                 android:layoutDirection="rtl"
+                android:fontFamily="@font/cairo_bold"
                 android:text="ذكر" />
 
 

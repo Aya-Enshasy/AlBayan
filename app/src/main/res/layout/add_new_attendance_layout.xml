@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:elevation="@dimen/_12sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,8 +15,8 @@
             android:id="@+id/container1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -42,9 +43,9 @@
                 android:hint="اية 1 ال 20 من سورة البقرة"
                 android:inputType="textPersonName"
                 android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_plan_yesterday" />
 
             <TextView
@@ -64,8 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/input_background"
                 android:backgroundTint="#F3F3F3"
                 android:ems="10"
@@ -73,9 +73,10 @@
                 android:inputType="number"
                 android:padding="10dp"
                 android:textDirection="rtl"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_yesterday_percentage" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_yesterday_percentage"
+                app:layout_constraintRight_toLeftOf="@+id/tv_yesterday_percentage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_yesterday_percentage" />
 
             <TextView
                 android:id="@+id/tv_repeated_yesterday"
@@ -85,6 +86,7 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="عدد التكرار"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_yesterday_percentage" />
@@ -94,18 +96,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/input_background"
                 android:backgroundTint="#F3F3F3"
                 android:ems="10"
+                android:visibility="gone"
+
                 android:hint="عدد مرات الخطأ والتكرار بالقراءة"
                 android:inputType="number"
                 android:padding="10dp"
                 android:textDirection="rtl"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_repeated_yesterday" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_repeated_yesterday"
+                app:layout_constraintRight_toLeftOf="@+id/tv_repeated_yesterday"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_repeated_yesterday" />
 
             <View
                 android:id="@+id/view2"
@@ -114,9 +118,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:background="#4FD29322"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="#3913A895"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_repeated_yesterday" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,15 +128,15 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/container1">
 
             <TextView
                 android:id="@+id/tv_plan_today"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="حفظ اليوم"
@@ -152,9 +156,9 @@
                 android:hint="اية 1 ال 20 من سورة البقرة"
                 android:inputType="textPersonName"
                 android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_plan_today" />
 
             <TextView
@@ -174,8 +178,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/input_background"
                 android:backgroundTint="#F3F3F3"
                 android:ems="10"
@@ -183,9 +186,10 @@
                 android:inputType="number"
                 android:padding="10dp"
                 android:textDirection="rtl"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_today_percentage" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_today_percentage"
+                app:layout_constraintRight_toLeftOf="@+id/tv_today_percentage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_today_percentage" />
 
             <TextView
                 android:id="@+id/tv_repeated"
@@ -195,6 +199,8 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="عدد التكرار"
+                android:visibility="gone"
+
                 android:textColor="@color/black"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_today_percentage" />
@@ -204,19 +210,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/input_background"
                 android:backgroundTint="#F3F3F3"
                 android:ems="10"
+                android:visibility="gone"
+
                 android:hint="عدد مرات الخطأ والتكرار بالقراءة"
                 android:inputType="number"
                 android:padding="10dp"
                 android:textDirection="rtl"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_repeated"
+                app:layout_constraintRight_toLeftOf="@+id/tv_repeated"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_repeated" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_repeated" />
 
             <View
                 android:id="@+id/view3"
@@ -225,22 +233,22 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:background="#4FD29322"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="#3913A895"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
 
             <TextView
                 android:id="@+id/tv_plan_tomorrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="12dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="خطة الغد"
                 android:textColor="@color/black"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
 
             <EditText
                 android:id="@+id/et_plan_tomorrow"
@@ -256,9 +264,46 @@
                 android:inputType="textPersonName"
                 android:padding="10dp"
                 android:textDirection="rtl"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_plan_tomorrow" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cairo_bold"
+                android:text="ملاحظات"
+                android:textColor="#23253A"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+
+                android:visibility="gone"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="289dp" />
+
+            <EditText
+                android:id="@+id/notes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/input_background"
+                android:backgroundTint="#0F000000"
+                android:ems="10"
+                android:visibility="gone"
+
+                android:fontFamily="@font/cairo_semibold"
+                android:hint="ملاحظة سواء مدح او شكوى"
+                android:inputType="text"
+                android:padding="10dp"
+
+                android:textSize="13sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -266,8 +311,8 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/btn_save"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_plan_tomorrow" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -275,17 +320,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="42dp"
-                android:layout_marginEnd="16dp"
+                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/btn_background"
                 android:fontFamily="@font/cairo_bold"
                 android:text="اضافة"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_plan_tomorrow" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notes" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
