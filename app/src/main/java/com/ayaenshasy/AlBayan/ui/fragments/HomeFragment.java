@@ -6,7 +6,9 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import android.widget.Toast;
 import com.ayaenshasy.AlBayan.NotificationsActivity;
 import com.ayaenshasy.AlBayan.PrayerService;
 import com.ayaenshasy.AlBayan.R;
+import com.ayaenshasy.AlBayan.listeners.DeleteListener;
 import com.ayaenshasy.AlBayan.utils.Constant;
 import com.ayaenshasy.AlBayan.utils.TimeUpdater;
 import com.ayaenshasy.AlBayan.adapter.StudentAdapter;
@@ -68,11 +71,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class HomeFragment extends BaseFragment {
     List<Student> students = new ArrayList<>();
     List<User> users = new ArrayList<>();
@@ -184,22 +183,36 @@ public class HomeFragment extends BaseFragment {
     private void setRvData() {
 
         if (role == Role.TEACHER && !isParent) {
-            queryStudentsByTeacherId(currentUser.getId());
-        } else if (isParent) {
+            queryStudentsByTeacherId();
+        }
+
+        else if (isParent) {
             binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
-            userAdapter = new UserAdapter(users, context);
+            userAdapter = new UserAdapter(users, context, new DeleteListener() {
+                @Override
+                public void onClick(String name, int pos) {
+//                    showDeleteConfirmationDialog(name,pos);
+                }
+            });
             binding.rvUser.setAdapter(userAdapter);
             queryStudentsByParentId(currentUser.getId());
-        } else {
+        }
+
+        else {
             binding.rvUser.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
-            userAdapter = new UserAdapter(users, context);
+            userAdapter = new UserAdapter(users, context, new DeleteListener() {
+                @Override
+                public void onClick(String name, int pos) {
+                    showDeleteConfirmationDialog(name,pos,"users");
+                }
+            });
             binding.rvUser.setAdapter(userAdapter);
 
             CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
 
-            com.google.firebase.firestore.Query query = usersRef.whereEqualTo("responsible_id", currentUser.getId());
+            com.google.firebase.firestore.Query query = usersRef.whereNotEqualTo("role", "ADMIN");
 
             query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -246,7 +259,7 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    private void queryStudentsByTeacherId(String teacherId) {
+    private void queryStudentsByTeacherId() {
         CollectionReference studentsRef = FirebaseFirestore.getInstance().collection("students");
         com.google.firebase.firestore.Query query = studentsRef.whereEqualTo("responsible_id", currentUser.getId());
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -280,6 +293,11 @@ public class HomeFragment extends BaseFragment {
                                         @Override
                                         public void sendData(Student student) {
                                             Constant.showBottomSheet(student, adapter, currentUser, getContext());
+                                        }
+                                    }, new DeleteListener() {
+                                        @Override
+                                        public void onClick(String name, int pos) {
+                                            showDeleteConfirmationDialog(name,pos,"students");
                                         }
                                     });
                                     binding.rvUser.setAdapter(adapter);
@@ -382,8 +400,7 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    // Handle permission request results
-    @Override
+     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -391,6 +408,7 @@ public class HomeFragment extends BaseFragment {
             // Handle VIBRATE permission request result
         }
     }
+
     private void showWaitingImage() {
         binding.lottieImg.setAnimation(R.raw.waiting_sand);
         binding.lottieImg.loop(true);
@@ -398,6 +416,7 @@ public class HomeFragment extends BaseFragment {
         binding.lottieImg.setVisibility(View.VISIBLE);
         binding.rvUser.setVisibility(View.GONE);
     }
+
     private void showNoDataImage() {
         binding.lottieImg.setAnimation(R.raw.waiting_sand);
         binding.lottieImg.loop(true);
@@ -410,5 +429,38 @@ public class HomeFragment extends BaseFragment {
         binding.lottieImg.setVisibility(View.GONE);
         binding.rvUser.setVisibility(View.VISIBLE);
     }
+
+    private void showDeleteConfirmationDialog(String userId, int pos,String path) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("حذف المستخدم");
+        builder.setMessage("هل متاكد من عملية الحذف ؟");
+        builder.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                CollectionReference usersRef = FirebaseFirestore.getInstance().collection(path);
+                DocumentReference userDocRef = usersRef.document(userId);
+                userDocRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            queryStudentsByTeacherId();
+                            setData();
+                            Toast.makeText(context, "تم الحذف بنجاح", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Handle any errors
+                            System.out.println("Error: " + task.getException().getMessage());
+                        }
+                    }
+                });
+
+//                deleteItem(position);
+            }
+        });
+        builder.setNegativeButton("لا", null);
+        builder.show();
+    }
+
 }
+
 

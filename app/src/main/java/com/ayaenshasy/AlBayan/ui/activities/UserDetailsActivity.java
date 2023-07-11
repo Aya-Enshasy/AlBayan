@@ -53,7 +53,7 @@ public class UserDetailsActivity extends BaseActivity {
         binding.tvName.setText("الاسم : " + getIntent().getStringExtra(USER_NAME));
         binding.tvId.setText("رقم الهوية : " + getIntent().getStringExtra(USER_ID));
 
-        UserAdapter userAdapter = new UserAdapter(users, context);
+        UserAdapter userAdapter = new UserAdapter(users, context,null);
         binding.rvUser.setAdapter(userAdapter);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef;
@@ -66,7 +66,7 @@ public class UserDetailsActivity extends BaseActivity {
 
         String userId = getIntent().getStringExtra(USER_ID);
         if (userId != null) {
-            Query query = usersRef.whereEqualTo("responsible_id", userId);
+            Query query = usersRef.whereEqualTo("responsible_id", "123");
 
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

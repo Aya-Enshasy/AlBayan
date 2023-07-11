@@ -4,11 +4,16 @@ import static com.ayaenshasy.AlBayan.utils.Constant.USER_ID;
 import static com.ayaenshasy.AlBayan.utils.Constant.USER_NAME;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,10 +21,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ayaenshasy.AlBayan.R;
  import com.ayaenshasy.AlBayan.databinding.ItemStudentMainBinding;
 import com.ayaenshasy.AlBayan.listeners.DataListener;
+import com.ayaenshasy.AlBayan.listeners.DeleteListener;
+import com.ayaenshasy.AlBayan.listeners.RemembranceListener;
 import com.ayaenshasy.AlBayan.model.user.Student;
 import com.ayaenshasy.AlBayan.ui.activities.StudentDetailsActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -29,11 +41,13 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     Context context;
     boolean mark = false;
     DataListener<Student> listener;
+    DeleteListener delete;
 
-    public StudentAdapter(List<Student> list, Context context, DataListener<Student> listener) {
+    public StudentAdapter(List<Student> list, Context context, DataListener<Student> listener,DeleteListener delete) {
         this.list = list;
         this.context = context;
         this.listener = listener;
+        this.delete = delete;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -67,6 +81,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true)
                 .into(holder.binding.imgUser);
+
+        Log.e("dnc,kdsc,n",list.get(position).getImage()+"");
+
         holder.binding.tvName.setText(list.get(position).getName());
         holder.binding.tvId.setText(list.get(position).getId());
 
@@ -89,7 +106,14 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             );
         });
 
+        holder.binding.imgDelete.setOnClickListener(View->{
+             delete.onClick(list.get(position).getId(),position);
+
+        });
+
     }
+
+
 
     @Override
     public int getItemCount() {

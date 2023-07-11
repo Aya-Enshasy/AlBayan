@@ -7,6 +7,7 @@ import static com.ayaenshasy.AlBayan.utils.Constant.USER_ROLE;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ayaenshasy.AlBayan.R;
 import com.ayaenshasy.AlBayan.databinding.ItemUserMainBinding;
 import com.ayaenshasy.AlBayan.listeners.DataListener;
+import com.ayaenshasy.AlBayan.listeners.DeleteListener;
 import com.ayaenshasy.AlBayan.model.Role;
 import com.ayaenshasy.AlBayan.model.user.User;
 import com.ayaenshasy.AlBayan.ui.activities.StudentDetailsActivity;
 import com.ayaenshasy.AlBayan.ui.activities.UserDetailsActivity;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -29,11 +34,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private List<User> list;
     Context context;
     DataListener<User> listener;
+    DeleteListener delete;
 
 
-    public UserAdapter(List<User> list, Context context) {
+    public UserAdapter(List<User> list, Context context,DeleteListener delete) {
         this.list = list;
         this.context = context;
+        this.delete = delete;
     }
 
     public void setUsers(List<User> users) {
@@ -52,6 +59,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.binding.tvName.setText(list.get(position).getName());
         holder.binding.tvId.setText(list.get(position).getId()+"");
+        Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true)
+                .into(holder.binding.imgUser);
+
+        Log.e("dnc,kdsc,n",list.get(position).getImage()+"");
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +84,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     );
                 }
             }
+        });
+
+
+        holder.binding.imgDelete.setOnClickListener(View->{
+            delete.onClick(list.get(position).getId(),position);
+
         });
 
     }

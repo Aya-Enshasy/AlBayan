@@ -4,7 +4,39 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/drawable/ic_logo.xml" value="0.2285" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_add_user.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_compass.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_daily_history.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_edit_user_profile.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_monthly_history.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_notifications.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_remembrance_details.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_sora.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_splash.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_student_details.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_support.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_user_details.xml" value="0.4" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_exam_layout.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_video_dialog.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/dialog_submit_operation.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/exam_item.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_committed_students.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_remembrance.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_teacher_notifications.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_notification.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_quran_chapter.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_student_main.xml" value="0.4" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/item_user_main.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/loader_dialog.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/monthely_item.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/remembrance_details_item.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/remembrance_item.xml" value="0.1675925925925926" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/video_item.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/Halqati/app/src/main/res/drawable/btn_background.xml" value="0.2125" />
         <entry key="..\:/Android Studio Projects/Halqati/app/src/main/res/drawable/ic_baseline_explore_24.xml" value="0.2555" />
         <entry key="..\:/Android Studio Projects/Halqati/app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_24.xml" value="0.204" />

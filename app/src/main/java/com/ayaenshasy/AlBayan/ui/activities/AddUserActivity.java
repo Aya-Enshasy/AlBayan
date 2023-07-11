@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -44,10 +45,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+
 public class AddUserActivity extends BaseActivity {
     ActivityAddUserBinding binding;
     FirebaseStorage firebaseStorage;
     Uri imageUri;
+    String imageUrl;
     ActivityResultLauncher<String> al1;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
@@ -97,9 +100,11 @@ public class AddUserActivity extends BaseActivity {
         binding.btnSave.setOnClickListener(View -> {
             addUser();
             closeKeyboard();
+
+
         });
         binding.lazyDatePicker.setOnClickListener(View -> {
-                 showDatePickerDialog();
+            showDatePickerDialog();
 
         });
         binding.backArrow.setOnClickListener(View -> {
@@ -124,7 +129,7 @@ public class AddUserActivity extends BaseActivity {
                 addNewUser("users", Role.SUPERVISOR);
                 break;
             default:
-        addNewUser("users", Role.BIG_BOSS);
+                addNewUser("users", Role.BIG_BOSS);
                 break;
         }
     }
@@ -155,9 +160,7 @@ public class AddUserActivity extends BaseActivity {
         }
 
         String date = binding.lazyDatePicker.getText().toString();
-        if (date != null || !TextUtils.isEmpty(birthDate)) {
-            formatDate(date.toString());
-        } else {
+        if (TextUtils.isEmpty(date)) {
             showErrorMessage("اضف تاريخ الميلاد");
             return;
         }
@@ -167,10 +170,12 @@ public class AddUserActivity extends BaseActivity {
         map.put("name", name);
         map.put("id", id);
         map.put("phone", phone);
-        map.put("birthDate", birthDate);
-        map.put("responsible_id", responsibleId);
+        map.put("birthDate", date);
+        map.put("responsible_id", "123");
         map.put("gender", gender);
         map.put("role", role.toString());
+        map.put("image", imageUrl);
+
         if (role == Role.STUDENT) {
             parentId = binding.etParentId.getText().toString();
 
@@ -193,20 +198,24 @@ public class AddUserActivity extends BaseActivity {
                     // ID is unique, proceed with adding the student to the database
                     db.collection(collectionName).document(id).set(map)
                             .addOnSuccessListener(aVoid -> {
+
                                 // Create the parent if the user is a student
-                                if (role == Role.STUDENT)
+                                if (role == Role.STUDENT) {
+
                                     createParent("parent", parentId);
-                                else {
+
+
+                                } else {
                                     loader_dialog.dismiss();
-                                    uploadUserImage(collectionName, id, map);
                                 }
+                                finish();
                             })
                             .addOnFailureListener(e -> {
                                 // Handle failure
                             });
                 }
             } else {
-                Toast.makeText(this, "خطا بالتحميل", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "failure", Toast.LENGTH_SHORT).show();
 
                 // Handle failure
             }
@@ -236,7 +245,10 @@ public class AddUserActivity extends BaseActivity {
         parentMap.put("name", parentName);
         parentMap.put("phone", parentPhone);
         parentMap.put("role", Role.PARENT);
-        parentMap.put("id",parentId);
+        parentMap.put("id", parentId);
+        parentMap.put("image", imageUrl);
+        parentMap.put("responsible_id", "123");
+
 
         // Check if the parent ID already exists in the database
         db.collection(collectionName).document(parentId).get().addOnCompleteListener(task -> {
@@ -244,15 +256,16 @@ public class AddUserActivity extends BaseActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     // ID already exists, show an error message or handle the case accordingly
-                    showErrorMessage("تم الاضافة :) ");
-                    uploadUserImage(collectionName, parentId, parentMap);
+                    showErrorMessage("تم إنشاء المستخدم بنجاح");
+                    finish();
 
                 } else {
+
                     // ID is unique, proceed with adding the parent to the database
                     db.collection(collectionName).document(parentId).set(parentMap)
                             .addOnSuccessListener(aVoid -> {
                                 showSuccessMessage("تم إنشاء المستخدم بنجاح");
-                                uploadUserImage(collectionName, parentId, parentMap);
+                                finish();
                             })
                             .addOnFailureListener(e -> {
                                 // Handle failure
@@ -264,53 +277,45 @@ public class AddUserActivity extends BaseActivity {
         });
     }
 
-    private void uploadUserImage(String collectionName, String documentId, Map<String, Object> userData) {
-        if (imageUri != null) {
-            // Generate a unique filename for the image
-            String filename = UUID.randomUUID().toString();
+    private void uploadUserImage() {
+        // Generate a unique filename for the image
+        String filename = UUID.randomUUID().toString();
 
-            // Get a reference to the Firebase Storage location
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + filename);
+        // Get a reference to the Firebase Storage location
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + filename);
 
-            // Upload the image file to Firebase Storage
-            UploadTask uploadTask = storageReference.putFile(imageUri);
+        // Upload the image file to Firebase Storage
+        UploadTask uploadTask = storageReference.putFile(imageUri);
 
-            // Monitor the upload process
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                // Get the download URL of the uploaded image
-                storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    String imageUrl = uri.toString();
+        // Monitor the upload process
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // Get the download URL of the uploaded image
+            storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrl = uri.toString();
 
-                    // Add the image URL to the user data
-                    userData.put("image", imageUrl);
-
-                    // Get the Firebase Firestore reference to the document
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference userRef = db.collection(collectionName).document(documentId);
-
-                    // Add the user to the database with the complete user data
-                    addUserWithUserData(userRef, userData);
-                }).addOnFailureListener(e -> {
-                    showErrorMessage("خطأ في تحميل الصورة، يرجى المحاولة مرة أخرى");
-                });
+//                    // Add the image URL to the user data
+//                    userData.put("image", imageUrl);
+//
+                Log.e("image", imageUrl);
+//                    // Get the Firebase Firestore reference to the document
+//                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                    DocumentReference userRef = db.collection(collectionName).document(documentId);
+//
+//                    // Add the user to the database with the complete user data
+//                    addUserWithUserData(userRef, userData);
             }).addOnFailureListener(e -> {
                 showErrorMessage("خطأ في تحميل الصورة، يرجى المحاولة مرة أخرى");
             });
-        } else {
-            // Get the Firebase Firestore reference to the document
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference userRef = db.collection(collectionName).document(documentId);
+        }).addOnFailureListener(e -> {
+            showErrorMessage("خطأ في تحميل الصورة، يرجى المحاولة مرة أخرى");
+        });
 
-            // Add the user to the database with the complete user data
-            addUserWithUserData(userRef, userData);
-        }
     }
 
     private void addUserWithUserData(DocumentReference userRef, Map<String, Object> userData) {
         userRef.set(userData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        showNotification("مرحبا", "مرحبا بك في تطبيق البيان");
 
                         showSuccessMessage("تم الاضافة بنجاح");
                         finish();
@@ -328,6 +333,7 @@ public class AddUserActivity extends BaseActivity {
                         imageUri = result;
                         Glide.with(getBaseContext()).load(imageUri).transform(new RoundedCorners(8))
                                 .error(R.drawable.ic_user_circle_svgrepo_com).into(binding.imgUser);
+                        uploadUserImage();
                     }
                 });
     }
@@ -339,7 +345,7 @@ public class AddUserActivity extends BaseActivity {
 
     private void showSuccessMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        loader_dialog.dismiss();
+//        loader_dialog.dismiss();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -348,21 +354,22 @@ public class AddUserActivity extends BaseActivity {
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
     }
 
+//    private String formatDate(String date) {
+//        SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
+//        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+//
+//        try {
+//            Date inputDate = inputDateFormat.parse(date);
+//            String formattedDate = outputDateFormat.format(inputDate);
+//            System.out.println("Formatted Date: " + formattedDate);
+//            return formattedDate;
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null; // Return null if the date couldn't be parsed
+//    }
 
-
-    private void formatDate(String date) {
-        SimpleDateFormat inputDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US);
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-        try {
-            Date inputDate = inputDateFormat.parse(date);
-            String formattedDate = outputDateFormat.format(inputDate);
-            birthDate = formattedDate;
-            System.out.println("Formatted Date: " + formattedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(

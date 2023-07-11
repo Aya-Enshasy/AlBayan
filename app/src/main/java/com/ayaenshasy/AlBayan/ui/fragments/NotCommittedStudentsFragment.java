@@ -310,7 +310,7 @@ public class NotCommittedStudentsFragment extends BaseFragment {
                                 public void sendData(Student student) {
                                     Constant.showBottomSheet(student,adapter,currentUser,getContext());
                                 }
-                            });
+                            },null);
                             binding.rvUser.setAdapter(adapter);
 
                             if (!isAttendanceMarkedToday

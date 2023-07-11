@@ -148,7 +148,7 @@ public class CommittedStudentsFragment extends BaseFragment {
                                 public void sendData(Student student) {
                                     Constant.showBottomSheet(student,adapter,currentUser,getContext());
                                 }
-                            });
+                            },null);
                             binding.rvUser.setAdapter(adapter);
 
                             if (isAttendanceMarkedToday && attendance != null && attendance.getPlanToday() != null && !attendance.getPlanToday().isEmpty()) {
