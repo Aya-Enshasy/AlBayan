@@ -66,7 +66,7 @@ public class UserDetailsActivity extends BaseActivity {
 
         String userId = getIntent().getStringExtra(USER_ID);
         if (userId != null) {
-            Query query = usersRef.whereEqualTo("responsible_id", "123");
+            Query query = usersRef.whereEqualTo("responsible_id", userId);
 
             query.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

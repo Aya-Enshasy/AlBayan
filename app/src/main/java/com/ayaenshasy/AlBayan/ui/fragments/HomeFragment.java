@@ -212,6 +212,7 @@ public class HomeFragment extends BaseFragment {
 
             CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
 
+//            com.google.firebase.firestore.Query query = usersRef.whereEqualTo("responsible_id", currentUser.getId());
             com.google.firebase.firestore.Query query = usersRef.whereNotEqualTo("role", "ADMIN");
 
             query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
