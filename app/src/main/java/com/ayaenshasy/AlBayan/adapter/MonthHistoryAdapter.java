@@ -43,7 +43,7 @@ public class MonthHistoryAdapter extends RecyclerView.Adapter<MonthHistoryAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Attendance attendance = list.get(position);
         holder.binding.tvDate.setText("  " + list.get(position).getDate());
-        holder.binding.tvRemmeber.setText("حفظ اليوم : " + attendance.getPlanToday() + " نسبة الحفظ " + attendance.getTodayPercentage());
+        holder.binding.tvRemmeber.setText("حفظ اليوم : " + attendance.getPlanToday() + "\n"+" نسبة الحفظ " + attendance.getTodayPercentage());
         holder.binding.tvPrayers.setText("الصلوات لهذا اليوم: ");
         StringBuilder prayersText = new StringBuilder();
 

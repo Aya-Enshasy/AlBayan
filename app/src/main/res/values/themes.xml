@@ -18,7 +18,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="CustomTheme" parent="Theme.AppCompat">
+        <!-- Customize your theme attributes here -->
+    </style>
     <style name="Theme.AlBayan.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.AlBayan.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

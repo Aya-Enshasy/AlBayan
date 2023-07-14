@@ -41,21 +41,12 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DailyHistoryStudentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class DailyHistoryStudentFragment extends BaseFragment {
     FragmentDailyHistoryStudentBinding binding;
     int max = 100;
     int min = 10;
     int total = max - min;
-    boolean bool_fajer = false;
-    boolean bool_dohor = false;
-    boolean bool_aser = false;
-    boolean bool_magreb = false;
-    boolean bool_esha = false;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -102,7 +93,8 @@ public class DailyHistoryStudentFragment extends BaseFragment {
         foldingCell();
         lottieImage();
         fluidSlider();
-        checkBoxes();
+
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         currentDate = dateFormat.format(new Date());
@@ -161,64 +153,6 @@ public class DailyHistoryStudentFragment extends BaseFragment {
         });
     }
 
-    private void checkBoxes() {
-        binding.fajer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_fajer = true;
-                } else {
-                    bool_fajer = false;
-                }
-            }
-        });
-        binding.dohor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_dohor = true;
-                } else {
-                    bool_dohor = false;
-                }
-            }
-        });
-        binding.aser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_aser = true;
-                } else {
-                    bool_aser = false;
-                }
-            }
-        });
-        binding.magreb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_magreb = true;
-                } else {
-                    bool_magreb = false;
-                }
-            }
-        });
-        binding.eshaa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    bool_esha = true;
-                } else {
-                    bool_esha = false;
-                }
-            }
-        });
-    }
-
     @SuppressLint("SetTextI18n")
     private void getUserAttendance(String userId, String currentDate) {
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -240,11 +174,7 @@ public class DailyHistoryStudentFragment extends BaseFragment {
                             islamicPrayers = new HashMap<>();
                         }
 
-                        boolean asr = Boolean.TRUE.equals(islamicPrayers.get("asr"));
-                        boolean isha = Boolean.TRUE.equals(islamicPrayers.get("Isha"));
-                        boolean fajr = Boolean.TRUE.equals(islamicPrayers.get("Fajr"));
-                        boolean dhuhr = Boolean.TRUE.equals(islamicPrayers.get("Dhuhr"));
-                        boolean maghrib = Boolean.TRUE.equals(islamicPrayers.get("Maghrib"));
+
                         String planToday = attendance.getPlanToday();
                         String planTomorrow = attendance.getPlanTomorrow();
                         String planYesterday = attendance.getPlanYesterday();
@@ -254,6 +184,9 @@ public class DailyHistoryStudentFragment extends BaseFragment {
                         String yesterdayPercentage = attendance.getYesterdayPercentage();
                         String rateTeacher = attendance.getRateTeacher();
                         String rateParent = attendance.getRateParent();
+                        String note = attendance.getNotes();
+
+                        Log.e("jkdbfkdejv",attendance.getNotes()+"");
 
                         // Update your UI with the retrieved data
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -263,6 +196,7 @@ public class DailyHistoryStudentFragment extends BaseFragment {
                                 binding.etPlanYesterday.setText(planYesterday);
                                 binding.etPlanToday.setText(planToday);
                                 binding.etRepeated.setText(repeated);
+                                binding.etNote.setText(note+"");
                                 binding.etRepeatedYesterday.setText(repeatedYesterday);
                                 binding.etTodayPercentage.setText(todayPercentage + " %");
                                 binding.etYesterdayPercentage.setText(yesterdayPercentage + " %");
@@ -270,16 +204,7 @@ public class DailyHistoryStudentFragment extends BaseFragment {
                                     binding.fluidSlider.setBubbleText(rateParent);
                                 else
                                     binding.fluidSlider.setBubbleText(rateTeacher);
-                                binding.fajer.setChecked(fajr);
-                                binding.dohor.setChecked(dhuhr);
-                                binding.aser.setChecked(asr);
-                                binding.magreb.setChecked(maghrib);
-                                binding.eshaa.setChecked(isha);
-                                binding.fajer.setEnabled(!fajr);
-                                binding.dohor.setEnabled(!dhuhr);
-                                binding.aser.setEnabled(!asr);
-                                binding.magreb.setEnabled(!maghrib);
-                                binding.eshaa.setEnabled(!isha);
+
                             }
                         });
                     }
@@ -299,66 +224,25 @@ public class DailyHistoryStudentFragment extends BaseFragment {
         });
     }
 
-//    private void editAttendanceData(String userId, String currentDate) {
-//        binding.progressBar.setVisibility(View.VISIBLE);
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        CollectionReference attendanceCollection = FirebaseFirestore.getInstance().collection("attendance");
-//        DocumentReference attendanceRef = attendanceCollection
-//                .document(userId)
-//                .collection("records")
-//                .document(currentDate);
-//
-//        Map<String, Object> updatedData = new HashMap<>();
-//        Map<String, Boolean> islamicPrayers = new HashMap<>();
-//        islamicPrayers.put("Asr", bool_aser);
-//        islamicPrayers.put("Dhuhr", bool_dohor);
-//        islamicPrayers.put("Fajr", bool_fajer);
-//        islamicPrayers.put("Maghrib", bool_magreb);
-//        islamicPrayers.put("Isha", bool_esha);
-//        updatedData.put("islamicPrayers", islamicPrayers);
-//
-//        if (isParent)
-//            updatedData.put("rateParent", binding.fluidSlider.getBubbleText());
-//        else
-//            updatedData.put("rateTeacher", binding.fluidSlider.getBubbleText());
-//
-//
-//        // Update the data in Firestore
-//        attendanceRef.set(updatedData, SetOptions.merge())
-//                .addOnSuccessListener(aVoid -> {
-//                    binding.progressBar.setVisibility(View.GONE);
-//                    Toast.makeText(getActivity(), "تم ارسال البيانات بنجاح", Toast.LENGTH_SHORT).show();
-//                    Log.d("TAG", "Attendance data updated successfully.");
-//                })
-//                .addOnFailureListener(e -> {
-//                    binding.progressBar.setVisibility(View.GONE);
-//                    Log.e("TAG", "Failed to update attendance data: " + e.getMessage());
-//                });
-//    }
-
     private void editAttendanceData(String userId, String currentDate) {
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        // Create a new thread or use an Executor to perform database operations asynchronously
-        Executor executor = Executors.newSingleThreadExecutor();
+         Executor executor = Executors.newSingleThreadExecutor();
 
         executor.execute(() -> {
-            // Create an instance of your Room DAO (data access object)
-            AttendanceDao attendanceDao = DatabaseClient.getInstance(context).getAppDatabase().attendanceDao();
+             AttendanceDao attendanceDao = DatabaseClient.getInstance(context).getAppDatabase().attendanceDao();
 
-            // Create a new AttendanceEntity object with the required data
-            Attendance attendanceEntity = new Attendance();
+             Attendance attendanceEntity = new Attendance();
             attendanceEntity.setId(userId);
             attendanceEntity.setDate(currentDate);
-            attendanceEntity.setIslamicPrayers(createIslamicPrayersMap());
+
 
             if (isParent)
                 attendanceEntity.setRateParent(binding.fluidSlider.getBubbleText());
             else
                 attendanceEntity.setRateTeacher(binding.fluidSlider.getBubbleText());
 
-            // Insert the AttendanceEntity into the Room database
-            attendanceDao.insert(attendanceEntity);
+             attendanceDao.insert(attendanceEntity);
 
             getActivity().runOnUiThread(() -> {
                 binding.progressBar.setVisibility(View.GONE);
@@ -368,15 +252,7 @@ public class DailyHistoryStudentFragment extends BaseFragment {
         });
     }
 
-    private Map<String, Boolean> createIslamicPrayersMap() {
-        Map<String, Boolean> islamicPrayers = new HashMap<>();
-        islamicPrayers.put("Asr", bool_aser);
-        islamicPrayers.put("Dhuhr", bool_dohor);
-        islamicPrayers.put("Fajr", bool_fajer);
-        islamicPrayers.put("Maghrib", bool_magreb);
-        islamicPrayers.put("Isha", bool_esha);
-        return islamicPrayers;
-    }
+
 
 
 }

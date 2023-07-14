@@ -257,7 +257,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
             // Get references to the views
             imgExam = bottomSheetView.findViewById(R.id.img_user);
-            TextView tvName = bottomSheetView.findViewById(R.id.tv_name);
+            TextView cancel = bottomSheetView.findViewById(R.id.cancel);
             AppCompatEditText etName = bottomSheetView.findViewById(R.id.et_name);
             TextView tvDegree = bottomSheetView.findViewById(R.id.tv_degree);
             AppCompatEditText etDegree = bottomSheetView.findViewById(R.id.et_degree);
@@ -269,7 +269,9 @@ public class ExamHistoryStudentFragment extends BaseFragment {
             AppCompatButton btnSave = bottomSheetView.findViewById(R.id.btn_save);
             etDate.setOnClickListener(view -> showDatePickerDialog());
 
-
+cancel.setOnClickListener(View->{
+    bottomSheetDialog.dismiss();
+});
             imgExam.setOnClickListener(view -> {
                 if (isNetworkAvailable()) {
                     ImageUpload = true;

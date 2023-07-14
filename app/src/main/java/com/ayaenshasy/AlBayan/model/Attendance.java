@@ -59,6 +59,7 @@ public class Attendance {
         this.yesterdayPercentage = yesterdayPercentage;
         this.repeatedYesterday = repeatedYesterday;
         this.planTomorrow = planTomorrow;
+        this.notes = notes;
     }
 
 

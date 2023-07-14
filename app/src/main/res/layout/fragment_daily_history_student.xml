@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/_30sdp"
+    android:layout_marginBottom="@dimen/_20sdp"
     tools:context=".ui.fragments.DailyHistoryStudentFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,9 @@
                     android:id="@+id/container1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_44sdp"
+                    android:paddingBottom="20dp"
+
+                    android:layout_marginTop="@dimen/_40sdp"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -269,6 +271,36 @@
                         app:layout_constraintTop_toBottomOf="@+id/et_repeated" />
 
                     <TextView
+                        android:id="@+id/tv_note_tomorrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/cairo_bold"
+                        android:text="ملاحظات"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="12dp"
+                        android:textColor="@color/black"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/et_plan_tomorrow" />
+
+                    <TextView
+                        android:id="@+id/et_note"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/cairo_semibold"
+                        android:hint="لم يسجل بعد "
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textDirection="rtl"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_note_tomorrow" />
+
+ <TextView
                         android:id="@+id/et_plan_tomorrow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -492,6 +524,7 @@
             android:layout_marginEnd="12dp"
             android:fontFamily="@font/cairo_bold"
             android:text="التقيم التربوي"
+            android:visibility="gone"
             android:textColor="#23253A"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold"
@@ -507,6 +540,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             app:bar_color="#86000000"
+            android:visibility="gone"
             app:bar_text_color="@color/white"
             app:bubble_text_color="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -526,6 +560,7 @@
             android:background="@drawable/btn_background"
             android:fontFamily="@font/cairo_bold"
             android:text="ادخل البيانات"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

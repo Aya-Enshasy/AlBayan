@@ -18,12 +18,13 @@
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_support.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/activity_user_details.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_exam_layout.xml" value="0.25" />
-        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_new_attendance_layout.xml" value="0.4" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/add_video_dialog.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/dialog_submit_operation.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/exam_item.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_committed_students.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_daily_history_student.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_monthly_history_student.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_quran.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_remembrance.xml" value="0.25" />
         <entry key="..\:/Android Studio Projects/AlBayan/app/src/main/res/layout/fragment_settings.xml" value="0.25" />

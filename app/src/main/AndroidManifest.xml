@@ -32,9 +32,6 @@
         <activity
             android:name=".AdsActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".NotificationsActivity"-->
-<!--            android:exported="false" />-->
         <activity
             android:name=".ui.activities.UserDetailsActivity"
             android:exported="false" />
