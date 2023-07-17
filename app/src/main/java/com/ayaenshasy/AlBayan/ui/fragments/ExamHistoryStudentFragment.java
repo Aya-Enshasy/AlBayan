@@ -202,7 +202,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
 
             @Override
             protected void onPostExecute(List<Exam> exams) {
-                  adapter.setExams(exams);
+                adapter.setExams(exams);
             }
         }.execute();
     }
@@ -269,9 +269,9 @@ public class ExamHistoryStudentFragment extends BaseFragment {
             AppCompatButton btnSave = bottomSheetView.findViewById(R.id.btn_save);
             etDate.setOnClickListener(view -> showDatePickerDialog());
 
-cancel.setOnClickListener(View->{
-    bottomSheetDialog.dismiss();
-});
+            cancel.setOnClickListener(View -> {
+                bottomSheetDialog.dismiss();
+            });
             imgExam.setOnClickListener(view -> {
                 if (isNetworkAvailable()) {
                     ImageUpload = true;
@@ -338,7 +338,7 @@ cancel.setOnClickListener(View->{
                 exam.setMosque(mosque);
                 exam.setDate(date);
                 exam.setImage(imageUrl);
-                 if (exam2 != null)
+                if (exam2 != null)
                     exam.setId(exam2.getId());
                 // Get an instance of the Room database
                 ExamDao examDao = DatabaseClient.getInstance(context).getAppDatabase().examDao();
