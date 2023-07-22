@@ -31,7 +31,7 @@ public interface ExamDao {
     @Query("SELECT * FROM exams")
     List<Exam> getAllExams();
 
-    @Query("SELECT id,studentId, name, degree, mosque, date,image FROM exams LIMIT :pageSize OFFSET :offset")
+    @Query("SELECT id,studentId, name, degree, mosque, date,image,shack_name,exam_type FROM exams LIMIT :pageSize OFFSET :offset")
     List<Exam> getExamsWithPagination(int pageSize, int offset);
 
     @Query("SELECT COUNT(*) FROM exams")

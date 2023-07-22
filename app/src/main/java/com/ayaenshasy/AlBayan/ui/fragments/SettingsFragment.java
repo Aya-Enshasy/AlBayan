@@ -326,6 +326,8 @@ public class SettingsFragment extends BaseFragment implements LogoutDialog.Logou
                 examData.put("degree", exam.getDegree());
                 examData.put("mosque", exam.getMosque());
                 examData.put("date", exam.getDate());
+                examData.put("shackName", exam.getShack_name());
+                examData.put("examType", exam.getExam_type());
                 examData.put("image", exam.getImage());
                 document.set(examData, SetOptions.merge())
                         .addOnSuccessListener(aVoid -> {

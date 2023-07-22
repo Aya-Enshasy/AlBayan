@@ -78,8 +78,9 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        holder.binding.tvName.setText("الاسم : " + list.get(position).getName());
-        holder.binding.tvMosque.setText("اسم المسجد : " + list.get(position).getMosque());
+        holder.binding.tvName.setText("نوع الاختبار : " + list.get(position).getExam_type());
+        holder.binding.tvMosque.setText("فرع الاختبار : " + list.get(position).getMosque());
+        holder.binding.tvUserName.setText(" اسم المختبر : " + list.get(position).getShack_name());
         holder.binding.tvDegree.setText("الدرجة : " + list.get(position).getDegree());
 
         Glide.with(context).load(list.get(position).getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)

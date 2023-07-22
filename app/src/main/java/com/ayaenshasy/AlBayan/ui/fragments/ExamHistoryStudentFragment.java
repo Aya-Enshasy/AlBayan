@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,11 +75,6 @@ import java.util.UUID;
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Dispatchers;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExamHistoryStudentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ExamHistoryStudentFragment extends BaseFragment {
     FragmentExamHistoryStudentBinding binding;
     private static final int REQUEST_CAMERA_PERMISSION = 1;
@@ -86,8 +82,7 @@ public class ExamHistoryStudentFragment extends BaseFragment {
     private static final int REQUEST_CAPTURE_IMAGE = 3;
     ExamAdapter adapter;
     private List<Exam> list = new ArrayList<>();
-    //    private ShapeableImageView imgUser; // Declare imgUser as a class member
-    String date;
+     String date;
     String user_id;
     private byte[] imageData;
     private Calendar calendar;
@@ -170,16 +165,16 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                         String mosque = documentSnapshot.getString("mosque");
                         String name = documentSnapshot.getString("name");
                         String date = documentSnapshot.getString("date");
-                        Exam exam = new Exam(degree, image, mosque, name, date); // Include examId in the constructor
+                        String examType = documentSnapshot.getString("examType");
+                        String shackName = documentSnapshot.getString("shackName");
+                        Exam exam = new Exam(degree, image, mosque, name, date,shackName,examType); // Include examId in the constructor
                         exam.setId(documentSnapshot.getLong("examId").intValue());
                         exam.setExamId(examId);
+
                         exam.setStudentId(documentSnapshot.getString("studentId"));
                         list.add(exam);
                     }
 
-                    // TODO: Add your code here to handle the retrieved list of exams
-                    // For example, you can pass the list to another method or update the UI with the data.
-//                    handleRetrievedExams(list);
                     adapter.setExams(list);
                 })
                 .addOnFailureListener(e -> {
@@ -259,12 +254,11 @@ public class ExamHistoryStudentFragment extends BaseFragment {
             imgExam = bottomSheetView.findViewById(R.id.img_user);
             TextView cancel = bottomSheetView.findViewById(R.id.cancel);
             AppCompatEditText etName = bottomSheetView.findViewById(R.id.et_name);
-            TextView tvDegree = bottomSheetView.findViewById(R.id.tv_degree);
+            AppCompatEditText exam_type = bottomSheetView.findViewById(R.id.et_exam_type);
             AppCompatEditText etDegree = bottomSheetView.findViewById(R.id.et_degree);
-            TextView tvMosque = bottomSheetView.findViewById(R.id.tv_mosque);
+            AppCompatEditText shack_name = bottomSheetView.findViewById(R.id.et_shack_name);
             AppCompatEditText etMosque = bottomSheetView.findViewById(R.id.et_mosque);
-            TextView tvDate = bottomSheetView.findViewById(R.id.tv_date);
-            etDate = bottomSheetView.findViewById(R.id.et_date);
+             etDate = bottomSheetView.findViewById(R.id.et_date);
             ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
             AppCompatButton btnSave = bottomSheetView.findViewById(R.id.btn_save);
             etDate.setOnClickListener(view -> showDatePickerDialog());
@@ -281,12 +275,13 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 }
             });
 
-            // Populate the fields if exam2 is not null
-            if (exam2 != null) {
+             if (exam2 != null) {
                 etName.setText(exam2.getName());
                 etDegree.setText(exam2.getDegree());
                 etMosque.setText(exam2.getMosque());
                 etDate.setText(exam2.getDate());
+                exam_type.setText(exam2.getExam_type());
+                shack_name.setText(exam2.getShack_name());
 //                if (exam2.getImage() != null)
                 Glide.with(context).load(exam2.getImage()).placeholder(R.drawable.ic_user_circle_svgrepo_com)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -302,6 +297,8 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 String degree = etDegree.getText().toString().trim();
                 String mosque = etMosque.getText().toString().trim();
                 String date = etDate.getText().toString().trim();
+                String examType = exam_type.getText().toString().trim();
+                String shackName = shack_name.getText().toString().trim();
                 btnClicked = true;
                 if (ImageFinished)
                     uploadExamImage();
@@ -338,8 +335,12 @@ public class ExamHistoryStudentFragment extends BaseFragment {
                 exam.setMosque(mosque);
                 exam.setDate(date);
                 exam.setImage(imageUrl);
+                exam.setExam_type(examType);
+                exam.setShack_name(shackName);
                 if (exam2 != null)
                     exam.setId(exam2.getId());
+                exam.setExam_type(examType);
+                exam.setShack_name(shackName);
                 // Get an instance of the Room database
                 ExamDao examDao = DatabaseClient.getInstance(context).getAppDatabase().examDao();
 
@@ -434,6 +435,8 @@ public class ExamHistoryStudentFragment extends BaseFragment {
         examData.put("mosque", exam.getMosque());
         examData.put("date", exam.getDate());
         examData.put("image", exam.getImage());
+        examData.put("shackName", exam.getShack_name());
+        examData.put("examType", exam.getExam_type());
         document.set(examData, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
                     // Data saved successfully

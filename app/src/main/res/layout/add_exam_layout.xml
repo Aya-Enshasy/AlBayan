@@ -111,7 +111,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/cairo_bold"
-            android:text="اسم المسجد"
+            android:text="فرع الاختبار"
             android:textColor="@color/black"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_degree" />
@@ -123,7 +123,7 @@
             android:layout_marginLeft="16dp"
             android:background="@drawable/input_background"
             android:backgroundTint="#F3F3F3"
-            android:hint="مسجد الفرقان"
+            android:hint="فرع"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:textDirection="rtl"
@@ -132,6 +132,64 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/tv_mosque"
             app:layout_constraintTop_toTopOf="@+id/tv_mosque" />
+
+        <TextView
+            android:id="@+id/tv_exam_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="نوع الاختبار"
+            android:textColor="@color/black"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_mosque" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_exam_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/input_background"
+            android:backgroundTint="#F3F3F3"
+            android:hint="مركزي , داخلي"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textDirection="rtl"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_exam_type"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tv_exam_type"
+            app:layout_constraintTop_toTopOf="@+id/tv_exam_type" />
+
+        <TextView
+            android:id="@+id/tv_shack_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/cairo_bold"
+            android:text="اسم المختبر"
+            android:textColor="@color/black"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_exam_type" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_shack_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/input_background"
+            android:backgroundTint="#F3F3F3"
+            android:hint="اسم"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textDirection="rtl"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_shack_name"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tv_shack_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_shack_name" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -143,7 +201,7 @@
             android:text="تاريخ الاختبار"
             android:textColor="@color/black"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_mosque" />
+            app:layout_constraintTop_toBottomOf="@+id/et_shack_name" />
 
 
         <TextView

@@ -22,6 +22,11 @@ public class Exam {
     private String mosque;
     @ColumnInfo(name = "date")
     private String date;
+    @ColumnInfo(name = "shack_name")
+    private String shack_name;
+    @ColumnInfo(name = "exam_type")
+    private String exam_type;
+
     private String image;
 //    @ColumnInfo(name = "imageData")
 //    private byte[] imageData; // New field for the image data
@@ -30,12 +35,14 @@ public class Exam {
     public Exam() {
     }
 
-    public Exam(String degree, String image, String mosque, String name, String date) {
+    public Exam(String degree, String image, String mosque, String name, String date, String shack_name, String exam_type) {
         this.degree = degree;
         this.image = image;
         this.mosque = mosque;
         this.name = name;
         this.date = date;
+        this.shack_name = shack_name;
+        this.exam_type = exam_type;
     }
 
 //    public Exam(String id, String name, String degree, String mosque, String date, byte[] imageData) {
@@ -46,6 +53,22 @@ public class Exam {
 //        this.date = date;
 ////        this.imageData = imageData;
 //    }
+
+    public String getShack_name() {
+        return shack_name;
+    }
+
+    public void setShack_name(String shack_name) {
+        this.shack_name = shack_name;
+    }
+
+    public String getExam_type() {
+        return exam_type;
+    }
+
+    public void setExam_type(String exam_type) {
+        this.exam_type = exam_type;
+    }
 
     public String getExamId() {
         return examId;
